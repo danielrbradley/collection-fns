@@ -1,0 +1,38 @@
+# Collection Functions
+
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Greenkeeper badge](https://badges.greenkeeper.io/alexjoverm/typescript-library-starter.svg)](https://greenkeeper.io/)
+[![Travis](https://img.shields.io/travis/alexjoverm/typescript-library-starter.svg)](https://travis-ci.org/alexjoverm/typescript-library-starter)
+[![Coveralls](https://img.shields.io/coveralls/alexjoverm/typescript-library-starter.svg)](https://coveralls.io/github/alexjoverm/typescript-library-starter)
+[![Dev Dependencies](https://david-dm.org/alexjoverm/typescript-library-starter/dev-status.svg)](https://david-dm.org/alexjoverm/typescript-library-starter?type=dev)
+
+Really simple functions for working with built-in collection types, inspired by F#'s collection modules design.
+
+### Features
+
+- Covers, iterables, arrays, maps and sets.
+- Composable functional design.
+
+### Importing library
+
+You can import the generated bundle to use the whole library:
+
+```javascript
+import myLib from 'collection-fns'
+```
+
+Additionally, you can import the specific modules from `dist/lib`:
+
+```javascript
+import { groupBy } from 'collection-fns/dist/lib/iterable'
+```
+
+### NPM scripts
+
+ - `yarn t`: Run test suite
+ - `yarn start`: Run `yarn build` in watch mode
+ - `yarn test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
+ - `yarn test:prod`: Run linting and generate coverage
+ - `yarn build`: Generate bundles and typings, create docs
+ - `yarn lint`: Lints code
+ - `yarn commit`: Commit using conventional commit style ([husky](https://github.com/typicode/husky) will tell you to use it if you haven't :wink:)
