@@ -1,3 +1,7 @@
+export const toArray = <T>(source: Iterable<T>): T[] => {
+  return Array.from(source)
+}
+
 export const map = <T, U>(mapping: (item: T) => U) =>
   function*(source: Iterable<T>): Iterable<U> {
     for (const item of source) {
@@ -124,7 +128,6 @@ function compareBy<T>(getProp: (item: T) => any) {
 export const sortBy = <T, Key>(selector: (item: T) => Key) => (
   source: Iterable<T>
 ): Iterable<T> => {
-  // TODO: Consider other approaches for speed.
   const copy = Array.from(source)
   copy.sort(compareBy(selector))
   return copy
