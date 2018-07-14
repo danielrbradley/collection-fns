@@ -23,14 +23,30 @@ export function map<T, U>(a: any, b?: any): any {
   }
 }
 
-export const filter = <T>(predicate: (item: T) => boolean) =>
-  function*(source: Iterable<T>): Iterable<T> {
-    for (const item of source) {
-      if (predicate(item)) {
-        yield item
+export function filter<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => Iterable<T>
+export function filter<T>(source: Iterable<T>, predicate: (item: T) => boolean): Iterable<T>
+export function filter<T>(a: any, b?: any): any {
+  if (typeof a === 'function') {
+    const predicate = a as (item: T) => boolean
+    return function*(source: Iterable<T>): Iterable<T> {
+      for (const item of source) {
+        if (predicate(item)) {
+          yield item
+        }
       }
     }
+  } else {
+    const source = a as Iterable<T>
+    const predicate = b as (item: T) => boolean
+    return (function*() {
+      for (const item of source) {
+        if (predicate(item)) {
+          yield item
+        }
+      }
+    })()
   }
+}
 
 export const choose = <T, U>(chooser: (item: T) => U | undefined) =>
   function*(source: Iterable<T>): Iterable<U> {

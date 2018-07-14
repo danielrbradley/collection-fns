@@ -63,6 +63,11 @@ describe('filter', () => {
         .then(Iterables.toArray).result
     ).toEqual([2])
   })
+  it('can filters without partial application', () => {
+    expect(pipe(Iterables.filter([1, 2], x => x % 2 === 0)).then(Iterables.toArray).result).toEqual(
+      [2]
+    )
+  })
 })
 
 describe('choose', () => {
