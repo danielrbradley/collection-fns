@@ -78,6 +78,13 @@ describe('choose', () => {
         .then(Iterables.toArray).result
     ).toEqual([2, 6])
   })
+  it('can choose without partial application', () => {
+    expect(
+      pipe(Iterables.choose([1, 2, 3], x => (x % 2 === 1 ? x * 2 : undefined))).then(
+        Iterables.toArray
+      ).result
+    ).toEqual([2, 6])
+  })
 })
 
 describe('collect', () => {

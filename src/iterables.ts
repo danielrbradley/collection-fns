@@ -48,15 +48,34 @@ export function filter<T>(a: any, b?: any): any {
   }
 }
 
-export const choose = <T, U>(chooser: (item: T) => U | undefined) =>
-  function*(source: Iterable<T>): Iterable<U> {
-    for (const item of source) {
-      const chosen = chooser(item)
-      if (chosen !== undefined) {
-        yield chosen
+export function choose<T, U>(
+  chooser: (item: T) => U | undefined
+): (source: Iterable<T>) => Iterable<U>
+export function choose<T, U>(source: Iterable<T>, chooser: (item: T) => U | undefined): Iterable<U>
+export function choose<T, U>(a: any, b?: any): any {
+  if (typeof a === 'function') {
+    const chooser = a as (item: T) => U | undefined
+    return function*(source: Iterable<T>): Iterable<U> {
+      for (const item of source) {
+        const chosen = chooser(item)
+        if (chosen !== undefined) {
+          yield chosen
+        }
       }
     }
+  } else {
+    const source = a as Iterable<T>
+    const chooser = b as (item: T) => U | undefined
+    return (function*(): Iterable<U> {
+      for (const item of source) {
+        const chosen = chooser(item)
+        if (chosen !== undefined) {
+          yield chosen
+        }
+      }
+    })()
   }
+}
 
 export const collect = <T, U>(mapping: (item: T) => Iterable<U>) =>
   function*(source: Iterable<T>): Iterable<U> {
