@@ -100,6 +100,16 @@ describe('collect', () => {
         .then(Iterables.toArray).result
     ).toEqual([1, 1, 2, 2])
   })
+  it('can collect iterables without partial application', () => {
+    expect(
+      pipe(
+        Iterables.collect([1, 2], function*(x) {
+          yield x
+          yield x
+        })
+      ).then(Iterables.toArray).result
+    ).toEqual([1, 1, 2, 2])
+  })
 })
 
 describe('append', () => {
@@ -118,6 +128,20 @@ describe('append', () => {
           )
         )
         .then(Iterables.toArray).result
+    ).toEqual([1, 2])
+  })
+  it('can append without partial application', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.append(
+          (function*() {
+            yield 1
+          })(),
+          (function*() {
+            yield 2
+          })()
+        )
+      )
     ).toEqual([1, 2])
   })
 })
@@ -159,6 +183,21 @@ describe('distinctBy', () => {
         .then(Iterables.toArray).result
     ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
   })
+  it('ignores duplicates without partial application', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.distinctBy(
+          (function*() {
+            yield { name: 'amy', id: 1 }
+            yield { name: 'bob', id: 2 }
+            yield { name: 'bob', id: 3 }
+            yield { name: 'cat', id: 3 }
+          })(),
+          x => x.name
+        )
+      )
+    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
+  })
 })
 
 describe('exists', () => {
@@ -181,6 +220,17 @@ describe('exists', () => {
         })()
       ).then(Iterables.exists(x => x === 3)).result
     ).toEqual(false)
+  })
+  it('matches without partial application', () => {
+    expect(
+      Iterables.exists(
+        (function*() {
+          yield 1
+          yield 2
+        })(),
+        x => x === 1
+      )
+    ).toEqual(true)
   })
 })
 
@@ -205,6 +255,17 @@ describe('find', () => {
       ).then(Iterables.find(x => x.name === 'cat')).result
     ).toBeUndefined()
   })
+  it('finds without partial application', () => {
+    expect(
+      Iterables.find(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })(),
+        x => x.name === 'bob'
+      )
+    ).toEqual({ name: 'bob', id: 2 })
+  })
 })
 
 describe('groupBy', () => {
@@ -224,6 +285,23 @@ describe('groupBy', () => {
       [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
     ])
   })
+  it('groups without partial application', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.groupBy(
+          (function*() {
+            yield { name: 'amy', age: 1 }
+            yield { name: 'bob', age: 2 }
+            yield { name: 'cat', age: 2 }
+          })(),
+          x => x.age
+        )
+      )
+    ).toEqual([
+      [1, [{ name: 'amy', age: 1 }]],
+      [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
+    ])
+  })
 })
 
 describe('init', () => {
@@ -232,6 +310,9 @@ describe('init', () => {
   })
   it('can create empty', () => {
     expect(pipe(Iterables.init(0)(i => i)).then(Iterables.toArray).result).toEqual([])
+  })
+  it('can init without partial application', () => {
+    expect(Iterables.toArray(Iterables.init(i => i + 1, 3))).toEqual([1, 2, 3])
   })
 })
 
@@ -258,6 +339,20 @@ describe('sortBy', () => {
         .then(Iterables.toArray).result
     ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
   })
+  it('sorts without partial application', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sortBy(
+          (function*() {
+            yield { name: 'amy', age: 21 }
+            yield { name: 'bob', age: 2 }
+            yield { name: 'cat', age: 18 }
+          })(),
+          x => x.age
+        )
+      )
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
 })
 
 describe('sumBy', () => {
@@ -270,6 +365,18 @@ describe('sumBy', () => {
           yield { name: 'cat', age: 18 }
         })()
       ).then(Iterables.sumBy(x => x.age)).result
+    ).toEqual(41)
+  })
+  it('sums without partial application', () => {
+    expect(
+      Iterables.sumBy(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })(),
+        x => x.age
+      )
     ).toEqual(41)
   })
 })
@@ -291,6 +398,18 @@ describe('maxBy', () => {
       `Can't find max of an empty collection`
     )
   })
+  it('works without partial application', () => {
+    expect(
+      Iterables.maxBy(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })(),
+        x => x.age
+      )
+    ).toEqual(21)
+  })
 })
 
 describe('minBy', () => {
@@ -309,6 +428,18 @@ describe('minBy', () => {
     expect(() => pipe([]).then(Iterables.minBy(x => x)).result).toThrow(
       `Can't find min of an empty collection`
     )
+  })
+  it('works without partial application', () => {
+    expect(
+      Iterables.minBy(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })(),
+        x => x.age
+      )
+    ).toEqual(2)
   })
 })
 
@@ -329,5 +460,18 @@ describe('meanBy', () => {
     expect(() => pipe([]).then(Iterables.meanBy(x => x)).result).toThrow(
       `Can't find mean of an empty collection`
     )
+  })
+  it('works without partial application', () => {
+    expect(
+      Iterables.meanBy(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+          yield { name: 'dot', age: 39 }
+        })(),
+        x => x.age
+      )
+    ).toEqual(20)
   })
 })
