@@ -5,47 +5,29 @@ export const toArray = <T>(source: Iterable<T>): T[] => {
 export function map<T, U>(mapping: (item: T) => U): (source: Iterable<T>) => Iterable<U>
 export function map<T, U>(source: Iterable<T>, mapping: (item: T) => U): Iterable<U>
 export function map<T, U>(a: any, b?: any): any {
-  if (typeof a === 'function') {
-    const mapping = a as (item: T) => U
-    return function*(source: Iterable<T>) {
-      for (const item of source) {
-        yield mapping(item)
-      }
+  const partial = typeof a === 'function'
+  const mapping: (item: T) => U = partial ? a : b
+  function* exec(source: Iterable<T>) {
+    for (const item of source) {
+      yield mapping(item)
     }
-  } else {
-    const source = a as Iterable<T>
-    const mapping = b as (item: T) => U
-    return (function*() {
-      for (const item of source) {
-        yield mapping(item)
-      }
-    })()
   }
+  return partial ? exec : exec(a)
 }
 
 export function filter<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => Iterable<T>
 export function filter<T>(source: Iterable<T>, predicate: (item: T) => boolean): Iterable<T>
-export function filter<T>(a: any, b?: any): any {
-  if (typeof a === 'function') {
-    const predicate = a as (item: T) => boolean
-    return function*(source: Iterable<T>): Iterable<T> {
-      for (const item of source) {
-        if (predicate(item)) {
-          yield item
-        }
+export function filter<T, U>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function* exec(source: Iterable<T>) {
+    for (const item of source) {
+      if (predicate(item)) {
+        yield item
       }
     }
-  } else {
-    const source = a as Iterable<T>
-    const predicate = b as (item: T) => boolean
-    return (function*() {
-      for (const item of source) {
-        if (predicate(item)) {
-          yield item
-        }
-      }
-    })()
   }
+  return partial ? exec : exec(a)
 }
 
 export function choose<T, U>(
@@ -53,28 +35,17 @@ export function choose<T, U>(
 ): (source: Iterable<T>) => Iterable<U>
 export function choose<T, U>(source: Iterable<T>, chooser: (item: T) => U | undefined): Iterable<U>
 export function choose<T, U>(a: any, b?: any): any {
-  if (typeof a === 'function') {
-    const chooser = a as (item: T) => U | undefined
-    return function*(source: Iterable<T>): Iterable<U> {
-      for (const item of source) {
-        const chosen = chooser(item)
-        if (chosen !== undefined) {
-          yield chosen
-        }
+  const partial = typeof a === 'function'
+  const chooser: (item: T) => U | undefined = partial ? a : b
+  function* exec(source: Iterable<T>) {
+    for (const item of source) {
+      const chosen = chooser(item)
+      if (chosen !== undefined) {
+        yield chosen
       }
     }
-  } else {
-    const source = a as Iterable<T>
-    const chooser = b as (item: T) => U | undefined
-    return (function*(): Iterable<U> {
-      for (const item of source) {
-        const chosen = chooser(item)
-        if (chosen !== undefined) {
-          yield chosen
-        }
-      }
-    })()
   }
+  return partial ? exec : exec(a)
 }
 
 export function collect<T, U>(
