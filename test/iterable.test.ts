@@ -118,7 +118,7 @@ describe('append', () => {
           )
         )
         .then(Iterables.toArray).result
-    ).toEqual([2, 1])
+    ).toEqual([1, 2])
   })
 })
 

@@ -77,8 +77,14 @@ export function choose<T, U>(a: any, b?: any): any {
   }
 }
 
-export const collect = <T, U>(mapping: (item: T) => Iterable<U>) =>
-  function*(source: Iterable<T>): Iterable<U> {
+export function collect<T, U>(
+  mapping: (item: T) => Iterable<U>
+): (source: Iterable<T>) => Iterable<U>
+export function collect<T, U>(source: Iterable<T>, mapping: (item: T) => Iterable<U>): Iterable<U>
+export function collect<T, U>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const mapping: (item: T) => Iterable<U> = partial ? a : b
+  function* exec(source: Iterable<T>) {
     for (const item of source) {
       const children = mapping(item)
       for (const child of children) {
@@ -86,9 +92,15 @@ export const collect = <T, U>(mapping: (item: T) => Iterable<U>) =>
       }
     }
   }
+  return partial ? exec : exec(a)
+}
 
-export const append = <T>(first: Iterable<T>) =>
-  function*(second: Iterable<T>): Iterable<T> {
+export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
+export function append<T>(first: Iterable<T>, second: Iterable<T>): Iterable<T>
+export function append<T, U>(a: any, b?: any): any {
+  const partial = b === undefined
+  const second: Iterable<T> = partial ? a : b
+  function* exec(first: Iterable<T>): Iterable<T> {
     for (const item of first) {
       yield item
     }
@@ -96,6 +108,8 @@ export const append = <T>(first: Iterable<T>) =>
       yield item
     }
   }
+  return partial ? exec : exec(a)
+}
 
 export const concat = function*<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
   for (const source of sources) {
@@ -105,8 +119,12 @@ export const concat = function*<T>(sources: Iterable<Iterable<T>>): Iterable<T> 
   }
 }
 
-export const distinctBy = <T, Key>(selector: (item: T) => Key) =>
-  function*(source: Iterable<T>): Iterable<T> {
+export function distinctBy<T, Key>(selector: (item: T) => Key): (source: Iterable<T>) => Iterable<T>
+export function distinctBy<T, Key>(source: Iterable<T>, selector: (item: T) => Key): Iterable<T>
+export function distinctBy<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => Key = partial ? a : b
+  function* exec(source: Iterable<T>): Iterable<T> {
     const seen = new Set<Key>()
     for (const item of source) {
       const key = selector(item)
@@ -116,49 +134,79 @@ export const distinctBy = <T, Key>(selector: (item: T) => Key) =>
       }
     }
   }
-
-export const exists = <T>(predicate: (item: T) => boolean) => (source: Iterable<T>): boolean => {
-  for (const item of source) {
-    if (predicate(item)) {
-      return true
-    }
-  }
-  return false
+  return partial ? exec : exec(a)
 }
 
-export const find = <T>(predicate: (item: T) => boolean) => (
-  source: Iterable<T>
-): T | undefined => {
-  for (const item of source) {
-    if (predicate(item)) {
-      return item
+export function exists<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => boolean
+export function exists<T>(source: Iterable<T>, predicate: (item: T) => boolean): boolean
+export function exists<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function exec(source: Iterable<T>): boolean {
+    for (const item of source) {
+      if (predicate(item)) {
+        return true
+      }
     }
+    return false
   }
-  return undefined
+  return partial ? exec : exec(a)
 }
 
-export const groupBy = <T, Key>(selector: (item: T) => Key) => (
-  source: Iterable<T>
-): Iterable<[Key, Iterable<T>]> => {
-  const groups = new Map<Key, T[]>()
-  for (const item of source) {
-    const key = selector(item)
-    const group = groups.get(key)
-    if (group === undefined) {
-      groups.set(key, [item])
-    } else {
-      group.push(item)
+export function find<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => T | undefined
+export function find<T>(source: Iterable<T>, predicate: (item: T) => boolean): T | undefined
+export function find<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function exec(source: Iterable<T>): T | undefined {
+    for (const item of source) {
+      if (predicate(item)) {
+        return item
+      }
     }
+    return undefined
   }
-  return groups.entries()
+  return partial ? exec : exec(a)
 }
 
-export const init = (count: number) =>
-  function*<T>(initializer: (index: number) => T): Iterable<T> {
+export function groupBy<T, Key>(
+  selector: (item: T) => Key
+): (source: Iterable<T>) => Iterable<[Key, Iterable<T>]>
+export function groupBy<T, Key>(
+  source: Iterable<T>,
+  selector: (item: T) => Key
+): Iterable<[Key, Iterable<T>]>
+export function groupBy<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => Key = partial ? a : b
+  function exec(source: Iterable<T>): Iterable<[Key, Iterable<T>]> {
+    const groups = new Map<Key, T[]>()
+    for (const item of source) {
+      const key = selector(item)
+      const group = groups.get(key)
+      if (group === undefined) {
+        groups.set(key, [item])
+      } else {
+        group.push(item)
+      }
+    }
+    return groups.entries()
+  }
+  return partial ? exec : exec(a)
+}
+
+export function init<T>(count: number): (initializer: (index: number) => T) => Iterable<T>
+export function init<T>(initializer: (index: number) => T, count: number): Iterable<T>
+export function init<T>(a: any, b?: any): any {
+  const partial = typeof a === 'number'
+  const count: number = partial ? a : b
+  function* exec<T>(initializer: (index: number) => T): Iterable<T> {
     for (let index = 0; index < count; index++) {
       yield initializer(index)
     }
   }
+  return partial ? exec : exec(a)
+}
 
 export const length = <T>(source: Iterable<T>): number => {
   let length = 0
@@ -174,59 +222,92 @@ function compareBy<T>(getProp: (item: T) => any) {
   }
 }
 
-export const sortBy = <T, Key>(selector: (item: T) => Key) => (
-  source: Iterable<T>
-): Iterable<T> => {
-  const copy = Array.from(source)
-  copy.sort(compareBy(selector))
-  return copy
-}
-
-export const sumBy = <T>(selector: (item: T) => number) => (source: Iterable<T>): number => {
-  let sum = 0
-  for (const item of source) {
-    sum += selector(item)
+export function sortBy<T, Key>(selector: (item: T) => Key): (source: Iterable<T>) => Iterable<T>
+export function sortBy<T, Key>(source: Iterable<T>, selector: (item: T) => Key): Iterable<T>
+export function sortBy<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => Key = partial ? a : b
+  function exec(source: Iterable<T>): Iterable<T> {
+    const copy = Array.from(source)
+    copy.sort(compareBy(selector))
+    return copy
   }
-  return sum
+  return partial ? exec : exec(a)
 }
 
-export const maxBy = <T>(selector: (item: T) => number) => (source: Iterable<T>): number => {
-  let max: number | null = null
-  for (const item of source) {
-    const value = selector(item)
-    if (max === null || value > max) {
-      max = value
+export function sumBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
+export function sumBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+export function sumBy<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => number = partial ? a : b
+  function exec(source: Iterable<T>): number {
+    let sum = 0
+    for (const item of source) {
+      sum += selector(item)
     }
+    return sum
   }
-  if (max === null) {
-    throw new Error(`Can't find max of an empty collection`)
-  }
-  return max
+  return partial ? exec : exec(a)
 }
 
-export const minBy = <T>(selector: (item: T) => number) => (source: Iterable<T>): number => {
-  let min: number | null = null
-  for (const item of source) {
-    const value = selector(item)
-    if (min === null || value < min) {
-      min = value
+export function maxBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
+export function maxBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+export function maxBy<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => number = partial ? a : b
+  function exec(source: Iterable<T>): number {
+    let max: number | null = null
+    for (const item of source) {
+      const value = selector(item)
+      if (max === null || value > max) {
+        max = value
+      }
     }
+    if (max === null) {
+      throw new Error(`Can't find max of an empty collection`)
+    }
+    return max
   }
-  if (min === null) {
-    throw new Error(`Can't find min of an empty collection`)
-  }
-  return min
+  return partial ? exec : exec(a)
 }
 
-export const meanBy = <T>(selector: (item: T) => number) => (source: Iterable<T>): number => {
-  let sum = 0
-  let count = 0
-  for (const item of source) {
-    sum += selector(item)
-    count++
+export function minBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
+export function minBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+export function minBy<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => number = partial ? a : b
+  function exec(source: Iterable<T>): number {
+    let min: number | null = null
+    for (const item of source) {
+      const value = selector(item)
+      if (min === null || value < min) {
+        min = value
+      }
+    }
+    if (min === null) {
+      throw new Error(`Can't find min of an empty collection`)
+    }
+    return min
   }
-  if (count === 0) {
-    throw new Error(`Can't find mean of an empty collection`)
+  return partial ? exec : exec(a)
+}
+
+export function meanBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
+export function meanBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+export function meanBy<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => number = partial ? a : b
+  function exec(source: Iterable<T>): number {
+    let sum = 0
+    let count = 0
+    for (const item of source) {
+      sum += selector(item)
+      count++
+    }
+    if (count === 0) {
+      throw new Error(`Can't find mean of an empty collection`)
+    }
+    return sum / count
   }
-  return sum / count
+  return partial ? exec : exec(a)
 }
