@@ -12,6 +12,25 @@ Really simple functions for working with built-in collection types, inspired by 
 - Covers, iterables, arrays, maps and sets.
 - Composable functional design.
 
+### Example usage
+
+Calculating primes without loops:
+```javascript
+const primes = pipe(init(x => x, 100))
+  .then(
+    map(x => ({
+      x,
+      factors: pipe(init(i => i + 1, x))
+        .then(filter(y => x % y === 0))
+        .result
+    }))
+  )
+  .then(filter(num => Iterables.length(num.factors) === 2))
+  .then(map(num => num.x))
+  .then(toArray)
+  .result
+```
+
 ### Importing library
 
 You can import the generated bundle to use the whole library:

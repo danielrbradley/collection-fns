@@ -1,6 +1,6 @@
 {
   "name": "collection-fns",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Functions for working with built-in collection types",
   "keywords": ["collections", "array", "map", "set", "iterable"],
   "main": "dist/collection-fns.umd.js",
