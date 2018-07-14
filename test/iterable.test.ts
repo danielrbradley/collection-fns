@@ -1,5 +1,4 @@
 import { pipe, Iterables } from '../src/collection-fns'
-import { map, toArray } from '../src/iterable'
 
 describe('toArray', () => {
   it('constructs an array', () => {
@@ -30,14 +29,14 @@ describe('map', () => {
   it('maps items without partial application', () => {
     expect(
       pipe(
-        map(
+        Iterables.map(
           (function*() {
             yield 1
             yield 2
           })(),
           x => x * 2
         )
-      ).then(toArray).result
+      ).then(Iterables.toArray).result
     ).toEqual([2, 4])
   })
 })

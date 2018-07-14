@@ -1,4 +1,4 @@
-import * as iterable from './iterable'
+import * as iterables from './iterables'
 export * from './pipes'
 
-export const Iterables = iterable
+export const Iterables = iterables
