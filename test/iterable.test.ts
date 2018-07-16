@@ -234,6 +234,41 @@ describe('exists', () => {
   })
 })
 
+describe('get', () => {
+  it('finds match', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })()
+      ).then(Iterables.get(x => x.name === 'bob')).result
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+  it('throws when not found', () => {
+    expect(
+      () =>
+        pipe(
+          (function*() {
+            yield { name: 'amy', id: 1 }
+            yield { name: 'bob', id: 2 }
+          })()
+        ).then(Iterables.get(x => x.name === 'cat')).result
+    ).toThrow('Element not found matching criteria')
+  })
+  it('finds without partial application', () => {
+    expect(
+      Iterables.get(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })(),
+        x => x.name === 'bob'
+      )
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+})
+
 describe('find', () => {
   it('finds match', () => {
     expect(

@@ -124,6 +124,22 @@ export function exists<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+export function get<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => T
+export function get<T>(source: Iterable<T>, predicate: (item: T) => boolean): T
+export function get<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function exec(source: Iterable<T>): T | undefined {
+    for (const item of source) {
+      if (predicate(item)) {
+        return item
+      }
+    }
+    throw new Error('Element not found matching criteria')
+  }
+  return partial ? exec : exec(a)
+}
+
 export function find<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => T | undefined
 export function find<T>(source: Iterable<T>, predicate: (item: T) => boolean): T | undefined
 export function find<T>(a: any, b?: any): any {
