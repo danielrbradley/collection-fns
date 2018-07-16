@@ -163,19 +163,66 @@ export function groupBy<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function init<T>(count: number): (initializer: (index: number) => T) => T[]
-export function init<T>(initializer: (index: number) => T, count: number): T[]
-export function init<T>(a: any, b?: any): any {
-  const partial = typeof a === 'number'
-  const count: number = partial ? a : b
-  function exec<T>(initializer: (index: number) => T): T[] {
-    const target = []
-    for (let index = 0; index < count; index++) {
-      target.push(initializer(index))
+export interface InitRange {
+  from: number
+  to: number
+  increment?: number
+}
+
+export interface InitCount {
+  start?: number
+  count: number
+  increment?: number
+}
+
+export function init(options: number | InitRange | InitCount): number[]
+export function init<T>(
+  options: number | InitRange | InitCount,
+  initializer: (index: number) => T
+): T[]
+export function init<T>(
+  options: number | InitRange | InitCount,
+  initializer?: (index: number) => T
+): any[] {
+  function normaliseOptions() {
+    if (typeof options === 'number') {
+      return {
+        start: 0,
+        count: options,
+        increment: 1
+      }
     }
-    return target
+    if ('from' in options) {
+      const sign = options.to < options.from ? -1 : 1
+      if (
+        options.increment !== undefined &&
+        (options.increment === 0 || options.increment / sign < 0)
+      ) {
+        throw new Error('Requested array is of infinite size.')
+      }
+      const increment = options.increment ? options.increment : sign
+      return {
+        start: options.from,
+        count: (options.to - options.from) / increment + 1,
+        increment: increment
+      }
+    }
+    const start = options.start === undefined ? 0 : options.start
+    return {
+      start,
+      count: options.count,
+      increment: options.increment === undefined ? 1 : options.increment
+    }
   }
-  return partial ? exec : exec(a)
+  const { start, count, increment } = normaliseOptions()
+  const map = initializer === undefined ? (x: number) => x : initializer
+  const target = []
+  let current = start
+  for (let index = 0; index < count; index++) {
+    target.push(map(current))
+    current += increment
+  }
+  return target
 }
 
 export function length<T>(source: T[]): number {

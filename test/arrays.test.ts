@@ -184,14 +184,66 @@ describe('groupBy', () => {
 })
 
 describe('init', () => {
-  test('piped', () => {
-    expect(pipe(Arrays.init(3)(i => i + 1)).result).toEqual([1, 2, 3])
-  })
   test('empty', () => {
-    expect(pipe(Arrays.init(0)(i => i)).result).toEqual([])
+    expect(Arrays.init(0)).toEqual([])
   })
-  test('invoke', () => {
-    expect(Arrays.init(i => i + 1, 3)).toEqual([1, 2, 3])
+  test('just count', () => {
+    expect(Arrays.init(5)).toEqual([0, 1, 2, 3, 4])
+  })
+  test('with mapping', () => {
+    expect(Arrays.init(5, x => x * x)).toEqual([0, 1, 4, 9, 16])
+  })
+  test('from-to', () => {
+    expect(Arrays.init({ from: 1, to: 3 })).toEqual([1, 2, 3])
+  })
+  test('from-to-same', () => {
+    expect(Arrays.init({ from: 1, to: 1 })).toEqual([1])
+  })
+  test('from-to fractional-increment', () => {
+    expect(Arrays.init({ from: 1, to: 2, increment: 0.5 })).toEqual([1, 1.5, 2])
+  })
+  test('from positive to negative', () => {
+    expect(Arrays.init({ from: 1, to: -1 })).toEqual([1, 0, -1])
+  })
+  test('from negative to positive', () => {
+    expect(Arrays.init({ from: -1, to: 1 })).toEqual([-1, 0, 1])
+  })
+  test('from-to zero increment fails', () => {
+    expect(() => Arrays.init({ from: 1, to: 2, increment: 0 })).toThrow(
+      'Requested array is of infinite size.'
+    )
+  })
+  test('from-to negative fails', () => {
+    expect(() => Arrays.init({ from: 1, to: 2, increment: -0.1 })).toThrow(
+      'Requested array is of infinite size.'
+    )
+  })
+  test('from-to negative crossing zero fails', () => {
+    expect(() => Arrays.init({ from: -1, to: 1, increment: -1 })).toThrow(
+      'Requested array is of infinite size.'
+    )
+  })
+  test('from-to reversed fails', () => {
+    expect(() => Arrays.init({ from: 2, to: 1, increment: 1 })).toThrow(
+      'Requested array is of infinite size.'
+    )
+  })
+  test('from-to reversed crossing zero fails', () => {
+    expect(() => Arrays.init({ from: 1, to: -1, increment: 0.1 })).toThrow(
+      'Requested array is of infinite size.'
+    )
+  })
+  test('start-count', () => {
+    expect(Arrays.init({ start: 3, count: 5 })).toEqual([3, 4, 5, 6, 7])
+  })
+  test('count prop', () => {
+    expect(Arrays.init({ count: 5 })).toEqual([0, 1, 2, 3, 4])
+  })
+  test('start-count', () => {
+    expect(Arrays.init({ start: 3, count: 5 })).toEqual([3, 4, 5, 6, 7])
+  })
+  test('count-increment', () => {
+    expect(Arrays.init({ count: 5, increment: 3 })).toEqual([0, 3, 6, 9, 12])
   })
 })
 

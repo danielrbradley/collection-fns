@@ -375,6 +375,11 @@ describe('init', () => {
       1
     ])
   })
+  test('from positive to negative with fractional increment', () => {
+    expect(
+      pipe(Iterables.init({ from: 1, to: -1, increment: -0.5 })).then(Iterables.toArray).result
+    ).toEqual([1, 0.5, 0, -0.5, -1])
+  })
   test('from-to zero increment fails', () => {
     expect(
       () => pipe(Iterables.init({ from: 1, to: 2, increment: 0 })).then(Iterables.toArray).result
@@ -399,6 +404,15 @@ describe('init', () => {
     expect(
       () => pipe(Iterables.init({ from: 1, to: -1, increment: 0.1 })).then(Iterables.toArray).result
     ).toThrow('Iterable will never complete.\nUse initInfinite if this is desired behaviour')
+  })
+  test('count prop', () => {
+    expect(Iterables.toArray(Iterables.init({ count: 5 }))).toEqual([0, 1, 2, 3, 4])
+  })
+  test('start-count', () => {
+    expect(Iterables.toArray(Iterables.init({ start: 3, count: 5 }))).toEqual([3, 4, 5, 6, 7])
+  })
+  test('count-increment', () => {
+    expect(Iterables.toArray(Iterables.init({ count: 5, increment: 3 }))).toEqual([0, 3, 6, 9, 12])
   })
 })
 
@@ -459,6 +473,20 @@ describe('take', () => {
       )
         .then(Iterables.take(3))
         .then(Iterables.toArray).result
+    ).toEqual([0, 0, 0])
+  })
+  test('invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.take(
+          (function*() {
+            while (true) {
+              yield 0
+            }
+          })(),
+          3
+        )
+      )
     ).toEqual([0, 0, 0])
   })
 })
