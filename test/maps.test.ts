@@ -76,7 +76,7 @@ describe('get', () => {
     expect(pipe(new Map([['a', 1], ['b', 2]])).then(Maps.get('a')).result).toEqual(1)
   })
   test('not found', () => {
-    expect(() => Maps.get(new Map([['a', 1], ['b', 2]]), 'c')).toThrow('')
+    expect(() => Maps.get(new Map([['a', 1], ['b', 2]]), 'c')).toThrow('Specified key not found')
   })
 })
 

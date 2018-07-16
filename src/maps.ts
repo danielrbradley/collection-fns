@@ -76,7 +76,7 @@ export function get<Key, T>(a: any, b?: any): any {
   const key: Key = partial ? a : b
   function exec(source: Map<Key, T>) {
     if (!source.has(key)) {
-      throw new Error('Specified key not found in source')
+      throw new Error('Specified key not found')
     }
     return source.get(key) as T
   }
