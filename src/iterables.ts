@@ -1,4 +1,4 @@
-export const toArray = <T>(source: Iterable<T>): T[] => {
+export function toArray<T>(source: Iterable<T>): T[] {
   return Array.from(source)
 }
 
@@ -82,7 +82,7 @@ export function append<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export const concat = function*<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
+export function* concat<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
   for (const source of sources) {
     for (const item of source) {
       yield item
@@ -179,7 +179,7 @@ export function init<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export const length = <T>(source: Iterable<T>): number => {
+export function length<T>(source: Iterable<T>): number {
   let length = 0
   for (const _ of source) {
     length++
