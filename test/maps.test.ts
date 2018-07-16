@@ -68,6 +68,18 @@ describe('choose', () => {
   })
 })
 
+describe('get', () => {
+  test('immediate', () => {
+    expect(Maps.get(new Map([['a', 1], ['b', 2]]), 'b')).toEqual(2)
+  })
+  test('piped', () => {
+    expect(pipe(new Map([['a', 1], ['b', 2]])).then(Maps.get('a')).result).toEqual(1)
+  })
+  test('not found', () => {
+    expect(() => Maps.get(new Map([['a', 1], ['b', 2]]), 'c')).toThrow('')
+  })
+})
+
 describe('find', () => {
   test('immediate', () => {
     expect(Maps.find(new Map([['a', 1], ['b', 2]]), 'b')).toEqual(2)
@@ -76,19 +88,7 @@ describe('find', () => {
     expect(pipe(new Map([['a', 1], ['b', 2]])).then(Maps.find('a')).result).toEqual(1)
   })
   test('not found', () => {
-    expect(() => Maps.find(new Map([['a', 1], ['b', 2]]), 'c')).toThrow('')
-  })
-})
-
-describe('tryFind', () => {
-  test('immediate', () => {
-    expect(Maps.tryFind(new Map([['a', 1], ['b', 2]]), 'b')).toEqual(2)
-  })
-  test('piped', () => {
-    expect(pipe(new Map([['a', 1], ['b', 2]])).then(Maps.tryFind('a')).result).toEqual(1)
-  })
-  test('not found', () => {
-    expect(Maps.tryFind(new Map([['a', 1], ['b', 2]]), 'c')).toBeUndefined()
+    expect(Maps.find(new Map([['a', 1], ['b', 2]]), 'c')).toBeUndefined()
   })
 })
 

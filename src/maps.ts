@@ -69,9 +69,9 @@ export function choose<Key, T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function find<Key, T>(source: Map<Key, T>, key: Key): T
-export function find<Key, T>(key: Key): (source: Map<Key, T>) => T
-export function find<Key, T>(a: any, b?: any): any {
+export function get<Key, T>(source: Map<Key, T>, key: Key): T
+export function get<Key, T>(key: Key): (source: Map<Key, T>) => T
+export function get<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
   function exec(source: Map<Key, T>) {
@@ -83,9 +83,9 @@ export function find<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function tryFind<Key, T>(source: Map<Key, T>, key: Key): T | undefined
-export function tryFind<Key, T>(key: Key): (source: Map<Key, T>) => T | undefined
-export function tryFind<Key, T>(a: any, b?: any): any {
+export function find<Key, T>(source: Map<Key, T>, key: Key): T | undefined
+export function find<Key, T>(key: Key): (source: Map<Key, T>) => T | undefined
+export function find<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
   function exec(source: Map<Key, T>) {
