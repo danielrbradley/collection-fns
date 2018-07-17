@@ -1,4 +1,4 @@
-export const toArray = <T>(source: Iterable<T>): T[] => {
+export function toArray<T>(source: Iterable<T>): T[] {
   return Array.from(source)
 }
 
@@ -17,7 +17,7 @@ export function map<T, U>(a: any, b?: any): any {
 
 export function filter<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => Iterable<T>
 export function filter<T>(source: Iterable<T>, predicate: (item: T) => boolean): Iterable<T>
-export function filter<T, U>(a: any, b?: any): any {
+export function filter<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T) => boolean = partial ? a : b
   function* exec(source: Iterable<T>) {
@@ -68,7 +68,7 @@ export function collect<T, U>(a: any, b?: any): any {
 
 export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
 export function append<T>(first: Iterable<T>, second: Iterable<T>): Iterable<T>
-export function append<T, U>(a: any, b?: any): any {
+export function append<T>(a: any, b?: any): any {
   const partial = b === undefined
   const second: Iterable<T> = partial ? a : b
   function* exec(first: Iterable<T>): Iterable<T> {
@@ -82,7 +82,7 @@ export function append<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export const concat = function*<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
+export function* concat<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
   for (const source of sources) {
     for (const item of source) {
       yield item
@@ -120,6 +120,22 @@ export function exists<T>(a: any, b?: any): any {
       }
     }
     return false
+  }
+  return partial ? exec : exec(a)
+}
+
+export function get<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => T
+export function get<T>(source: Iterable<T>, predicate: (item: T) => boolean): T
+export function get<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function exec(source: Iterable<T>): T | undefined {
+    for (const item of source) {
+      if (predicate(item)) {
+        return item
+      }
+    }
+    throw new Error('Element not found matching criteria')
   }
   return partial ? exec : exec(a)
 }
@@ -166,20 +182,87 @@ export function groupBy<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function init<T>(count: number): (initializer: (index: number) => T) => Iterable<T>
-export function init<T>(initializer: (index: number) => T, count: number): Iterable<T>
-export function init<T>(a: any, b?: any): any {
+export interface InitRange {
+  from: number
+  to: number
+  increment?: number
+}
+
+export interface InitCount {
+  start?: number
+  count: number
+  increment?: number
+}
+
+export function* init(options: number | InitRange | InitCount): Iterable<number> {
+  function normaliseOptions() {
+    if (typeof options === 'number') {
+      return {
+        start: 0,
+        count: options,
+        increment: 1
+      }
+    }
+    if ('from' in options) {
+      const sign = options.to < options.from ? -1 : 1
+      if (
+        options.increment !== undefined &&
+        (options.increment === 0 || options.increment / sign < 0)
+      ) {
+        throw new Error(
+          'Iterable will never complete.\nUse initInfinite if this is desired behaviour'
+        )
+      }
+      const increment = options.increment ? options.increment : sign
+      return {
+        start: options.from,
+        count: (options.to - options.from) / increment + 1,
+        increment: increment
+      }
+    }
+    const start = options.start === undefined ? 0 : options.start
+    return {
+      start,
+      count: options.count,
+      increment: options.increment === undefined ? 1 : options.increment
+    }
+  }
+  const { start, count, increment } = normaliseOptions()
+  let current = start
+  for (let index = 0; index < count; index++) {
+    yield current
+    current += increment
+  }
+}
+
+export function* initInfinite(options?: { start?: number; increment?: number }): Iterable<number> {
+  const start = options !== undefined && options.start !== undefined ? options.start : 0
+  const increment = options !== undefined && options.increment !== undefined ? options.increment : 1
+  for (let index = start; true; index += increment) {
+    yield index
+  }
+}
+
+export function take<T>(count: number): (source: Iterable<T>) => Iterable<T>
+export function take<T>(source: Iterable<T>, count: number): Iterable<T>
+export function take<T>(a: any, b?: any): any {
   const partial = typeof a === 'number'
   const count: number = partial ? a : b
-  function* exec<T>(initializer: (index: number) => T): Iterable<T> {
-    for (let index = 0; index < count; index++) {
-      yield initializer(index)
+  function* exec(source: Iterable<T>): Iterable<T> {
+    let i = 0
+    for (const item of source) {
+      if (i < count) {
+        i++
+        yield item
+      } else {
+        break
+      }
     }
   }
   return partial ? exec : exec(a)
 }
 
-export const length = <T>(source: Iterable<T>): number => {
+export function length<T>(source: Iterable<T>): number {
   let length = 0
   for (const _ of source) {
     length++

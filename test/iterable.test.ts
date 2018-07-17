@@ -234,6 +234,41 @@ describe('exists', () => {
   })
 })
 
+describe('get', () => {
+  it('finds match', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })()
+      ).then(Iterables.get(x => x.name === 'bob')).result
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+  it('throws when not found', () => {
+    expect(
+      () =>
+        pipe(
+          (function*() {
+            yield { name: 'amy', id: 1 }
+            yield { name: 'bob', id: 2 }
+          })()
+        ).then(Iterables.get(x => x.name === 'cat')).result
+    ).toThrow('Element not found matching criteria')
+  })
+  it('finds without partial application', () => {
+    expect(
+      Iterables.get(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })(),
+        x => x.name === 'bob'
+      )
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+})
+
 describe('find', () => {
   it('finds match', () => {
     expect(
@@ -305,23 +340,163 @@ describe('groupBy', () => {
 })
 
 describe('init', () => {
-  it('creates elements', () => {
-    expect(pipe(Iterables.init(3)(i => i + 1)).then(Iterables.toArray).result).toEqual([1, 2, 3])
+  test('empty', () => {
+    expect(pipe(Iterables.init(0)).then(Iterables.toArray).result).toEqual([])
   })
-  it('can create empty', () => {
-    expect(pipe(Iterables.init(0)(i => i)).then(Iterables.toArray).result).toEqual([])
+  test('just count', () => {
+    expect(pipe(Iterables.init(5)).then(Iterables.toArray).result).toEqual([0, 1, 2, 3, 4])
   })
-  it('can init without partial application', () => {
-    expect(Iterables.toArray(Iterables.init(i => i + 1, 3))).toEqual([1, 2, 3])
+  test('from-to', () => {
+    expect(pipe(Iterables.init({ from: 1, to: 3 })).then(Iterables.toArray).result).toEqual([
+      1,
+      2,
+      3
+    ])
+  })
+  test('from-to-same', () => {
+    expect(pipe(Iterables.init({ from: 1, to: 1 })).then(Iterables.toArray).result).toEqual([1])
+  })
+  test('from-to fractional-increment', () => {
+    expect(
+      pipe(Iterables.init({ from: 1, to: 2, increment: 0.5 })).then(Iterables.toArray).result
+    ).toEqual([1, 1.5, 2])
+  })
+  test('from positive to negative', () => {
+    expect(pipe(Iterables.init({ from: 1, to: -1 })).then(Iterables.toArray).result).toEqual([
+      1,
+      0,
+      -1
+    ])
+  })
+  test('from negative to positive', () => {
+    expect(pipe(Iterables.init({ from: -1, to: 1 })).then(Iterables.toArray).result).toEqual([
+      -1,
+      0,
+      1
+    ])
+  })
+  test('from positive to negative with fractional increment', () => {
+    expect(
+      pipe(Iterables.init({ from: 1, to: -1, increment: -0.5 })).then(Iterables.toArray).result
+    ).toEqual([1, 0.5, 0, -0.5, -1])
+  })
+  test('from-to zero increment fails', () => {
+    expect(
+      () => pipe(Iterables.init({ from: 1, to: 2, increment: 0 })).then(Iterables.toArray).result
+    ).toThrow('Iterable will never complete.\nUse initInfinite if this is desired behaviour')
+  })
+  test('from-to negative fails', () => {
+    expect(
+      () => pipe(Iterables.init({ from: 1, to: 2, increment: -0.1 })).then(Iterables.toArray).result
+    ).toThrow('Iterable will never complete.\nUse initInfinite if this is desired behaviour')
+  })
+  test('from-to negative crossing zero fails', () => {
+    expect(
+      () => pipe(Iterables.init({ from: -1, to: 1, increment: -1 })).then(Iterables.toArray).result
+    ).toThrow('Iterable will never complete.\nUse initInfinite if this is desired behaviour')
+  })
+  test('from-to reversed fails', () => {
+    expect(
+      () => pipe(Iterables.init({ from: 2, to: 1, increment: 1 })).then(Iterables.toArray).result
+    ).toThrow('Iterable will never complete.\nUse initInfinite if this is desired behaviour')
+  })
+  test('from-to reversed crossing zero fails', () => {
+    expect(
+      () => pipe(Iterables.init({ from: 1, to: -1, increment: 0.1 })).then(Iterables.toArray).result
+    ).toThrow('Iterable will never complete.\nUse initInfinite if this is desired behaviour')
+  })
+  test('count prop', () => {
+    expect(Iterables.toArray(Iterables.init({ count: 5 }))).toEqual([0, 1, 2, 3, 4])
+  })
+  test('start-count', () => {
+    expect(Iterables.toArray(Iterables.init({ start: 3, count: 5 }))).toEqual([3, 4, 5, 6, 7])
+  })
+  test('count-increment', () => {
+    expect(Iterables.toArray(Iterables.init({ count: 5, increment: 3 }))).toEqual([0, 3, 6, 9, 12])
+  })
+})
+
+describe('initInfinite', () => {
+  test('defaults', () => {
+    expect(
+      pipe(Iterables.initInfinite())
+        .then(Iterables.take(5))
+        .then(Iterables.toArray).result
+    ).toEqual([0, 1, 2, 3, 4])
+  })
+  test('no properties', () => {
+    expect(
+      pipe(Iterables.initInfinite({}))
+        .then(Iterables.take(5))
+        .then(Iterables.toArray).result
+    ).toEqual([0, 1, 2, 3, 4])
+  })
+  test('just start', () => {
+    expect(
+      pipe(Iterables.initInfinite({ start: 5 }))
+        .then(Iterables.take(5))
+        .then(Iterables.toArray).result
+    ).toEqual([5, 6, 7, 8, 9])
+  })
+  test('just increment', () => {
+    expect(
+      pipe(Iterables.initInfinite({ increment: 5 }))
+        .then(Iterables.take(5))
+        .then(Iterables.toArray).result
+    ).toEqual([0, 5, 10, 15, 20])
+  })
+  test('fractional increment', () => {
+    expect(
+      pipe(Iterables.initInfinite({ increment: 0.5 }))
+        .then(Iterables.take(5))
+        .then(Iterables.toArray).result
+    ).toEqual([0, 0.5, 1, 1.5, 2])
+  })
+  test('custom range', () => {
+    expect(
+      pipe(Iterables.initInfinite({ start: 5, increment: 0.5 }))
+        .then(Iterables.take(5))
+        .then(Iterables.toArray).result
+    ).toEqual([5, 5.5, 6, 6.5, 7])
+  })
+})
+
+describe('take', () => {
+  test('piped', () => {
+    expect(
+      pipe(
+        (function*() {
+          while (true) {
+            yield 0
+          }
+        })()
+      )
+        .then(Iterables.take(3))
+        .then(Iterables.toArray).result
+    ).toEqual([0, 0, 0])
+  })
+  test('invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.take(
+          (function*() {
+            while (true) {
+              yield 0
+            }
+          })(),
+          3
+        )
+      )
+    ).toEqual([0, 0, 0])
   })
 })
 
 describe('length', () => {
   it('can return zero length', () => {
-    expect(pipe(Iterables.init(0)(i => i)).then(Iterables.length).result).toEqual(0)
+    expect(pipe(Iterables.init({ count: 0 })).then(Iterables.length).result).toEqual(0)
   })
   it('can return non-zero length', () => {
-    expect(pipe(Iterables.init(5)(i => i)).then(Iterables.length).result).toEqual(5)
+    expect(pipe(Iterables.init({ count: 5 })).then(Iterables.length).result).toEqual(5)
   })
 })
 
