@@ -1,18 +1,24 @@
 import { pipe, Sets, Iterables } from '../src/collection-fns'
 
-describe('ofIterable', () => {
-  it('constructs an array', () => {
-    const iterator = function*() {
-      yield 1
-      yield 2
-      yield 2
-    }
-    expect(Sets.ofIterable(iterator())).toEqual(new Set([1, 2]))
-  })
+test('ofIterable', () => {
+  const iterator = function*() {
+    yield 1
+    yield 2
+    yield 2
+  }
+  expect(Sets.ofIterable(iterator())).toEqual(new Set([1, 2]))
+})
+
+test('ofArray', () => {
+  expect(Sets.ofArray([1, 2, 2, 3])).toEqual(new Set([1, 2, 3]))
 })
 
 test('asIterable', () => {
   expect(Iterables.length(Sets.asIterable(new Set(['a'])))).toEqual(1)
+})
+
+test('toArray', () => {
+  expect(Sets.toArray(new Set(['a']))).toEqual(['a'])
 })
 
 describe('map', () => {

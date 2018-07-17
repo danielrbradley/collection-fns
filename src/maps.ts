@@ -4,8 +4,16 @@ export function ofIterable<Key, T>(source: Iterable<[Key, T]>): Map<Key, T> {
   return new Map(source)
 }
 
-export function toIterable<Key, T>(source: Map<Key, T>): Iterable<[Key, T]> {
-  return source.entries()
+export function ofArray<Key, T>(source: [Key, T][]): Map<Key, T> {
+  return new Map(source)
+}
+
+export function ofSet<T>(source: Set<T>): Map<T, T> {
+  return new Map(source.entries())
+}
+
+export function asIterable<Key, T>(source: Map<Key, T>): Iterable<[Key, T]> {
+  return source
 }
 
 export function map<Key, T, U>(source: Map<Key, T>, mapping: (key: Key, value: T) => U): Map<Key, U>

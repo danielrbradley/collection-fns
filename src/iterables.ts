@@ -17,7 +17,7 @@ export function map<T, U>(a: any, b?: any): any {
 
 export function filter<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => Iterable<T>
 export function filter<T>(source: Iterable<T>, predicate: (item: T) => boolean): Iterable<T>
-export function filter<T, U>(a: any, b?: any): any {
+export function filter<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T) => boolean = partial ? a : b
   function* exec(source: Iterable<T>) {
@@ -68,7 +68,7 @@ export function collect<T, U>(a: any, b?: any): any {
 
 export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
 export function append<T>(first: Iterable<T>, second: Iterable<T>): Iterable<T>
-export function append<T, U>(a: any, b?: any): any {
+export function append<T>(a: any, b?: any): any {
   const partial = b === undefined
   const second: Iterable<T> = partial ? a : b
   function* exec(first: Iterable<T>): Iterable<T> {

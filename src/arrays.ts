@@ -62,7 +62,7 @@ export function collect<T, U>(a: any, b?: any): any {
 
 export function append<T>(second: T[]): (first: T[]) => T[]
 export function append<T>(first: T[], second: T[]): T[]
-export function append<T, U>(a: any, b?: any): any {
+export function append<T>(a: any, b?: any): any {
   const partial = b === undefined
   const second: T[] = partial ? a : b
   function exec(first: T[]): T[] {

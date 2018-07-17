@@ -11,8 +11,16 @@ test('ofIterable', () => {
   ).toEqual(new Map([['a', 1], ['b', 2]]))
 })
 
-test('toIterable', () => {
-  expect(Iterables.toArray(Maps.toIterable(new Map([['a', 1], ['b', 2]])))).toEqual([
+test('ofArray', () => {
+  expect(Maps.ofArray([['a', 1], ['b', 2]])).toEqual(new Map([['a', 1], ['b', 2]]))
+})
+
+test('ofSet', () => {
+  expect(Maps.ofSet(new Set(['a', 'b']))).toEqual(new Map([['a', 'a'], ['b', 'b']]))
+})
+
+test('asIterable', () => {
+  expect(Iterables.toArray(Maps.asIterable(new Map([['a', 1], ['b', 2]])))).toEqual([
     ['a', 1],
     ['b', 2]
   ])
