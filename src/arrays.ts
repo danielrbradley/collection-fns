@@ -259,6 +259,10 @@ export function sortByDescending<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+export function reverse<T>(source: T[]): T[] {
+  return Array.from(source).reverse()
+}
+
 export function sumBy<T>(selector: (item: T) => number): (source: T[]) => number
 export function sumBy<T>(source: T[], selector: (item: T) => number): number
 export function sumBy<T>(a: any, b?: any): any {

@@ -291,6 +291,16 @@ describe('sortByDescending', () => {
     ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
   })
 })
+
+describe('reverse', () => {
+  test('empty', () => {
+    expect(Arrays.reverse([])).toEqual([])
+  })
+  test('reversal', () => {
+    expect(Arrays.reverse([8, 3, 5])).toEqual([5, 3, 8])
+  })
+})
+
 describe('sumBy', () => {
   test('piping', () => {
     expect(
