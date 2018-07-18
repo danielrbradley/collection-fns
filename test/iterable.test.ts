@@ -560,6 +560,15 @@ describe('sortByDescending', () => {
   })
 })
 
+describe('reverse', () => {
+  test('empty iterable', () => {
+    expect(Iterables.toArray(Iterables.reverse([]))).toEqual([])
+  })
+  test('reversal', () => {
+    expect(Iterables.toArray(Iterables.reverse([8, 3, 5]))).toEqual([5, 3, 8])
+  })
+})
+
 describe('sumBy', () => {
   it('sums ages', () => {
     expect(
