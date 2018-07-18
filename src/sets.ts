@@ -1,4 +1,4 @@
-import { Iterables } from './collection-fns'
+import * as Iterables from './iterables'
 
 export function ofIterable<T>(source: Iterable<T>): Set<T> {
   return new Set(source)

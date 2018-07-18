@@ -500,6 +500,15 @@ describe('length', () => {
   })
 })
 
+describe('count', () => {
+  test('zero length', () => {
+    expect(pipe(Iterables.init({ count: 0 })).then(Iterables.count).result).toEqual(0)
+  })
+  test('non-zero length', () => {
+    expect(pipe(Iterables.init({ count: 5 })).then(Iterables.count).result).toEqual(5)
+  })
+})
+
 describe('sortBy', () => {
   it('sorts by selected key', () => {
     expect(
@@ -527,6 +536,45 @@ describe('sortBy', () => {
         )
       )
     ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+})
+
+describe('sortByDescending', () => {
+  test('piped', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })()
+      )
+        .then(Iterables.sortByDescending(x => x.age))
+        .then(Iterables.toArray).result
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sortByDescending(
+          (function*() {
+            yield { name: 'amy', age: 21 }
+            yield { name: 'bob', age: 2 }
+            yield { name: 'cat', age: 18 }
+          })(),
+          x => x.age
+        )
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+})
+
+describe('reverse', () => {
+  test('empty iterable', () => {
+    expect(Iterables.toArray(Iterables.reverse([]))).toEqual([])
+  })
+  test('reversal', () => {
+    expect(Iterables.toArray(Iterables.reverse([8, 3, 5]))).toEqual([5, 3, 8])
   })
 })
 

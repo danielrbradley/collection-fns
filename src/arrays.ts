@@ -229,10 +229,8 @@ export function length<T>(source: T[]): number {
   return source.length
 }
 
-function compareBy<T>(getProp: (item: T) => any) {
-  return (a: T, b: T) => {
-    return getProp(a) > getProp(b) ? 1 : -1
-  }
+export function count<T>(source: T[]): number {
+  return source.length
 }
 
 export function sortBy<T, Key>(selector: (item: T) => Key): (source: T[]) => T[]
@@ -242,10 +240,31 @@ export function sortBy<T, Key>(a: any, b?: any): any {
   const selector: (item: T) => Key = partial ? a : b
   function exec(source: T[]): T[] {
     const copy = Array.from(source)
-    copy.sort(compareBy(selector))
+    copy.sort((a: T, b: T) => {
+      return selector(a) > selector(b) ? 1 : -1
+    })
     return copy
   }
   return partial ? exec : exec(a)
+}
+
+export function sortByDescending<T, Key>(selector: (item: T) => Key): (source: T[]) => T[]
+export function sortByDescending<T, Key>(source: T[], selector: (item: T) => Key): T[]
+export function sortByDescending<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => Key = partial ? a : b
+  function exec(source: T[]): T[] {
+    const copy = Array.from(source)
+    copy.sort((a: T, b: T) => {
+      return selector(a) > selector(b) ? -1 : 1
+    })
+    return copy
+  }
+  return partial ? exec : exec(a)
+}
+
+export function reverse<T>(source: T[]): T[] {
+  return Array.from(source).reverse()
 }
 
 export function sumBy<T>(selector: (item: T) => number): (source: T[]) => number

@@ -113,3 +113,12 @@ describe('exists', () => {
     expect(Maps.exists(new Map([['a', 1], ['b', 2]]), (key, value) => value === 3)).toEqual(false)
   })
 })
+
+describe('count', () => {
+  test('zero length', () => {
+    expect(Maps.count(new Map())).toEqual(0)
+  })
+  test('non-zero length', () => {
+    expect(Maps.count(new Map([['a', 1], ['b', 2], ['c', 3]]))).toEqual(3)
+  })
+})

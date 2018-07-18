@@ -256,6 +256,15 @@ describe('length', () => {
   })
 })
 
+describe('count', () => {
+  test('zero length', () => {
+    expect(Arrays.count([])).toEqual(0)
+  })
+  test('non-zero length', () => {
+    expect(Arrays.count([1, 2, 3, 4, 5])).toEqual(5)
+  })
+})
+
 describe('sortBy', () => {
   test('piped', () => {
     expect(
@@ -271,6 +280,33 @@ describe('sortBy', () => {
         x => x.age
       )
     ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+})
+
+describe('sortByDescending', () => {
+  test('piped', () => {
+    expect(
+      pipe([{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }]).then(
+        Arrays.sortByDescending(x => x.age)
+      ).result
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('invoke', () => {
+    expect(
+      Arrays.sortByDescending(
+        [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+        x => x.age
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+})
+
+describe('reverse', () => {
+  test('empty', () => {
+    expect(Arrays.reverse([])).toEqual([])
+  })
+  test('reversal', () => {
+    expect(Arrays.reverse([8, 3, 5])).toEqual([5, 3, 8])
   })
 })
 
