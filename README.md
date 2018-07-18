@@ -4,6 +4,7 @@
 [![Travis](https://img.shields.io/travis/danielrbradley/collection-fns.svg)](https://travis-ci.org/danielrbradley/collection-fns)
 [![Coveralls](https://img.shields.io/coveralls/danielrbradley/collection-fns.svg)](https://coveralls.io/github/danielrbradley/collection-fns)
 [![Dev Dependencies](https://david-dm.org/danielrbradley/collection-fns/dev-status.svg)](https://david-dm.org/danielrbradley/collection-fns?type=dev) [![Greenkeeper badge](https://badges.greenkeeper.io/danielrbradley/collection-fns.svg)](https://greenkeeper.io/)
+[![npm version](https://badge.fury.io/js/collection-fns.svg)](https://badge.fury.io/js/collection-fns)
 
 Really simple functions for working with built-in collection types, inspired by F#'s collection modules design.
 
