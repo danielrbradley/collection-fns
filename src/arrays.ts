@@ -244,6 +244,21 @@ export function sortBy<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+export function sortByDescending<T, Key>(selector: (item: T) => Key): (source: T[]) => T[]
+export function sortByDescending<T, Key>(source: T[], selector: (item: T) => Key): T[]
+export function sortByDescending<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const selector: (item: T) => Key = partial ? a : b
+  function exec(source: T[]): T[] {
+    const copy = Array.from(source)
+    copy.sort((a: T, b: T) => {
+      return selector(a) > selector(b) ? -1 : 1
+    })
+    return copy
+  }
+  return partial ? exec : exec(a)
+}
+
 export function sumBy<T>(selector: (item: T) => number): (source: T[]) => number
 export function sumBy<T>(source: T[], selector: (item: T) => number): number
 export function sumBy<T>(a: any, b?: any): any {

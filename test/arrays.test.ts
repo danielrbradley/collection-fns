@@ -274,6 +274,23 @@ describe('sortBy', () => {
   })
 })
 
+describe('sortByDescending', () => {
+  test('piped', () => {
+    expect(
+      pipe([{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }]).then(
+        Arrays.sortByDescending(x => x.age)
+      ).result
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('invoke', () => {
+    expect(
+      Arrays.sortByDescending(
+        [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+        x => x.age
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+})
 describe('sumBy', () => {
   test('piping', () => {
     expect(
