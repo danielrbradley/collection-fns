@@ -229,6 +229,10 @@ export function length<T>(source: T[]): number {
   return source.length
 }
 
+export function count<T>(source: T[]): number {
+  return source.length
+}
+
 export function sortBy<T, Key>(selector: (item: T) => Key): (source: T[]) => T[]
 export function sortBy<T, Key>(source: T[], selector: (item: T) => Key): T[]
 export function sortBy<T, Key>(a: any, b?: any): any {

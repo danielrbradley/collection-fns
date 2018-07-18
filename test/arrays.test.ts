@@ -256,6 +256,15 @@ describe('length', () => {
   })
 })
 
+describe('count', () => {
+  test('zero length', () => {
+    expect(Arrays.count([])).toEqual(0)
+  })
+  test('non-zero length', () => {
+    expect(Arrays.count([1, 2, 3, 4, 5])).toEqual(5)
+  })
+})
+
 describe('sortBy', () => {
   test('piped', () => {
     expect(
