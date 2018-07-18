@@ -1,4 +1,4 @@
-import { Iterables } from './collection-fns'
+import * as Iterables from './iterables'
 
 export function ofIterable<Key, T>(source: Iterable<[Key, T]>): Map<Key, T> {
   return new Map(source)
