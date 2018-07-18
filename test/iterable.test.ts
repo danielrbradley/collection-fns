@@ -500,6 +500,15 @@ describe('length', () => {
   })
 })
 
+describe('count', () => {
+  test('zero length', () => {
+    expect(pipe(Iterables.init({ count: 0 })).then(Iterables.count).result).toEqual(0)
+  })
+  test('non-zero length', () => {
+    expect(pipe(Iterables.init({ count: 5 })).then(Iterables.count).result).toEqual(5)
+  })
+})
+
 describe('sortBy', () => {
   it('sorts by selected key', () => {
     expect(

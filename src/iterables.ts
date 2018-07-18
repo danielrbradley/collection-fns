@@ -263,6 +263,10 @@ export function take<T>(a: any, b?: any): any {
 }
 
 export function length<T>(source: Iterable<T>): number {
+  return count(source)
+}
+
+export function count<T>(source: Iterable<T>): number {
   let length = 0
   for (const _ of source) {
     length++
