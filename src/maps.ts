@@ -122,3 +122,7 @@ export function exists<Key, T>(a: any, b?: any): any {
   }
   return partial ? exec : exec(a)
 }
+
+export function count<Key, T>(source: Map<Key, T>): number {
+  return source.size
+}
