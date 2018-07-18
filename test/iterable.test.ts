@@ -530,6 +530,36 @@ describe('sortBy', () => {
   })
 })
 
+describe('sortByDescending', () => {
+  test('piped', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })()
+      )
+        .then(Iterables.sortByDescending(x => x.age))
+        .then(Iterables.toArray).result
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sortByDescending(
+          (function*() {
+            yield { name: 'amy', age: 21 }
+            yield { name: 'bob', age: 2 }
+            yield { name: 'cat', age: 18 }
+          })(),
+          x => x.age
+        )
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+})
+
 describe('sumBy', () => {
   it('sums ages', () => {
     expect(
