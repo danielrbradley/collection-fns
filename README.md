@@ -44,18 +44,18 @@ Calculating primes lazily with iterators:
 import { pipe } from 'collection-fns'
 import { init, map, filter, count } from 'collection-fns/dist/lib/iterables';
 
-const primes = pipe(init({ from: 1, to: 100 }))
-  .then(
-    map(x => ({
-      x,
-      factors:
-        pipe(init({ from: 1, to: x }))
-          .then(filter(y => x % y === 0))
-          .result
-    }))
-  )
-  .then(filter(num => count(num.factors) === 2))
-  .then(map(num => num.x)).result
+const primes = pipe(
+  init({ from: 1, to: 100 }),
+  map(x => ({
+    x,
+    factors: pipe(
+      init({ from: 1, to: x }),
+      filter(y => x % y === 0)
+    )
+  })),
+  filter(num => count(num.factors) === 2),
+  map(num => num.x)
+)
 
 for (const prime of primes) {
   console.log(prime)
@@ -70,29 +70,51 @@ Iterables.map(
   x => x * x))
 ```
 
-### Pipes explained
+## Pipes
 
-The `pipe()` function is a stand-in until the pipe operator gets [implemented in ESNext](https://github.com/tc39/proposal-pipeline-operator#introduction).
+The `pipe()` function is a stand-in until the pipe (`|>`) operator gets [implemented in ESNext](https://github.com/tc39/proposal-pipeline-operator#introduction).
 
-1. The pipe is started by passing `pipe(...)` a first value.
+For pipes of up to 26 steps, the multi-argument overloads can be used where the first argument is the initial value, and all following arguments are functions take the result of the step before and returning a new result. The result from the final step is then returned as the result of the pipe.
+
+For longer pipes there is an alternative syntax:
+1. The pipe is started by passing `pipe(...)` a single initial value.
 2. Each `.then(...)` step in a pipe takes a callback that is passed the value from the previous step.
 3. At the end of the pipe, access the `.result` property to get the value returned from the last step.
 
 Taking the example from the proposal linked above:
 
 ```javascript
-let result = exclaim(capitalize(doubleSay("hello")));
+function doubleSay (str) {
+  return str + ", " + str;
+}
+function capitalize (str) {
+  return str[0].toUpperCase() + str.substring(1);
+}
+function exclaim (str) {
+  return str + '!';
+}
 ```
 
-Rewritten with pipes allows us to read the steps going down the page:
-
+The following statements are equivalent:
 ```javascript
+let result = exclaim(capitalize(doubleSay("hello")));
+result // Prints: "Hello, hello!"
+
+let result = pipe(
+  "hello",
+  doubleSay,
+  capitalize,
+  exclaim
+)
+result // Prints: "Hello, hello!"
+
 let result =
   pipe("hello")
     .then(doubleSay)
     .then(capitalize)
     .then(exclaim)
     .result
+result // Prints: "Hello, hello!"
 ```
 
 ## NPM scripts
