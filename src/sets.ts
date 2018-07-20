@@ -190,6 +190,34 @@ export function contains<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the first element for which the given function returns true.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @param source The input collection.
+ * @throws If no item is found matching the criteria of the predicate.
+ */
+export function get<T>(predicate: (item: T) => boolean): (source: Set<T>) => T
+/**
+ * Returns the first element for which the given function returns true.
+ * @param source The input collection.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @throws If no item is found matching the criteria of the predicate.
+ */
+export function get<T>(source: Set<T>, predicate: (item: T) => boolean): T
+export function get<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function exec(source: Set<T>): T | undefined {
+    for (const item of source) {
+      if (predicate(item)) {
+        return item
+      }
+    }
+    throw new Error('Element not found matching criteria')
+  }
+  return partial ? exec : exec(a)
+}
+
 export function find<T>(predicate: (item: T) => boolean): (source: Set<T>) => T | undefined
 export function find<T>(source: Set<T>, predicate: (item: T) => boolean): T | undefined
 export function find<T>(a: any, b?: any): any {

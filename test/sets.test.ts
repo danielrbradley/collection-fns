@@ -120,6 +120,22 @@ describe('contains', () => {
   })
 })
 
+describe('get', () => {
+  test('piped match', () => {
+    expect(pipe(new Set(['amy', 'bob'])).then(Sets.get(x => x.startsWith('b'))).result).toEqual(
+      'bob'
+    )
+  })
+  it('throws when not found', () => {
+    expect(
+      () => pipe(new Set(['amy', 'bob'])).then(Sets.get(x => x.startsWith('c'))).result
+    ).toThrow('Element not found matching criteria')
+  })
+  test('invoke', () => {
+    expect(Sets.get(new Set(['amy', 'bob']), x => x.startsWith('a'))).toEqual('amy')
+  })
+})
+
 describe('find', () => {
   test('piped match', () => {
     expect(pipe(new Set(['amy', 'bob'])).then(Sets.find(x => x.startsWith('b'))).result).toEqual(

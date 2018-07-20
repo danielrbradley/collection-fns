@@ -158,7 +158,19 @@ export function concat<Key, T>(sources: Iterable<Map<Key, T>>): Map<Key, T> {
   return target
 }
 
+/**
+ * Returns the value for the given key.
+ * @param key The key to lookup in the map.
+ * @param source The input collection.
+ * @throws If the key does not exist in the source collection.
+ */
 export function get<Key, T>(key: Key): (source: Map<Key, T>) => T
+/**
+ * Returns the value for the given key.
+ * @param source The input collection.
+ * @param key The key to lookup in the map.
+ * @throws If the key does not exist in the source collection.
+ */
 export function get<Key, T>(source: Map<Key, T>, key: Key): T
 export function get<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
