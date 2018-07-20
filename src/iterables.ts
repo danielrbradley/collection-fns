@@ -11,6 +11,11 @@ export function toArray<T>(source: Iterable<T>): T[] {
  * @param mapping A function to transform items from the input collection.
  */
 export function map<T, U>(mapping: (item: T) => U): (source: Iterable<T>) => Iterable<U>
+/**
+ * Creates a new iterable whose elements are the results of applying the specified mapping to each of the elements of the source collection.
+ * @param source The input collection.
+ * @param mapping A function to transform items from the input collection.
+ */
 export function map<T, U>(source: Iterable<T>, mapping: (item: T) => U): Iterable<U>
 export function map<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -28,6 +33,11 @@ export function map<T, U>(a: any, b?: any): any {
  * @param predicate A function to test whether each item in the input collection should be included in the output.
  */
 export function filter<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => Iterable<T>
+/**
+ * Returns a new iterable containing only the elements of the collection for which the given predicate returns true.
+ * @param source The input collection.
+ * @param predicate A function to test whether each item in the input collection should be included in the output.
+ */
 export function filter<T>(source: Iterable<T>, predicate: (item: T) => boolean): Iterable<T>
 export function filter<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -49,6 +59,11 @@ export function filter<T>(a: any, b?: any): any {
 export function choose<T, U>(
   chooser: (item: T) => U | undefined
 ): (source: Iterable<T>) => Iterable<U>
+/**
+ * Applies the given function to each element of the sequence and returns a new sequence comprised of the results for each element where the function returns a value.
+ * @param source The input collection.
+ * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
+ */
 export function choose<T, U>(source: Iterable<T>, chooser: (item: T) => U | undefined): Iterable<U>
 export function choose<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -71,6 +86,11 @@ export function choose<T, U>(a: any, b?: any): any {
 export function collect<T, U>(
   mapping: (item: T) => Iterable<U>
 ): (source: Iterable<T>) => Iterable<U>
+/**
+ * Applies the given function to each element of the source iterable and concatenates all the results.
+ * @param source The input collection.
+ * @param mapping A function to transform elements of the input collection into collections that are concatenated.
+ */
 export function collect<T, U>(source: Iterable<T>, mapping: (item: T) => Iterable<U>): Iterable<U>
 export function collect<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -86,7 +106,16 @@ export function collect<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Wraps the two given iterables as a single concatenated iterable.
+ * @param second The second iterable.
+ */
 export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
+/**
+ * Wraps the two given iterables as a single concatenated iterable.
+ * @param first The first iterable.
+ * @param second The second iterable.
+ */
 export function append<T>(first: Iterable<T>, second: Iterable<T>): Iterable<T>
 export function append<T>(a: any, b?: any): any {
   const partial = b === undefined

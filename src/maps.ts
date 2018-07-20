@@ -38,10 +38,15 @@ export function asIterable<Key, T>(source: Map<Key, T>): Iterable<[Key, T]> {
  * Creates a new map whose values are the results of applying the specified mapping to each of the values of the source map.
  * @param mapping A function to transform entries from the input collection into new values.
  */
-export function map<Key, T, U>(source: Map<Key, T>, mapping: (key: Key, value: T) => U): Map<Key, U>
 export function map<Key, T, U>(
   mapping: (key: Key, value: T) => U
 ): (source: Map<Key, T>) => Map<Key, U>
+/**
+ * Creates a new map whose values are the results of applying the specified mapping to each of the values of the source map.
+ * @param source The input collection.
+ * @param mapping A function to transform entries from the input collection into new values.
+ */
+export function map<Key, T, U>(source: Map<Key, T>, mapping: (key: Key, value: T) => U): Map<Key, U>
 export function map<Key, T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const mapping: (key: Key, value: T) => U = partial ? a : b
@@ -62,12 +67,17 @@ export function map<Key, T, U>(a: any, b?: any): any {
  * @param predicate A function to test whether each item in the input map should be included in the output map.
  */
 export function filter<Key, T>(
+  predicate: (key: Key, value: T) => boolean
+): (source: Map<Key, T>) => Map<Key, T>
+/**
+ * Returns a new map containing only the elements of the map for which the given predicate returns true.
+ * @param source The input collection.
+ * @param predicate A function to test whether each item in the input map should be included in the output map.
+ */
+export function filter<Key, T>(
   source: Map<Key, T>,
   predicate: (key: Key, value: T) => boolean
 ): Map<Key, T>
-export function filter<Key, T>(
-  predicate: (key: Key, value: T) => boolean
-): (source: Map<Key, T>) => Map<Key, T>
 export function filter<Key, T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (key: Key, value: T) => boolean = partial ? a : b
@@ -84,12 +94,17 @@ export function filter<Key, T>(a: any, b?: any): any {
  * @param chooser A function to transform entries from the input map to a new value to be included, or undefined to be excluded.
  */
 export function choose<Key, T, U>(
+  chooser: (key: Key, value: T) => U | undefined
+): (source: Map<Key, T>) => Map<Key, U>
+/**
+ * Applies the given function to each entry of the map and returns a new map comprised of the results for each element where the function returns a value.
+ * @param source The input collection.
+ * @param chooser A function to transform entries from the input map to a new value to be included, or undefined to be excluded.
+ */
+export function choose<Key, T, U>(
   source: Map<Key, T>,
   chooser: (key: Key, value: T) => U | undefined
 ): Map<Key, U>
-export function choose<Key, T, U>(
-  chooser: (key: Key, value: T) => U | undefined
-): (source: Map<Key, T>) => Map<Key, U>
 export function choose<Key, T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const chooser: (key: Key, value: T) => U | undefined = partial ? a : b
@@ -107,8 +122,8 @@ export function choose<Key, T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function get<Key, T>(source: Map<Key, T>, key: Key): T
 export function get<Key, T>(key: Key): (source: Map<Key, T>) => T
+export function get<Key, T>(source: Map<Key, T>, key: Key): T
 export function get<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
@@ -121,8 +136,8 @@ export function get<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function find<Key, T>(source: Map<Key, T>, key: Key): T | undefined
 export function find<Key, T>(key: Key): (source: Map<Key, T>) => T | undefined
+export function find<Key, T>(source: Map<Key, T>, key: Key): T | undefined
 export function find<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
@@ -133,12 +148,12 @@ export function find<Key, T>(a: any, b?: any): any {
 }
 
 export function exists<Key, T>(
+  predicate: (key: Key, value: T) => boolean
+): (source: Map<Key, T>) => boolean
+export function exists<Key, T>(
   source: Map<Key, T>,
   predicate: (key: Key, value: T) => boolean
 ): boolean
-export function exists<Key, T>(
-  predicate: (key: Key, value: T) => boolean
-): (source: Map<Key, T>) => boolean
 export function exists<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const predicate: (key: Key, value: T) => boolean = partial ? a : b

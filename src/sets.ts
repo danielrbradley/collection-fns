@@ -40,6 +40,12 @@ export function toArray<T>(source: Set<T>): T[] {
  * @param mapping A function to transform items from the input collection.
  */
 export function map<T, U>(mapping: (item: T) => U): (source: Set<T>) => Set<U>
+/**
+ * Creates a new set whose elements are the results of applying the specified mapping to each of the elements of the source set.
+ * NOTE: Duplicate items will be ignored.
+ * @param source The input collection.
+ * @param mapping A function to transform items from the input collection.
+ */
 export function map<T, U>(source: Set<T>, mapping: (item: T) => U): Set<U>
 export function map<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -55,6 +61,11 @@ export function map<T, U>(a: any, b?: any): any {
  * @param predicate A function to test whether each item in the input set should be included in the output set.
  */
 export function filter<T>(predicate: (item: T) => boolean): (source: Set<T>) => Set<T>
+/**
+ * Returns a new set containing only the elements of the source set for which the given predicate returns true.
+ * @param source The input collection.
+ * @param predicate A function to test whether each item in the input set should be included in the output set.
+ */
 export function filter<T>(source: Set<T>, predicate: (item: T) => boolean): Set<T>
 export function filter<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -71,6 +82,12 @@ export function filter<T>(a: any, b?: any): any {
  * @param chooser A function to transform items from the input set to a new value to be included, or undefined to be excluded.
  */
 export function choose<T, U>(chooser: (item: T) => U | undefined): (source: Set<T>) => Set<U>
+/**
+ * Applies the given function to each element of the set and returns a new set comprised of the results for each element where the function returns a value.
+ * NOTE: Duplicate items will be ignored.
+ * @param source The input collection.
+ * @param chooser A function to transform items from the input set to a new value to be included, or undefined to be excluded.
+ */
 export function choose<T, U>(source: Set<T>, chooser: (item: T) => U | undefined): Set<U>
 export function choose<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
@@ -87,6 +104,12 @@ export function choose<T, U>(a: any, b?: any): any {
  * @param mapping A function to transform elements of the input set into collections that are concatenated.
  */
 export function collect<T, U>(mapping: (item: T) => Iterable<U>): (source: Set<T>) => Set<U>
+/**
+ * Applies the given function to each element of the source set and concatenates all the results.
+ * NOTE: Duplicate items will be ignored.
+ * @param source The input collection.
+ * @param mapping A function to transform elements of the input set into collections that are concatenated.
+ */
 export function collect<T, U>(source: Set<T>, mapping: (item: T) => Iterable<U>): Set<U>
 export function collect<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
