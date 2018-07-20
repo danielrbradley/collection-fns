@@ -62,11 +62,11 @@ export function choose<T, U>(a: any, b?: any): any {
  * Applies the given function to each element of the source array and concatenates all the results.
  * @param mapping A function to transform elements of the input collection into collections that are concatenated.
  */
-export function collect<T, U>(mapping: (item: T) => U[]): (source: T[]) => U[]
-export function collect<T, U>(source: T[], mapping: (item: T) => U[]): U[]
+export function collect<T, U>(mapping: (item: T) => Iterable<U>): (source: T[]) => U[]
+export function collect<T, U>(source: T[], mapping: (item: T) => Iterable<U>): U[]
 export function collect<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const mapping: (item: T) => U[] = partial ? a : b
+  const mapping: (item: T) => Iterable<U> = partial ? a : b
   function exec(source: T[]) {
     const target = []
     for (const item of source) {
