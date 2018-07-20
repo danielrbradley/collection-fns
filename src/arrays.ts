@@ -100,7 +100,17 @@ export function collect<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Wraps the two given arrays as a single concatenated array.
+ * @param second The second array.
+ * @param first The first array.
+ */
 export function append<T>(second: T[]): (first: T[]) => T[]
+/**
+ * Wraps the two given arrays as a single concatenated array.
+ * @param first The first array.
+ * @param second The second array.
+ */
 export function append<T>(first: T[], second: T[]): T[]
 export function append<T>(a: any, b?: any): any {
   const partial = b === undefined

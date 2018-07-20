@@ -76,6 +76,22 @@ describe('choose', () => {
   })
 })
 
+describe('append', () => {
+  test('immediate', () => {
+    expect(Maps.append(new Map([['a', 1], ['b', 2]]), new Map([['b', 2], ['c', 3]]))).toEqual(
+      new Map([['a', 1], ['b', 2], ['c', 3]])
+    )
+  })
+  test('piped', () => {
+    expect(
+      pipe(
+        new Map([['a', 1], ['b', 2], ['c', 3]]),
+        Maps.append(new Map([['a', 1], ['b', 2], ['c', 3]]))
+      )
+    ).toEqual(new Map([['a', 1], ['b', 2], ['c', 3]]))
+  })
+})
+
 describe('get', () => {
   test('immediate', () => {
     expect(Maps.get(new Map([['a', 1], ['b', 2]]), 'b')).toEqual(2)

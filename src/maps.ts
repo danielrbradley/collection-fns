@@ -122,6 +122,27 @@ export function choose<Key, T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Wraps the two given maps as a single concatenated map.
+ * @param second The second map.
+ * @param first The first map.
+ */
+export function append<Key, T>(second: Map<Key, T>): (first: Map<Key, T>) => Map<Key, T>
+/**
+ * Wraps the two given maps as a single concatenated map.
+ * @param first The first map.
+ * @param second The second map.
+ */
+export function append<Key, T>(first: Map<Key, T>, second: Map<Key, T>): Map<Key, T>
+export function append<Key, T>(a: any, b?: any): any {
+  const partial = b === undefined
+  const second: Map<Key, T> = partial ? a : b
+  function exec(first: Map<Key, T>): Map<Key, T> {
+    return new Map<Key, T>(Iterables.append(first, second))
+  }
+  return partial ? exec : exec(a)
+}
+
 export function get<Key, T>(key: Key): (source: Map<Key, T>) => T
 export function get<Key, T>(source: Map<Key, T>, key: Key): T
 export function get<Key, T>(a: any, b?: any): any {

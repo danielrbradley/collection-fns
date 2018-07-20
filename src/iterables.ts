@@ -109,6 +109,7 @@ export function collect<T, U>(a: any, b?: any): any {
 /**
  * Wraps the two given iterables as a single concatenated iterable.
  * @param second The second iterable.
+ * @param first The first iterable.
  */
 export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
 /**

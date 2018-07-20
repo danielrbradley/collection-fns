@@ -120,7 +120,17 @@ export function collect<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Wraps the two given sets as a single concatenated set.
+ * @param second The second set.
+ * @param first The first set.
+ */
 export function append<T>(second: Set<T>): (first: Set<T>) => Set<T>
+/**
+ * Wraps the two given sets as a single concatenated set.
+ * @param first The first set.
+ * @param second The second set.
+ */
 export function append<T>(first: Set<T>, second: Set<T>): Set<T>
 export function append<T>(a: any, b?: any): any {
   const partial = b === undefined
