@@ -143,6 +143,21 @@ export function append<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Combines the given collection-of-maps as a single concatenated map.
+ * NOTE: Duplicate items will be ignored.
+ * @param sources The input collection.
+ */
+export function concat<Key, T>(sources: Iterable<Map<Key, T>>): Map<Key, T> {
+  const target = new Map<Key, T>()
+  for (const source of sources) {
+    for (const item of source) {
+      target.set(item[0], item[1])
+    }
+  }
+  return target
+}
+
 export function get<Key, T>(key: Key): (source: Map<Key, T>) => T
 export function get<Key, T>(source: Map<Key, T>, key: Key): T
 export function get<Key, T>(a: any, b?: any): any {

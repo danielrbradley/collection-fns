@@ -92,6 +92,14 @@ describe('append', () => {
   })
 })
 
+describe('concat', () => {
+  test('immediate', () => {
+    expect(Maps.concat([new Map([['a', 1], ['b', 2]]), new Map([['b', 2], ['c', 3]])])).toEqual(
+      new Map([['a', 1], ['b', 2], ['c', 3]])
+    )
+  })
+})
+
 describe('get', () => {
   test('immediate', () => {
     expect(Maps.get(new Map([['a', 1], ['b', 2]]), 'b')).toEqual(2)

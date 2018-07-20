@@ -122,12 +122,14 @@ export function collect<T, U>(a: any, b?: any): any {
 
 /**
  * Wraps the two given sets as a single concatenated set.
+ * NOTE: Duplicate items will be ignored.
  * @param second The second set.
  * @param first The first set.
  */
 export function append<T>(second: Set<T>): (first: Set<T>) => Set<T>
 /**
  * Wraps the two given sets as a single concatenated set.
+ * NOTE: Duplicate items will be ignored.
  * @param first The first set.
  * @param second The second set.
  */
@@ -141,6 +143,11 @@ export function append<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Combines the given collection-of-sets as a single concatenated set.
+ * NOTE: Duplicate items will be ignored.
+ * @param sources The input collection.
+ */
 export function concat<T>(sources: Iterable<Set<T>>): Set<T> {
   const target = new Set<T>()
   for (const source of sources) {

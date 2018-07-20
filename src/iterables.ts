@@ -132,6 +132,10 @@ export function append<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Combines the given collection-of-iterables as a single concatenated iterable.
+ * @param sources The input collection.
+ */
 export function* concat<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
   for (const source of sources) {
     for (const item of source) {

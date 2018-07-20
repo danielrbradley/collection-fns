@@ -121,7 +121,11 @@ export function append<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-export function concat<T>(sources: T[][]): T[] {
+/**
+ * Combines the given collection-of-arrays as a single concatenated array.
+ * @param sources The input collection.
+ */
+export function concat<T>(sources: Iterable<T[]>): T[] {
   const target = []
   for (const source of sources) {
     for (const item of source) {
