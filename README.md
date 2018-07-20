@@ -62,6 +62,18 @@ for (const prime of primes) {
 }
 ```
 
+Grouping numbers into odd and even buckets
+```javascript
+import { pipe, Maps } from 'collection-fns'
+import { init, groupBy } from 'collection-fns/dist/lib/arrays';
+
+const oddAndEven = pipe(
+  init({ from: 1, to: 25 }),
+  groupBy(i => i % 2 === 0 ? 'even' : 'odd'),
+  Maps.ofArray
+)
+```
+
 This works by use of partial application, however all functional can also be called directly such as:
 
 ```javascript
