@@ -1,21 +1,43 @@
 import * as Iterables from './iterables'
 
+/**
+ * Creates a map from the source iterable object.
+ * NOTE: Items with duplicate keys will be ignored.
+ * @param source An iterable objext of tuples to convert to a map.
+ */
 export function ofIterable<Key, T>(source: Iterable<[Key, T]>): Map<Key, T> {
   return new Map(source)
 }
 
+/**
+ * Creates a map from the source array object.
+ * NOTE: Items with duplicate keys will be ignored.
+ * @param source An array of tuples to convert to a map.
+ */
 export function ofArray<Key, T>(source: [Key, T][]): Map<Key, T> {
   return new Map(source)
 }
 
+/**
+ * Creates a map from the source set object.
+ * @param source A set objext to convert to a map.
+ */
 export function ofSet<T>(source: Set<T>): Map<T, T> {
   return new Map(source.entries())
 }
 
+/**
+ * Returns the source, but with the type restricted to being only iterable of the map's entries.
+ * @param source A map objext to return as an iterable.
+ */
 export function asIterable<Key, T>(source: Map<Key, T>): Iterable<[Key, T]> {
   return source
 }
 
+/**
+ * Creates a new map whose values are the results of applying the specified mapping to each of the values of the source map.
+ * @param mapping A function to transform entries from the input collection into new values.
+ */
 export function map<Key, T, U>(source: Map<Key, T>, mapping: (key: Key, value: T) => U): Map<Key, U>
 export function map<Key, T, U>(
   mapping: (key: Key, value: T) => U
@@ -35,6 +57,10 @@ export function map<Key, T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns a new map containing only the elements of the map for which the given predicate returns true.
+ * @param predicate A function to test whether each item in the input map should be included in the output map.
+ */
 export function filter<Key, T>(
   source: Map<Key, T>,
   predicate: (key: Key, value: T) => boolean
@@ -53,6 +79,10 @@ export function filter<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Applies the given function to each entry of the map and returns a new map comprised of the results for each element where the function returns a value.
+ * @param chooser A function to transform entries from the input map to a new value to be included, or undefined to be excluded.
+ */
 export function choose<Key, T, U>(
   source: Map<Key, T>,
   chooser: (key: Key, value: T) => U | undefined

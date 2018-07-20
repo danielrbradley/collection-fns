@@ -1,7 +1,15 @@
+/**
+ * Creates an array from the source iterable object.
+ * @param source An Iterable objext to convert to an array.
+ */
 export function ofIterable<T>(source: Iterable<T>): T[] {
   return Array.from(source)
 }
 
+/**
+ * Creates a new array whose elements are the results of applying the specified mapping to each of the elements of the source collection.
+ * @param mapping A function to transform items from the input collection.
+ */
 export function map<T, U>(mapping: (item: T) => U): (source: T[]) => U[]
 export function map<T, U>(source: T[], mapping: (item: T) => U): U[]
 export function map<T, U>(a: any, b?: any): any {
@@ -13,6 +21,10 @@ export function map<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns a new array containing only the elements of the collection for which the given predicate returns true.
+ * @param predicate A function to test whether each item in the input collection should be included in the output.
+ */
 export function filter<T>(predicate: (item: T) => boolean): (source: T[]) => T[]
 export function filter<T>(source: T[], predicate: (item: T) => boolean): T[]
 export function filter<T, U>(a: any, b?: any): any {
@@ -24,6 +36,10 @@ export function filter<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Applies the given function to each element of the array and returns a new array comprised of the results for each element where the function returns a value.
+ * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
+ */
 export function choose<T, U>(chooser: (item: T) => U | undefined): (source: T[]) => U[]
 export function choose<T, U>(source: T[], chooser: (item: T) => U | undefined): U[]
 export function choose<T, U>(a: any, b?: any): any {
@@ -42,6 +58,10 @@ export function choose<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Applies the given function to each element of the source array and concatenates all the results.
+ * @param mapping A function to transform elements of the input collection into collections that are concatenated.
+ */
 export function collect<T, U>(mapping: (item: T) => U[]): (source: T[]) => U[]
 export function collect<T, U>(source: T[], mapping: (item: T) => U[]): U[]
 export function collect<T, U>(a: any, b?: any): any {

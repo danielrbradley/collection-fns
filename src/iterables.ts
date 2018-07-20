@@ -1,7 +1,15 @@
+/**
+ * Creates an array from the source iterable object.
+ * @param source An Iterable objext to convert to an array.
+ */
 export function toArray<T>(source: Iterable<T>): T[] {
   return Array.from(source)
 }
 
+/**
+ * Creates a new iterable whose elements are the results of applying the specified mapping to each of the elements of the source collection.
+ * @param mapping A function to transform items from the input collection.
+ */
 export function map<T, U>(mapping: (item: T) => U): (source: Iterable<T>) => Iterable<U>
 export function map<T, U>(source: Iterable<T>, mapping: (item: T) => U): Iterable<U>
 export function map<T, U>(a: any, b?: any): any {
@@ -15,6 +23,10 @@ export function map<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns a new iterable containing only the elements of the collection for which the given predicate returns true.
+ * @param predicate A function to test whether each item in the input collection should be included in the output.
+ */
 export function filter<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => Iterable<T>
 export function filter<T>(source: Iterable<T>, predicate: (item: T) => boolean): Iterable<T>
 export function filter<T>(a: any, b?: any): any {
@@ -30,6 +42,10 @@ export function filter<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Applies the given function to each element of the sequence and returns a new sequence comprised of the results for each element where the function returns a value.
+ * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
+ */
 export function choose<T, U>(
   chooser: (item: T) => U | undefined
 ): (source: Iterable<T>) => Iterable<U>
@@ -48,6 +64,10 @@ export function choose<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Applies the given function to each element of the source iterable and concatenates all the results.
+ * @param mapping A function to transform elements of the input collection into collections that are concatenated.
+ */
 export function collect<T, U>(
   mapping: (item: T) => Iterable<U>
 ): (source: Iterable<T>) => Iterable<U>

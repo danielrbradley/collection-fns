@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/collection-fns.svg)](https://badge.fury.io/js/collection-fns)
 [![GitHub issues](https://img.shields.io/github/issues/danielrbradley/collection-fns.svg)](https://github.com/danielrbradley/collection-fns/issues)
-[![TypeDoc docs](https://img.shields.io/badge/TypeDocs-docs-lightgrey.svg)](https://github.com/danielrbradley/collection-fns)
+[![TypeDoc docs](https://img.shields.io/badge/TypeDoc-docs-lightgrey.svg)](https://www.danielbradley.net/collection-fns/)
 [![Travis](https://img.shields.io/travis/danielrbradley/collection-fns.svg)](https://travis-ci.org/danielrbradley/collection-fns)
 [![Coveralls](https://img.shields.io/coveralls/danielrbradley/collection-fns.svg)](https://coveralls.io/github/danielrbradley/collection-fns)
 [![Dev Dependencies](https://david-dm.org/danielrbradley/collection-fns/dev-status.svg)](https://david-dm.org/danielrbradley/collection-fns?type=dev) [![Greenkeeper badge](https://badges.greenkeeper.io/danielrbradley/collection-fns.svg)](https://greenkeeper.io/)
