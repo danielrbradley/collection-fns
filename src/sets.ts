@@ -218,7 +218,17 @@ export function get<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the first element for which the given function returns true, otherwise undefined.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @param source The input collection.
+ */
 export function find<T>(predicate: (item: T) => boolean): (source: Set<T>) => T | undefined
+/**
+ * Returns the first element for which the given function returns true, otherwise undefined.
+ * @param source The input collection.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ */
 export function find<T>(source: Set<T>, predicate: (item: T) => boolean): T | undefined
 export function find<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'

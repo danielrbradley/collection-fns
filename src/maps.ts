@@ -184,7 +184,17 @@ export function get<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the value for the given key, or undefined if not found.
+ * @param key The key to lookup in the map.
+ * @param source The input collection.
+ */
 export function find<Key, T>(key: Key): (source: Map<Key, T>) => T | undefined
+/**
+ * Returns the value for the given key, or undefined if not found.
+ * @param source The input collection.
+ * @param key The key to lookup in the map.
+ */
 export function find<Key, T>(source: Map<Key, T>, key: Key): T | undefined
 export function find<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
