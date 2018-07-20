@@ -158,7 +158,7 @@ export function find<T>(a: any, b?: any): any {
 
 export function groupBy<T, Key>(
   selector: (item: T) => Key
-): (source: Iterable<T>) => Iterable<[Key, Iterable<T>]>
+): (source: Iterable<T>) => Iterable<[Key, ReadonlyArray<T>]>
 export function groupBy<T, Key>(
   source: Iterable<T>,
   selector: (item: T) => Key
@@ -166,7 +166,7 @@ export function groupBy<T, Key>(
 export function groupBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => Key = partial ? a : b
-  function exec(source: Iterable<T>): Iterable<[Key, Iterable<T>]> {
+  function exec(source: Iterable<T>): Iterable<[Key, ReadonlyArray<T>]> {
     const groups = new Map<Key, T[]>()
     for (const item of source) {
       const key = selector(item)
