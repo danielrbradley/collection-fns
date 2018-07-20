@@ -236,6 +236,27 @@ export function exists<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Evaluates to true if the given key is in the source map.
+ * @param key The key to look for.
+ * @param source The input collection.
+ */
+export function containsKey<Key, T>(key: Key): (source: Map<Key, T>) => boolean
+/**
+ * Evaluates to true if the given key is in the source map.
+ * @param source The input collection.
+ * @param key The key to look for.
+ */
+export function containsKey<Key, T>(source: Map<Key, T>, key: Key): boolean
+export function containsKey<Key, T>(a: any, b?: any): any {
+  const partial = b === undefined
+  const key: Key = partial ? a : b
+  function exec(source: Map<Key, T>): boolean {
+    return source.has(key)
+  }
+  return partial ? exec : exec(a)
+}
+
 export function count<Key, T>(source: Map<Key, T>): number {
   return source.size
 }

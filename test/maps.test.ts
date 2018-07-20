@@ -138,6 +138,23 @@ describe('exists', () => {
   })
 })
 
+describe('containsKey', () => {
+  test('immediate', () => {
+    expect(Maps.containsKey(new Map([['a', 1], ['b', 2]]), 'a')).toEqual(true)
+  })
+  test('piped', () => {
+    expect(
+      pipe(
+        new Map([['a', 1], ['b', 2]]),
+        Maps.containsKey('b')
+      )
+    ).toEqual(true)
+  })
+  test('not found', () => {
+    expect(Maps.containsKey(new Map([['a', 1], ['b', 2]]), 'foo')).toEqual(false)
+  })
+})
+
 describe('count', () => {
   test('zero length', () => {
     expect(Maps.count(new Map())).toEqual(0)
