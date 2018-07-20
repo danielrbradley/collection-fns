@@ -362,10 +362,18 @@ export function take<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the number of items in the collection.
+ * @param source The input collection.
+ */
 export function length<T>(source: Iterable<T>): number {
   return count(source)
 }
 
+/**
+ * Returns the number of items in the collection.
+ * @param source The input collection.
+ */
 export function count<T>(source: Iterable<T>): number {
   let length = 0
   for (const _ of source) {

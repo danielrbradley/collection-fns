@@ -325,10 +325,18 @@ export function init<T>(
   return target
 }
 
+/**
+ * Returns the number of items in the array.
+ * @param source The input collection.
+ */
 export function length<T>(source: T[]): number {
   return source.length
 }
 
+/**
+ * Returns the number of items in the array.
+ * @param source The input collection.
+ */
 export function count<T>(source: T[]): number {
   return source.length
 }

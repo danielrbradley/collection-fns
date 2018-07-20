@@ -254,6 +254,10 @@ export function find<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the number of items in the collection.
+ * @param source The input collection.
+ */
 export function count<T>(source: Set<T>): number {
   return source.size
 }

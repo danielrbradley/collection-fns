@@ -257,6 +257,10 @@ export function containsKey<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the number of items in the collection.
+ * @param source The input collection.
+ */
 export function count<Key, T>(source: Map<Key, T>): number {
   return source.size
 }
