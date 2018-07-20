@@ -176,7 +176,17 @@ export function distinctBy<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Tests if any element of the collection satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
 export function exists<T>(predicate: (item: T) => boolean): (source: Iterable<T>) => boolean
+/**
+ * Tests if any element of the collection satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test each item of the input collection.
+ */
 export function exists<T>(source: Iterable<T>, predicate: (item: T) => boolean): boolean
 export function exists<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'

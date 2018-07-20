@@ -158,7 +158,17 @@ export function concat<T>(sources: Iterable<Set<T>>): Set<T> {
   return target
 }
 
+/**
+ * Tests if any element of the set satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
 export function exists<T>(predicate: (item: T) => boolean): (source: Set<T>) => boolean
+/**
+ * Tests if any element of the set satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test each item of the input collection.
+ */
 export function exists<T>(source: Set<T>, predicate: (item: T) => boolean): boolean
 export function exists<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'

@@ -183,9 +183,19 @@ export function find<Key, T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Tests if any element of the map satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
 export function exists<Key, T>(
   predicate: (key: Key, value: T) => boolean
 ): (source: Map<Key, T>) => boolean
+/**
+ * Tests if any element of the map satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test each item of the input collection.
+ */
 export function exists<Key, T>(
   source: Map<Key, T>,
   predicate: (key: Key, value: T) => boolean
