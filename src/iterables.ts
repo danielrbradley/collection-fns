@@ -144,7 +144,21 @@ export function* concat<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
   }
 }
 
+/**
+ * Returns a iterable that contains no duplicate entries according to the equality comparisons on
+ * the keys returned by the given key-generating function. If an element occurs multiple times in
+ * the sequence then the later occurrences are discarded.
+ * @param selector A function that transforms the collection items into comparable keys.
+ * @param source The input collection.
+ */
 export function distinctBy<T, Key>(selector: (item: T) => Key): (source: Iterable<T>) => Iterable<T>
+/**
+ * Returns a iterable that contains no duplicate entries according to the equality comparisons on
+ * the keys returned by the given key-generating function. If an element occurs multiple times in
+ * the sequence then the later occurrences are discarded.
+ * @param source The input collection.
+ * @param selector A function that transforms the collection items into comparable keys.
+ */
 export function distinctBy<T, Key>(source: Iterable<T>, selector: (item: T) => Key): Iterable<T>
 export function distinctBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
