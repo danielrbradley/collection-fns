@@ -179,7 +179,17 @@ export function exists<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Evaluates to true if the given item is in the source set.
+ * @param item The item to look for.
+ * @param source The input collection.
+ */
 export function contains<T>(item: T): (source: Set<T>) => boolean
+/**
+ * Evaluates to true if the given item is in the source set.
+ * @param source The input collection.
+ * @param item The item to look for.
+ */
 export function contains<T>(source: Set<T>, item: T): boolean
 export function contains<T>(a: any, b?: any): any {
   const partial = b === undefined
