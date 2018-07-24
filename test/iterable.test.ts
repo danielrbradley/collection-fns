@@ -39,6 +39,18 @@ describe('map', () => {
       ).then(Iterables.toArray).result
     ).toEqual([2, 4])
   })
+  it('can map with index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 1
+          yield 2
+        })()
+      )
+        .then(Iterables.map((x, index) => index))
+        .then(Iterables.toArray).result
+    ).toEqual([0, 1])
+  })
 })
 
 describe('filter', () => {
@@ -68,6 +80,15 @@ describe('filter', () => {
       [2]
     )
   })
+  it('can filters based on index', () => {
+    expect(
+      pipe(
+        [1, 2, 15, 7],
+        Iterables.filter((x, index) => index % 2 === 0),
+        Iterables.toArray
+      )
+    ).toEqual([1, 15])
+  })
 })
 
 describe('choose', () => {
@@ -84,6 +105,15 @@ describe('choose', () => {
         Iterables.toArray
       ).result
     ).toEqual([2, 6])
+  })
+  it('chooses with index', () => {
+    expect(
+      pipe(
+        [1, 2, 3],
+        Iterables.choose((x, index) => (index % 2 === 0 ? x * 2 : x)),
+        Iterables.toArray
+      )
+    ).toEqual([2, 2, 6])
   })
 })
 
@@ -109,6 +139,18 @@ describe('collect', () => {
         })
       ).then(Iterables.toArray).result
     ).toEqual([1, 1, 2, 2])
+  })
+  it('can collect with index', () => {
+    expect(
+      pipe([1, 2])
+        .then(
+          Iterables.collect(function*(x, index) {
+            yield x
+            yield x + index
+          })
+        )
+        .then(Iterables.toArray).result
+    ).toEqual([1, 1, 2, 3])
   })
 })
 
@@ -198,6 +240,20 @@ describe('distinctBy', () => {
       )
     ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
   })
+  it('passes index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+          yield { name: 'bob', id: 3 }
+          yield { name: 'cat', id: 3 }
+        })()
+      )
+        .then(Iterables.distinctBy((x, index) => Math.floor(index / 2)))
+        .then(Iterables.toArray).result
+    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 3 }])
+  })
 })
 
 describe('exists', () => {
@@ -230,6 +286,16 @@ describe('exists', () => {
         })(),
         x => x === 1
       )
+    ).toEqual(true)
+  })
+  it('passes index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 1
+          yield 2
+        })()
+      ).then(Iterables.exists((x, index) => x === 2 && index === 1)).result
     ).toEqual(true)
   })
 })
@@ -267,6 +333,16 @@ describe('get', () => {
       )
     ).toEqual({ name: 'bob', id: 2 })
   })
+  it('finds by index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })()
+      ).then(Iterables.get((x, index) => index === 1)).result
+    ).toEqual({ name: 'bob', id: 2 })
+  })
 })
 
 describe('find', () => {
@@ -299,6 +375,16 @@ describe('find', () => {
         })(),
         x => x.name === 'bob'
       )
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+  it('finds by index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', id: 1 }
+          yield { name: 'bob', id: 2 }
+        })()
+      ).then(Iterables.find((x, index) => index === 1)).result
     ).toEqual({ name: 'bob', id: 2 })
   })
 })
@@ -335,6 +421,22 @@ describe('groupBy', () => {
     ).toEqual([
       [1, [{ name: 'amy', age: 1 }]],
       [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
+    ])
+  })
+  it('groups by index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', age: 1 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 2 }
+        })()
+      )
+        .then(Iterables.groupBy((x, index) => index % 2))
+        .then(Iterables.toArray).result
+    ).toEqual([
+      [0, [{ name: 'amy', age: 1 }, { name: 'cat', age: 2 }]],
+      [1, [{ name: 'bob', age: 2 }]]
     ])
   })
 })
