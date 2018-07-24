@@ -10,16 +10,16 @@ export function ofIterable<T>(source: Iterable<T>): T[] {
  * Creates a new array whose elements are the results of applying the specified mapping to each of the elements of the source collection.
  * @param mapping A function to transform items from the input collection.
  */
-export function map<T, U>(mapping: (item: T) => U): (source: T[]) => U[]
+export function map<T, U>(mapping: (item: T, index: number) => U): (source: T[]) => U[]
 /**
  * Creates a new array whose elements are the results of applying the specified mapping to each of the elements of the source collection.
  * @param source The input collection.
  * @param mapping A function to transform items from the input collection.
  */
-export function map<T, U>(source: T[], mapping: (item: T) => U): U[]
+export function map<T, U>(source: T[], mapping: (item: T, index: number) => U): U[]
 export function map<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const mapping: (item: T) => U = partial ? a : b
+  const mapping: (item: T, index: number) => U = partial ? a : b
   function exec(source: T[]) {
     return source.map(mapping)
   }
@@ -30,16 +30,16 @@ export function map<T, U>(a: any, b?: any): any {
  * Returns a new array containing only the elements of the collection for which the given predicate returns true.
  * @param predicate A function to test whether each item in the input collection should be included in the output.
  */
-export function filter<T>(predicate: (item: T) => boolean): (source: T[]) => T[]
+export function filter<T>(predicate: (item: T, index: number) => boolean): (source: T[]) => T[]
 /**
  * Returns a new array containing only the elements of the collection for which the given predicate returns true.
  * @param source The input collection.
  * @param predicate A function to test whether each item in the input collection should be included in the output.
  */
-export function filter<T>(source: T[], predicate: (item: T) => boolean): T[]
+export function filter<T>(source: T[], predicate: (item: T, index: number) => boolean): T[]
 export function filter<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const predicate: (item: T) => boolean = partial ? a : b
+  const predicate: (item: T, index: number) => boolean = partial ? a : b
   function exec(source: T[]) {
     return source.filter(predicate)
   }
@@ -50,23 +50,27 @@ export function filter<T, U>(a: any, b?: any): any {
  * Applies the given function to each element of the array and returns a new array comprised of the results for each element where the function returns a value.
  * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
  */
-export function choose<T, U>(chooser: (item: T) => U | undefined): (source: T[]) => U[]
+export function choose<T, U>(
+  chooser: (item: T, index: number) => U | undefined
+): (source: T[]) => U[]
 /**
  * Applies the given function to each element of the array and returns a new array comprised of the results for each element where the function returns a value.
  * @param source The input collection.
  * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
  */
-export function choose<T, U>(source: T[], chooser: (item: T) => U | undefined): U[]
+export function choose<T, U>(source: T[], chooser: (item: T, index: number) => U | undefined): U[]
 export function choose<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const chooser: (item: T) => U | undefined = partial ? a : b
+  const chooser: (item: T, index: number) => U | undefined = partial ? a : b
   function exec(source: T[]) {
     const target = []
+    let index = 0
     for (const item of source) {
-      const chosen = chooser(item)
+      const chosen = chooser(item, index)
       if (chosen !== undefined) {
         target.push(chosen)
       }
+      index++
     }
     return target
   }
@@ -77,23 +81,27 @@ export function choose<T, U>(a: any, b?: any): any {
  * Applies the given function to each element of the source array and concatenates all the results.
  * @param mapping A function to transform elements of the input collection into collections that are concatenated.
  */
-export function collect<T, U>(mapping: (item: T) => Iterable<U>): (source: T[]) => U[]
+export function collect<T, U>(
+  mapping: (item: T, index: number) => Iterable<U>
+): (source: T[]) => U[]
 /**
  * Applies the given function to each element of the source array and concatenates all the results.
  * @param source The input collection.
  * @param mapping A function to transform elements of the input collection into collections that are concatenated.
  */
-export function collect<T, U>(source: T[], mapping: (item: T) => Iterable<U>): U[]
+export function collect<T, U>(source: T[], mapping: (item: T, index: number) => Iterable<U>): U[]
 export function collect<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const mapping: (item: T) => Iterable<U> = partial ? a : b
+  const mapping: (item: T, index: number) => Iterable<U> = partial ? a : b
   function exec(source: T[]) {
     const target = []
+    let index = 0
     for (const item of source) {
-      const children = mapping(item)
+      const children = mapping(item, index)
       for (const child of children) {
         target.push(child)
       }
+      index++
     }
     return target
   }
@@ -142,7 +150,7 @@ export function concat<T>(sources: Iterable<T[]>): T[] {
  * @param selector A function that transforms the array items into comparable keys.
  * @param source The input collection.
  */
-export function distinctBy<T, Key>(selector: (item: T) => Key): (source: T[]) => T[]
+export function distinctBy<T, Key>(selector: (item: T, index: number) => Key): (source: T[]) => T[]
 /**
  * Returns an array that contains no duplicate entries according to the equality comparisons on
  * the keys returned by the given key-generating function. If an element occurs multiple times in
@@ -150,17 +158,19 @@ export function distinctBy<T, Key>(selector: (item: T) => Key): (source: T[]) =>
  * @param source The input collection.
  * @param selector A function that transforms the array items into comparable keys.
  */
-export function distinctBy<T, Key>(source: T[], selector: (item: T) => Key): T[]
+export function distinctBy<T, Key>(source: T[], selector: (item: T, index: number) => Key): T[]
 export function distinctBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const selector: (item: T) => Key = partial ? a : b
+  const selector: (item: T, index: number) => Key = partial ? a : b
   function exec(source: T[]): T[] {
     const seen = new Map<Key, T>()
+    let index = 0
     for (const item of source) {
-      const key = selector(item)
+      const key = selector(item, index)
       if (!seen.has(key)) {
         seen.set(key, item)
       }
+      index++
     }
     return Array.from(seen.values())
   }
@@ -172,16 +182,16 @@ export function distinctBy<T, Key>(a: any, b?: any): any {
  * @param predicate A function to test each item of the input collection.
  * @param source The input collection.
  */
-export function exists<T>(predicate: (item: T) => boolean): (source: T[]) => boolean
+export function exists<T>(predicate: (item: T, index: number) => boolean): (source: T[]) => boolean
 /**
  * Tests if any element of the array satisfies the given predicate.
  * @param source The input collection.
  * @param predicate A function to test each item of the input collection.
  */
-export function exists<T>(source: T[], predicate: (item: T) => boolean): boolean
+export function exists<T>(source: T[], predicate: (item: T, index: number) => boolean): boolean
 export function exists<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const predicate: (item: T) => boolean = partial ? a : b
+  const predicate: (item: T, index: number) => boolean = partial ? a : b
   function exec(source: T[]): boolean {
     return source.some(predicate)
   }
@@ -194,22 +204,24 @@ export function exists<T>(a: any, b?: any): any {
  * @param source The input collection.
  * @throws If no item is found matching the criteria of the predicate.
  */
-export function get<T>(predicate: (item: T) => boolean): (source: T[]) => T
+export function get<T>(predicate: (item: T, index: number) => boolean): (source: T[]) => T
 /**
  * Returns the first element for which the given function returns true.
  * @param source The input collection.
  * @param predicate A function to test whether an item in the collection should be returned.
  * @throws If no item is found matching the criteria of the predicate.
  */
-export function get<T>(source: T[], predicate: (item: T) => boolean): T
+export function get<T>(source: T[], predicate: (item: T, index: number) => boolean): T
 export function get<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const predicate: (item: T) => boolean = partial ? a : b
+  const predicate: (item: T, index: number) => boolean = partial ? a : b
   function exec(source: T[]): T | undefined {
+    let index = 0
     for (const item of source) {
-      if (predicate(item)) {
+      if (predicate(item, index)) {
         return item
       }
+      index++
     }
     throw new Error('Element not found matching criteria')
   }
@@ -221,42 +233,53 @@ export function get<T>(a: any, b?: any): any {
  * @param predicate A function to test whether an item in the collection should be returned.
  * @param source The input collection.
  */
-export function find<T>(predicate: (item: T) => boolean): (source: T[]) => T | undefined
+export function find<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: T[]) => T | undefined
 /**
  * Returns the first element for which the given function returns true, otherwise undefined.
  * @param source The input collection.
  * @param predicate A function to test whether an item in the collection should be returned.
  */
-export function find<T>(source: T[], predicate: (item: T) => boolean): T | undefined
+export function find<T>(source: T[], predicate: (item: T, index: number) => boolean): T | undefined
 export function find<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const predicate: (item: T) => boolean = partial ? a : b
+  const predicate: (item: T, index: number) => boolean = partial ? a : b
   function exec(source: T[]): T | undefined {
+    let index = 0
     for (const item of source) {
-      if (predicate(item)) {
+      if (predicate(item, index)) {
         return item
       }
+      index++
     }
     return undefined
   }
   return partial ? exec : exec(a)
 }
 
-export function groupBy<T, Key>(selector: (item: T) => Key): (source: T[]) => [Key, T[]][]
-export function groupBy<T, Key>(source: T[], selector: (item: T) => Key): [Key, T[]][]
+export function groupBy<T, Key>(
+  selector: (item: T, index: number) => Key
+): (source: T[]) => [Key, T[]][]
+export function groupBy<T, Key>(
+  source: T[],
+  selector: (item: T, index: number) => Key
+): [Key, T[]][]
 export function groupBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
-  const selector: (item: T) => Key = partial ? a : b
+  const selector: (item: T, index: number) => Key = partial ? a : b
   function exec(source: T[]): [Key, T[]][] {
     const groups = new Map<Key, T[]>()
+    let index = 0
     for (const item of source) {
-      const key = selector(item)
+      const key = selector(item, index)
       const group = groups.get(key)
       if (group === undefined) {
         groups.set(key, [item])
       } else {
         group.push(item)
       }
+      index++
     }
     return Array.from(groups.entries())
   }

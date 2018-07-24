@@ -20,6 +20,9 @@ describe('map', () => {
   test('invoke', () => {
     expect(Arrays.map([1, 2], x => x * 2)).toEqual([2, 4])
   })
+  test('with index', () => {
+    expect(Arrays.map([1, 2], (x, index) => x * index)).toEqual([0, 2])
+  })
 })
 
 describe('filter', () => {
@@ -32,6 +35,9 @@ describe('filter', () => {
   test('invoke', () => {
     expect(Arrays.filter([1, 2, 3, 4], x => x % 2 === 0)).toEqual([2, 4])
   })
+  test('with index', () => {
+    expect(Arrays.filter([1, 2, 3, 4], (x, index) => index % 2 === 0)).toEqual([1, 3])
+  })
 })
 
 describe('choose', () => {
@@ -42,6 +48,11 @@ describe('choose', () => {
   })
   test('invoke', () => {
     expect(Arrays.choose([1, 2, 3], x => (x % 2 === 1 ? x * 2 : undefined))).toEqual([2, 6])
+  })
+  test('with index', () => {
+    expect(
+      Arrays.choose([1, 2, 3], (x, index) => (index % 2 === 0 ? x * index : undefined))
+    ).toEqual([0, 6])
   })
 })
 
@@ -61,6 +72,13 @@ describe('collect', () => {
         return [x, x]
       })
     ).toEqual([1, 1, 2, 2])
+  })
+  test('with index', () => {
+    expect(
+      Arrays.collect([1, 2], function(x, index) {
+        return [x, x + index]
+      })
+    ).toEqual([1, 1, 2, 3])
   })
 })
 
@@ -101,6 +119,19 @@ describe('distinctBy', () => {
       )
     ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
   })
+  test('with index', () => {
+    expect(
+      pipe(
+        [
+          { name: 'amy', id: 1 },
+          { name: 'bob', id: 2 },
+          { name: 'bob', id: 3 },
+          { name: 'cat', id: 3 }
+        ],
+        Arrays.distinctBy((x, index) => Math.floor(index / 2))
+      )
+    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 3 }])
+  })
 })
 
 describe('exists', () => {
@@ -112,6 +143,9 @@ describe('exists', () => {
   })
   test('invoke', () => {
     expect(Arrays.exists([1, 2], x => x === 1)).toEqual(true)
+  })
+  test('with index', () => {
+    expect(Arrays.exists([1, 2], (x, index) => index === 1)).toEqual(true)
   })
 })
 
@@ -133,6 +167,11 @@ describe('get', () => {
   test('invoke', () => {
     expect(
       Arrays.get([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], x => x.name === 'bob')
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+  test('by index', () => {
+    expect(
+      Arrays.get([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], (x, index) => index === 1)
     ).toEqual({ name: 'bob', id: 2 })
   })
 })
@@ -157,6 +196,11 @@ describe('find', () => {
       Arrays.find([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], x => x.name === 'bob')
     ).toEqual({ name: 'bob', id: 2 })
   })
+  test('by index', () => {
+    expect(
+      Arrays.find([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], (x, index) => index === 1)
+    ).toEqual({ name: 'bob', id: 2 })
+  })
 })
 
 describe('groupBy', () => {
@@ -179,6 +223,17 @@ describe('groupBy', () => {
     ).toEqual([
       [1, [{ name: 'amy', age: 1 }]],
       [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
+    ])
+  })
+  test('with index', () => {
+    expect(
+      Arrays.groupBy(
+        [{ name: 'amy', age: 1 }, { name: 'bob', age: 2 }, { name: 'cat', age: 2 }],
+        (x, index) => index % 2
+      )
+    ).toEqual([
+      [0, [{ name: 'amy', age: 1 }, { name: 'cat', age: 2 }]],
+      [1, [{ name: 'bob', age: 2 }]]
     ])
   })
 })
