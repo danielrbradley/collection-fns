@@ -824,6 +824,20 @@ describe('reverse', () => {
   })
 })
 
+describe('sum', () => {
+  it('sums without partial application', () => {
+    expect(
+      Iterables.sum(
+        (function*() {
+          yield 21
+          yield 2
+          yield 18
+        })()
+      )
+    ).toEqual(41)
+  })
+})
+
 describe('sumBy', () => {
   it('sums ages', () => {
     expect(
@@ -847,6 +861,23 @@ describe('sumBy', () => {
         x => x.age
       )
     ).toEqual(41)
+  })
+})
+
+describe('max', () => {
+  it('finds max', () => {
+    expect(
+      Iterables.max(
+        (function*() {
+          yield 2
+          yield 21
+          yield 18
+        })()
+      )
+    ).toEqual(21)
+  })
+  it('fails on empty collection', () => {
+    expect(() => Iterables.max([])).toThrow(`Can't find max of an empty collection`)
   })
 })
 
@@ -881,6 +912,23 @@ describe('maxBy', () => {
   })
 })
 
+describe('min', () => {
+  it('finds min', () => {
+    expect(
+      Iterables.min(
+        (function*() {
+          yield 21
+          yield 2
+          yield 18
+        })()
+      )
+    ).toEqual(2)
+  })
+  it('fails on empty collection', () => {
+    expect(() => Iterables.min([])).toThrow(`Can't find min of an empty collection`)
+  })
+})
+
 describe('minBy', () => {
   it('finds min age', () => {
     expect(
@@ -909,6 +957,24 @@ describe('minBy', () => {
         x => x.age
       )
     ).toEqual(2)
+  })
+})
+
+describe('mean', () => {
+  it('finds mean', () => {
+    expect(
+      Iterables.mean(
+        (function*() {
+          yield 21
+          yield 2
+          yield 18
+          yield 39
+        })()
+      )
+    ).toEqual(20)
+  })
+  it('fails on empty collection', () => {
+    expect(() => Iterables.mean([])).toThrow(`Can't find mean of an empty collection`)
   })
 })
 
