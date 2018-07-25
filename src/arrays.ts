@@ -145,6 +145,17 @@ export function concat<T>(sources: Iterable<T[]>): T[] {
 
 /**
  * Returns an array that contains no duplicate entries according to the equality comparisons on
+ * the elements. If an element occurs multiple times in the sequence then the later occurrences are
+ * discarded.
+ * @param source The input collection.
+ */
+export function distinct<T>(source: T[]): T[] {
+  const asSet = new Set<T>(source)
+  return Array.from(asSet)
+}
+
+/**
+ * Returns an array that contains no duplicate entries according to the equality comparisons on
  * the keys returned by the given key-generating function. If an element occurs multiple times in
  * the sequence then the later occurrences are discarded.
  * @param selector A function that transforms the array items into comparable keys.

@@ -95,6 +95,12 @@ test('concat', () => {
   expect(Arrays.concat([[1, 2], [3, 4], [5]])).toEqual([1, 2, 3, 4, 5])
 })
 
+describe('distinct', () => {
+  it('ignores duplicates', () => {
+    expect(Arrays.distinct(['amy', 'bob', 'bob', 'cat'])).toEqual(['amy', 'bob', 'cat'])
+  })
+})
+
 describe('distinctBy', () => {
   test('piping', () => {
     expect(
