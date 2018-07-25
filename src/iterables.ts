@@ -489,6 +489,67 @@ export function count<T>(source: Iterable<T>): number {
 }
 
 /**
+ * Yields an iterable ordered by the selected key.
+ * If no selector is specified, the elements will be compared directly.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ */
+export function sort<T, Key>(selector?: (item: T) => Key): (source: Iterable<T>) => Iterable<T>
+/**
+ * Yields an iterable ordered by the selected key.
+ * If no selector is specified, the elements will be compared directly.
+ * @param source The input collection.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ */
+export function sort<T, Key>(source: Iterable<T>, selector?: (item: T) => Key): Iterable<T>
+export function sort<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function' || typeof a === 'undefined'
+  const optionalSelector: (item: T) => Key = partial ? a : b
+  const selector = optionalSelector === undefined ? (x: T) => x : optionalSelector
+  function exec(source: Iterable<T>): Iterable<T> {
+    const copy = Array.from(source)
+    copy.sort((a: T, b: T) => {
+      return selector(a) > selector(b) ? 1 : -1
+    })
+    return copy
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
+ * Yields an iterable ordered by the selected key, descending.
+ * If no selector is specified, the elements will be compared directly.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ */
+export function sortDescending<T, Key>(
+  selector?: (item: T) => Key
+): (source: Iterable<T>) => Iterable<T>
+/**
+ * Yields an iterable ordered by the selected key descending.
+ * If no selector is specified, the elements will be compared directly.
+ * @param source The input collection.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ */
+export function sortDescending<T, Key>(
+  source: Iterable<T>,
+  selector?: (item: T) => Key
+): Iterable<T>
+export function sortDescending<T, Key>(a: any, b?: any): any {
+  const partial = typeof a === 'function' || typeof a === 'undefined'
+  const optionalSelector: (item: T) => Key = partial ? a : b
+  const selector = optionalSelector === undefined ? (x: T) => x : optionalSelector
+  function exec(source: Iterable<T>): Iterable<T> {
+    const copy = Array.from(source)
+    copy.sort((a: T, b: T) => {
+      return selector(a) < selector(b) ? 1 : -1
+    })
+    return copy
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
  * Applies a key-generating function to each element of the collection and yields an iterable ordered by keys.
  * @param selector A function to transform items of the input sequence into comparable keys.
  * @param source The input collection.

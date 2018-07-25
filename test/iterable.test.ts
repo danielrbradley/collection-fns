@@ -643,6 +643,118 @@ describe('count', () => {
   })
 })
 
+describe('sort', () => {
+  test('piped numbers', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 21
+          yield 2
+          yield 18
+        })(),
+        Iterables.sort(),
+        Iterables.toArray
+      )
+    ).toEqual([2, 18, 21])
+  })
+  test('strings, invoked directly', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sort(
+          (function*() {
+            yield 'cat'
+            yield 'amy'
+            yield 'bob'
+          })()
+        )
+      )
+    ).toEqual(['amy', 'bob', 'cat'])
+  })
+  test('with key selector, piped', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })(),
+        Iterables.sort(x => x.age),
+        Iterables.toArray
+      )
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+  test('with key selector, direct invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sort(
+          (function*() {
+            yield { name: 'amy', age: 21 }
+            yield { name: 'bob', age: 2 }
+            yield { name: 'cat', age: 18 }
+          })(),
+          x => x.age
+        )
+      )
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+})
+
+describe('sortDescending', () => {
+  test('piped numbers', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 21
+          yield 2
+          yield 18
+        })(),
+        Iterables.sortDescending(),
+        Iterables.toArray
+      )
+    ).toEqual([21, 18, 2])
+  })
+  test('strings, invoked directly', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sortDescending(
+          (function*() {
+            yield 'cat'
+            yield 'amy'
+            yield 'bob'
+          })()
+        )
+      )
+    ).toEqual(['cat', 'bob', 'amy'])
+  })
+  test('with key selector, piped', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield { name: 'amy', age: 21 }
+          yield { name: 'bob', age: 2 }
+          yield { name: 'cat', age: 18 }
+        })(),
+        Iterables.sortDescending(x => x.age),
+        Iterables.toArray
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('with key selector, direct invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.sortDescending(
+          (function*() {
+            yield { name: 'amy', age: 21 }
+            yield { name: 'bob', age: 2 }
+            yield { name: 'cat', age: 18 }
+          })(),
+          x => x.age
+        )
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+})
+
 describe('sortBy', () => {
   it('sorts by selected key', () => {
     expect(
