@@ -1,39 +1,107 @@
+/**
+ * Class for chaining the result of one function into another.
+ */
 export class Pipe<T> {
+  /**
+   * The result returned by the previous function.
+   */
   result: T
   constructor(input: T) {
     this.result = input
   }
+  /**
+   * Executes the specified function, passing the current result as an input.
+   * @param next A function taking the last result and returning a new result which can then be piped again.
+   */
   then<U>(next: (value: T) => U) {
     return new Pipe(next(this.result))
   }
 }
 
+/**
+ * Starts a new pipe with the given input as an initial value.
+ * This returns a pipe object to use for executing a series of functions.
+ * To get the final result, use the `result` property.
+ * @param input The initial value to start the pipe.
+ */
 export function pipe<T>(input: T): Pipe<T>
-export function pipe<A, B>(a: A, b: (value: A) => B): B
-export function pipe<A, B, C>(a: A, b: (value: A) => B, c: (value: B) => C): C
-export function pipe<A, B, C, D>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A>(input: Input, a: (value: Input) => A): A
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B>(input: Input, a: (value: Input) => A, b: (value: A) => B): B
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C>(
+  input: Input,
+  a: (value: Input) => A,
+  b: (value: A) => B,
+  c: (value: B) => C
+): C
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D
 ): D
-export function pipe<A, B, C, D, E>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
   e: (value: D) => E
 ): E
-export function pipe<A, B, C, D, E, F>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
   e: (value: D) => E,
   f: (value: E) => F
 ): F
-export function pipe<A, B, C, D, E, F, G>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -41,8 +109,15 @@ export function pipe<A, B, C, D, E, F, G>(
   f: (value: E) => F,
   g: (value: F) => G
 ): G
-export function pipe<A, B, C, D, E, F, G, H>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -51,8 +126,15 @@ export function pipe<A, B, C, D, E, F, G, H>(
   g: (value: F) => G,
   h: (value: G) => H
 ): H
-export function pipe<A, B, C, D, E, F, G, H, I>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -62,8 +144,15 @@ export function pipe<A, B, C, D, E, F, G, H, I>(
   h: (value: G) => H,
   i: (value: H) => I
 ): I
-export function pipe<A, B, C, D, E, F, G, H, I, J>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -74,8 +163,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J>(
   i: (value: H) => I,
   j: (value: I) => J
 ): J
-export function pipe<A, B, C, D, E, F, G, H, I, J, K>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -87,8 +183,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K>(
   j: (value: I) => J,
   k: (value: J) => K
 ): K
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -101,8 +204,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L>(
   k: (value: J) => K,
   l: (value: K) => L
 ): L
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -116,8 +226,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M>(
   l: (value: K) => L,
   m: (value: L) => M
 ): M
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -132,8 +249,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(
   m: (value: L) => M,
   n: (value: M) => N
 ): N
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -149,8 +273,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
   n: (value: M) => N,
   o: (value: N) => O
 ): O
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -167,8 +298,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
   o: (value: N) => O,
   p: (value: O) => P
 ): P
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -186,8 +324,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
   p: (value: O) => P,
   q: (value: P) => Q
 ): Q
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -206,8 +351,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
   q: (value: P) => Q,
   r: (value: Q) => R
 ): R
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -227,8 +379,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(
   r: (value: Q) => R,
   s: (value: R) => S
 ): S
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -249,8 +408,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>
   s: (value: R) => S,
   t: (value: S) => T
 ): T
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -272,8 +438,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T,
   t: (value: S) => T,
   u: (value: T) => U
 ): U
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -296,8 +469,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T,
   u: (value: T) => U,
   v: (value: U) => V
 ): V
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -321,8 +501,15 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T,
   v: (value: U) => V,
   w: (value: V) => W
 ): W
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<Input, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -347,8 +534,42 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T,
   w: (value: V) => W,
   x: (value: W) => X
 ): X
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<
+  Input,
+  A,
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  H,
+  I,
+  J,
+  K,
+  L,
+  M,
+  N,
+  O,
+  P,
+  Q,
+  R,
+  S,
+  T,
+  U,
+  V,
+  W,
+  X,
+  Y
+>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
@@ -374,8 +595,43 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T,
   x: (value: W) => X,
   y: (value: X) => Y
 ): Y
-export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z>(
-  a: A,
+/**
+ * Calls each successive function with the result of the previous function.
+ * @param input The initial value to pass to the next function.
+ * @param a..z Functions taking the previous result and returning a new result.
+ * @returns The result of the last function provided.
+ */
+export function pipe<
+  Input,
+  A,
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  H,
+  I,
+  J,
+  K,
+  L,
+  M,
+  N,
+  O,
+  P,
+  Q,
+  R,
+  S,
+  T,
+  U,
+  V,
+  W,
+  X,
+  Y,
+  Z
+>(
+  input: Input,
+  a: (value: Input) => A,
   b: (value: A) => B,
   c: (value: B) => C,
   d: (value: C) => D,
