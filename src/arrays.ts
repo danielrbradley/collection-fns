@@ -519,6 +519,18 @@ export function reverse<T>(source: T[]): T[] {
 }
 
 /**
+ * Returns the sum of the values in the collection.
+ * @param source The input collection.
+ */
+export function sum(source: number[]): number {
+  let sum = 0
+  for (const item of source) {
+    sum += item
+  }
+  return sum
+}
+
+/**
  * Returns the sum of the values returned by the selector for each element in the array.
  * @param selector A function to transform each element into a summable value.
  * @param source The input collection.
@@ -541,6 +553,24 @@ export function sumBy<T>(a: any, b?: any): any {
     return sum
   }
   return partial ? exec : exec(a)
+}
+
+/**
+ * Returns the maximum of the values in the collection.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ */
+export function max(source: number[]): number {
+  let max: number | null = null
+  for (const item of source) {
+    if (max === null || item > max) {
+      max = item
+    }
+  }
+  if (max === null) {
+    throw new Error(`Can't find max of an empty collection`)
+  }
+  return max
 }
 
 /**
@@ -577,6 +607,24 @@ export function maxBy<T>(a: any, b?: any): any {
 }
 
 /**
+ * Returns the minimum of the values in the collection.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ */
+export function min(source: number[]): number {
+  let min: number | null = null
+  for (const item of source) {
+    if (min === null || item < min) {
+      min = item
+    }
+  }
+  if (min === null) {
+    throw new Error(`Can't find min of an empty collection`)
+  }
+  return min
+}
+
+/**
  * Returns the minimum of the values returned by the selector for each element in the array.
  * @param selector A function to transform each element into a comparable value.
  * @param source The input collection.
@@ -607,6 +655,24 @@ export function minBy<T>(a: any, b?: any): any {
     return min
   }
   return partial ? exec : exec(a)
+}
+
+/**
+ * Returns the mean (average) of the values in the collection.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ */
+export function mean(source: number[]): number {
+  let sum = 0
+  let count = 0
+  for (const item of source) {
+    sum += item
+    count++
+  }
+  if (count === 0) {
+    throw new Error(`Can't find mean of an empty collection`)
+  }
+  return sum / count
 }
 
 /**

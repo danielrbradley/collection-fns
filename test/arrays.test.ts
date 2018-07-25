@@ -419,6 +419,12 @@ describe('reverse', () => {
   })
 })
 
+describe('sum', () => {
+  it('sums without partial application', () => {
+    expect(Arrays.sum([21, 2, 18])).toEqual(41)
+  })
+})
+
 describe('sumBy', () => {
   test('piping', () => {
     expect(
@@ -434,6 +440,15 @@ describe('sumBy', () => {
         x => x.age
       )
     ).toEqual(41)
+  })
+})
+
+describe('max', () => {
+  it('finds max', () => {
+    expect(Arrays.max([2, 21, 18])).toEqual(21)
+  })
+  it('fails on empty collection', () => {
+    expect(() => Arrays.max([])).toThrow(`Can't find max of an empty collection`)
   })
 })
 
@@ -460,6 +475,15 @@ describe('maxBy', () => {
   })
 })
 
+describe('min', () => {
+  it('finds min', () => {
+    expect(Arrays.min([21, 2, 18])).toEqual(2)
+  })
+  it('fails on empty collection', () => {
+    expect(() => Arrays.min([])).toThrow(`Can't find min of an empty collection`)
+  })
+})
+
 describe('minBy', () => {
   test('piping', () => {
     expect(
@@ -480,6 +504,15 @@ describe('minBy', () => {
         x => x.age
       )
     ).toEqual(2)
+  })
+})
+
+describe('mean', () => {
+  it('finds mean', () => {
+    expect(Arrays.mean([21, 2, 18, 39])).toEqual(20)
+  })
+  it('fails on empty collection', () => {
+    expect(() => Arrays.mean([])).toThrow(`Can't find mean of an empty collection`)
   })
 })
 
