@@ -210,6 +210,23 @@ describe('concat', () => {
   })
 })
 
+describe('distinct', () => {
+  it('ignores duplicates', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 'amy'
+          yield 'bob'
+          yield 'bob'
+          yield 'cat'
+        })(),
+        Iterables.distinct,
+        Iterables.toArray
+      )
+    ).toEqual(['amy', 'bob', 'cat'])
+  })
+})
+
 describe('distinctBy', () => {
   it('ignores duplicates', () => {
     expect(

@@ -167,6 +167,17 @@ export function* concat<T>(sources: Iterable<Iterable<T>>): Iterable<T> {
 
 /**
  * Returns a iterable that contains no duplicate entries according to the equality comparisons on
+ * the elements. If an element occurs multiple times in the sequence then the later occurrences are
+ * discarded.
+ * @param source The input collection.
+ */
+export function distinct<T>(source: Iterable<T>): Iterable<T> {
+  const asSet = new Set<T>(source)
+  return asSet
+}
+
+/**
+ * Returns a iterable that contains no duplicate entries according to the equality comparisons on
  * the keys returned by the given key-generating function. If an element occurs multiple times in
  * the sequence then the later occurrences are discarded.
  * @param selector A function that transforms the collection items into comparable keys.
