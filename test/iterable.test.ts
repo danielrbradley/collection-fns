@@ -568,6 +568,38 @@ describe('take', () => {
     expect(
       pipe(
         (function*() {
+          yield 1
+          yield 2
+          yield 3
+          yield 4
+        })(),
+        Iterables.skip(2),
+        Iterables.toArray
+      )
+    ).toEqual([3, 4])
+  })
+  test('invoke', () => {
+    expect(
+      Iterables.toArray(
+        Iterables.skip(
+          (function*() {
+            yield 1
+            yield 2
+            yield 3
+            yield 4
+          })(),
+          2
+        )
+      )
+    ).toEqual([3, 4])
+  })
+})
+
+describe('take', () => {
+  test('piped', () => {
+    expect(
+      pipe(
+        (function*() {
           while (true) {
             yield 0
           }

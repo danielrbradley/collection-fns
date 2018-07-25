@@ -412,6 +412,34 @@ export function* initInfinite(options?: { start?: number; increment?: number }):
 }
 
 /**
+ * Returns the elements of the iterable after a specified count.
+ * @param count The number of items to skip.
+ * @param source The input collection.
+ */
+export function skip<T>(count: number): (source: Iterable<T>) => Iterable<T>
+/**
+ * Returns the elements of the iterable after a specified count.
+ * @param source The input collection.
+ * @param count The number of items to skip.
+ */
+export function skip<T>(source: Iterable<T>, count: number): Iterable<T>
+export function skip<T>(a: any, b?: any): any {
+  const partial = typeof a === 'number'
+  const count: number = partial ? a : b
+  function* exec(source: Iterable<T>): Iterable<T> {
+    let i = 0
+    for (const item of source) {
+      if (i >= count) {
+        yield item
+      } else {
+        i++
+      }
+    }
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
  * Returns the elements of the iterable up to a specified count.
  * @param count The number of items to take.
  * @param source The input collection.
