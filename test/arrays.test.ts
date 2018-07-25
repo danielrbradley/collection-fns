@@ -320,6 +320,60 @@ describe('count', () => {
   })
 })
 
+describe('sort', () => {
+  test('piped', () => {
+    expect(
+      pipe([{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }]).then(
+        Arrays.sort(x => x.age)
+      ).result
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+  test('invoke', () => {
+    expect(
+      Arrays.sort(
+        [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+        x => x.age
+      )
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+  test('piped without selector', () => {
+    expect(pipe([21, 2, 18]).then(Arrays.sort()).result).toEqual([2, 18, 21])
+  })
+  test('invoke without selector', () => {
+    expect(Arrays.sort(['amy', 'cat', 'bob'])).toEqual(['amy', 'bob', 'cat'])
+  })
+})
+
+describe('sortDescending', () => {
+  test('piped', () => {
+    expect(
+      pipe(
+        [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+        Arrays.sortDescending(x => x.age)
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('invoke', () => {
+    expect(
+      Arrays.sortDescending(
+        [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+        x => x.age
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
+  test('piped without selector', () => {
+    expect(
+      pipe(
+        [21, 2, 18],
+        Arrays.sortDescending()
+      )
+    ).toEqual([21, 18, 2])
+  })
+  test('invoke without selector', () => {
+    expect(Arrays.sortDescending(['amy', 'cat', 'bob'])).toEqual(['cat', 'bob', 'amy'])
+  })
+})
+
 describe('sortBy', () => {
   test('piped', () => {
     expect(
