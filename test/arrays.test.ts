@@ -263,6 +263,9 @@ describe('init', () => {
   test('from-to fractional-increment', () => {
     expect(Arrays.init({ from: 1, to: 2, increment: 0.5 })).toEqual([1, 1.5, 2])
   })
+  test('from-to overshooting-increment', () => {
+    expect(Arrays.init({ from: 1, to: 2, increment: 5 })).toEqual([1])
+  })
   test('from positive to negative', () => {
     expect(Arrays.init({ from: 1, to: -1 })).toEqual([1, 0, -1])
   })

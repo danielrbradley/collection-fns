@@ -480,6 +480,11 @@ describe('init', () => {
       pipe(Iterables.init({ from: 1, to: 2, increment: 0.5 })).then(Iterables.toArray).result
     ).toEqual([1, 1.5, 2])
   })
+  test('from-to overshooting-increment', () => {
+    expect(
+      pipe(Iterables.init({ from: 1, to: 2, increment: 5 })).then(Iterables.toArray).result
+    ).toEqual([1])
+  })
   test('from positive to negative', () => {
     expect(pipe(Iterables.init({ from: 1, to: -1 })).then(Iterables.toArray).result).toEqual([
       1,

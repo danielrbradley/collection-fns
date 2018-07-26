@@ -391,7 +391,7 @@ export function* init(options: number | InitRange | InitCount): Iterable<number>
       const increment = options.increment ? options.increment : sign
       return {
         start: options.from,
-        count: (options.to - options.from) / increment + 1,
+        count: Math.floor((options.to - options.from) / increment + 1),
         increment: increment
       }
     }
