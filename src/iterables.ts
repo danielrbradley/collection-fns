@@ -8,17 +8,17 @@ export function toArray<T>(source: Iterable<T>): T[] {
 
 /**
  * Creates a new iterable whose elements are the results of applying the specified mapping to each of the elements of the source collection.
+ * @param source The input collection.
+ * @param mapping A function to transform items from the input collection.
+ */
+export function map<T, U>(source: Iterable<T>, mapping: (item: T, index: number) => U): Iterable<U>
+/**
+ * Creates a new iterable whose elements are the results of applying the specified mapping to each of the elements of the source collection.
  * @param mapping A function to transform items from the input collection.
  */
 export function map<T, U>(
   mapping: (item: T, index: number) => U
 ): (source: Iterable<T>) => Iterable<U>
-/**
- * Creates a new iterable whose elements are the results of applying the specified mapping to each of the elements of the source collection.
- * @param source The input collection.
- * @param mapping A function to transform items from the input collection.
- */
-export function map<T, U>(source: Iterable<T>, mapping: (item: T, index: number) => U): Iterable<U>
 export function map<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const mapping: (item: T, index: number) => U = partial ? a : b
@@ -34,13 +34,6 @@ export function map<T, U>(a: any, b?: any): any {
 
 /**
  * Returns a new iterable containing only the elements of the collection for which the given predicate returns true.
- * @param predicate A function to test whether each item in the input collection should be included in the output.
- */
-export function filter<T>(
-  predicate: (item: T, index: number) => boolean
-): (source: Iterable<T>) => Iterable<T>
-/**
- * Returns a new iterable containing only the elements of the collection for which the given predicate returns true.
  * @param source The input collection.
  * @param predicate A function to test whether each item in the input collection should be included in the output.
  */
@@ -48,6 +41,13 @@ export function filter<T>(
   source: Iterable<T>,
   predicate: (item: T, index: number) => boolean
 ): Iterable<T>
+/**
+ * Returns a new iterable containing only the elements of the collection for which the given predicate returns true.
+ * @param predicate A function to test whether each item in the input collection should be included in the output.
+ */
+export function filter<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: Iterable<T>) => Iterable<T>
 export function filter<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -65,13 +65,6 @@ export function filter<T>(a: any, b?: any): any {
 
 /**
  * Applies the given function to each element of the sequence and returns a new sequence comprised of the results for each element where the function returns a value.
- * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
- */
-export function choose<T, U>(
-  chooser: (item: T, index: number) => U | undefined
-): (source: Iterable<T>) => Iterable<U>
-/**
- * Applies the given function to each element of the sequence and returns a new sequence comprised of the results for each element where the function returns a value.
  * @param source The input collection.
  * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
  */
@@ -79,6 +72,13 @@ export function choose<T, U>(
   source: Iterable<T>,
   chooser: (item: T, index: number) => U | undefined
 ): Iterable<U>
+/**
+ * Applies the given function to each element of the sequence and returns a new sequence comprised of the results for each element where the function returns a value.
+ * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
+ */
+export function choose<T, U>(
+  chooser: (item: T, index: number) => U | undefined
+): (source: Iterable<T>) => Iterable<U>
 export function choose<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const chooser: (item: T, index: number) => U | undefined = partial ? a : b
@@ -97,13 +97,6 @@ export function choose<T, U>(a: any, b?: any): any {
 
 /**
  * Applies the given function to each element of the source iterable and concatenates all the results.
- * @param mapping A function to transform elements of the input collection into collections that are concatenated.
- */
-export function collect<T, U>(
-  mapping: (item: T, index: number) => Iterable<U>
-): (source: Iterable<T>) => Iterable<U>
-/**
- * Applies the given function to each element of the source iterable and concatenates all the results.
  * @param source The input collection.
  * @param mapping A function to transform elements of the input collection into collections that are concatenated.
  */
@@ -111,6 +104,13 @@ export function collect<T, U>(
   source: Iterable<T>,
   mapping: (item: T, index: number) => Iterable<U>
 ): Iterable<U>
+/**
+ * Applies the given function to each element of the source iterable and concatenates all the results.
+ * @param mapping A function to transform elements of the input collection into collections that are concatenated.
+ */
+export function collect<T, U>(
+  mapping: (item: T, index: number) => Iterable<U>
+): (source: Iterable<T>) => Iterable<U>
 export function collect<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const mapping: (item: T, index: number) => Iterable<U> = partial ? a : b
@@ -129,16 +129,16 @@ export function collect<T, U>(a: any, b?: any): any {
 
 /**
  * Wraps the two given iterables as a single concatenated iterable.
- * @param second The second iterable.
- * @param first The first iterable.
- */
-export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
-/**
- * Wraps the two given iterables as a single concatenated iterable.
  * @param first The first iterable.
  * @param second The second iterable.
  */
 export function append<T>(first: Iterable<T>, second: Iterable<T>): Iterable<T>
+/**
+ * Wraps the two given iterables as a single concatenated iterable.
+ * @param second The second iterable.
+ * @param first The first iterable.
+ */
+export function append<T>(second: Iterable<T>): (first: Iterable<T>) => Iterable<T>
 export function append<T>(a: any, b?: any): any {
   const partial = b === undefined
   const second: Iterable<T> = partial ? a : b
@@ -180,16 +180,6 @@ export function distinct<T>(source: Iterable<T>): Iterable<T> {
  * Returns a iterable that contains no duplicate entries according to the equality comparisons on
  * the keys returned by the given key-generating function. If an element occurs multiple times in
  * the sequence then the later occurrences are discarded.
- * @param selector A function that transforms the collection items into comparable keys.
- * @param source The input collection.
- */
-export function distinctBy<T, Key>(
-  selector: (item: T, index: number) => Key
-): (source: Iterable<T>) => Iterable<T>
-/**
- * Returns a iterable that contains no duplicate entries according to the equality comparisons on
- * the keys returned by the given key-generating function. If an element occurs multiple times in
- * the sequence then the later occurrences are discarded.
  * @param source The input collection.
  * @param selector A function that transforms the collection items into comparable keys.
  */
@@ -197,6 +187,16 @@ export function distinctBy<T, Key>(
   source: Iterable<T>,
   selector: (item: T, index: number) => Key
 ): Iterable<T>
+/**
+ * Returns a iterable that contains no duplicate entries according to the equality comparisons on
+ * the keys returned by the given key-generating function. If an element occurs multiple times in
+ * the sequence then the later occurrences are discarded.
+ * @param selector A function that transforms the collection items into comparable keys.
+ * @param source The input collection.
+ */
+export function distinctBy<T, Key>(
+  selector: (item: T, index: number) => Key
+): (source: Iterable<T>) => Iterable<T>
 export function distinctBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T, index: number) => Key = partial ? a : b
@@ -217,14 +217,6 @@ export function distinctBy<T, Key>(a: any, b?: any): any {
 
 /**
  * Tests if any element of the collection satisfies the given predicate.
- * @param predicate A function to test each item of the input collection.
- * @param source The input collection.
- */
-export function exists<T>(
-  predicate: (item: T, index: number) => boolean
-): (source: Iterable<T>) => boolean
-/**
- * Tests if any element of the collection satisfies the given predicate.
  * @param source The input collection.
  * @param predicate A function to test each item of the input collection.
  */
@@ -232,6 +224,14 @@ export function exists<T>(
   source: Iterable<T>,
   predicate: (item: T, index: number) => boolean
 ): boolean
+/**
+ * Tests if any element of the collection satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
+export function exists<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: Iterable<T>) => boolean
 export function exists<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -250,18 +250,18 @@ export function exists<T>(a: any, b?: any): any {
 
 /**
  * Returns the first element for which the given function returns true.
- * @param predicate A function to test whether an item in the collection should be returned.
- * @param source The input collection.
- * @throws If no item is found matching the criteria of the predicate.
- */
-export function get<T>(predicate: (item: T, index: number) => boolean): (source: Iterable<T>) => T
-/**
- * Returns the first element for which the given function returns true.
  * @param source The input collection.
  * @param predicate A function to test whether an item in the collection should be returned.
  * @throws If no item is found matching the criteria of the predicate.
  */
 export function get<T>(source: Iterable<T>, predicate: (item: T, index: number) => boolean): T
+/**
+ * Returns the first element for which the given function returns true.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @param source The input collection.
+ * @throws If no item is found matching the criteria of the predicate.
+ */
+export function get<T>(predicate: (item: T, index: number) => boolean): (source: Iterable<T>) => T
 export function get<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -280,14 +280,6 @@ export function get<T>(a: any, b?: any): any {
 
 /**
  * Returns the first element for which the given function returns true, otherwise undefined.
- * @param predicate A function to test whether an item in the collection should be returned.
- * @param source The input collection.
- */
-export function find<T>(
-  predicate: (item: T, index: number) => boolean
-): (source: Iterable<T>) => T | undefined
-/**
- * Returns the first element for which the given function returns true, otherwise undefined.
  * @param source The input collection.
  * @param predicate A function to test whether an item in the collection should be returned.
  */
@@ -295,6 +287,14 @@ export function find<T>(
   source: Iterable<T>,
   predicate: (item: T, index: number) => boolean
 ): T | undefined
+/**
+ * Returns the first element for which the given function returns true, otherwise undefined.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @param source The input collection.
+ */
+export function find<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: Iterable<T>) => T | undefined
 export function find<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -314,15 +314,6 @@ export function find<T>(a: any, b?: any): any {
 /**
  * Applies a key-generating function to each element of a collection and yields a iterable of unique
  * keys and an array of all elements that have each key.
- * @param selector A function that transforms an element of the collection into a comparable key.
- * @param source The input collection.
- */
-export function groupBy<T, Key>(
-  selector: (item: T, index: number) => Key
-): (source: Iterable<T>) => Iterable<[Key, ReadonlyArray<T>]>
-/**
- * Applies a key-generating function to each element of a collection and yields a iterable of unique
- * keys and an array of all elements that have each key.
  * @param source The input collection.
  * @param selector A function that transforms an element of the collection into a comparable key.
  */
@@ -330,6 +321,15 @@ export function groupBy<T, Key>(
   source: Iterable<T>,
   selector: (item: T, index: number) => Key
 ): Iterable<[Key, Iterable<T>]>
+/**
+ * Applies a key-generating function to each element of a collection and yields a iterable of unique
+ * keys and an array of all elements that have each key.
+ * @param selector A function that transforms an element of the collection into a comparable key.
+ * @param source The input collection.
+ */
+export function groupBy<T, Key>(
+  selector: (item: T, index: number) => Key
+): (source: Iterable<T>) => Iterable<[Key, ReadonlyArray<T>]>
 export function groupBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T, index: number) => Key = partial ? a : b
@@ -424,16 +424,16 @@ export function* initInfinite(options?: { start?: number; increment?: number }):
 
 /**
  * Returns the elements of the iterable after a specified count.
- * @param count The number of items to skip.
- * @param source The input collection.
- */
-export function skip<T>(count: number): (source: Iterable<T>) => Iterable<T>
-/**
- * Returns the elements of the iterable after a specified count.
  * @param source The input collection.
  * @param count The number of items to skip.
  */
 export function skip<T>(source: Iterable<T>, count: number): Iterable<T>
+/**
+ * Returns the elements of the iterable after a specified count.
+ * @param count The number of items to skip.
+ * @param source The input collection.
+ */
+export function skip<T>(count: number): (source: Iterable<T>) => Iterable<T>
 export function skip<T>(a: any, b?: any): any {
   const partial = typeof a === 'number'
   const count: number = partial ? a : b
@@ -452,16 +452,16 @@ export function skip<T>(a: any, b?: any): any {
 
 /**
  * Returns the elements of the iterable up to a specified count.
- * @param count The number of items to take.
- * @param source The input collection.
- */
-export function take<T>(count: number): (source: Iterable<T>) => Iterable<T>
-/**
- * Returns the elements of the iterable up to a specified count.
  * @param source The input collection.
  * @param count The number of items to take.
  */
 export function take<T>(source: Iterable<T>, count: number): Iterable<T>
+/**
+ * Returns the elements of the iterable up to a specified count.
+ * @param count The number of items to take.
+ * @param source The input collection.
+ */
+export function take<T>(count: number): (source: Iterable<T>) => Iterable<T>
 export function take<T>(a: any, b?: any): any {
   const partial = typeof a === 'number'
   const count: number = partial ? a : b
@@ -502,17 +502,17 @@ export function count<T>(source: Iterable<T>): number {
 /**
  * Yields an iterable ordered by the selected key.
  * If no selector is specified, the elements will be compared directly.
- * @param selector An optional function to transform items of the input sequence into comparable keys.
- * @param source The input collection.
- */
-export function sort<T, Key>(selector?: (item: T) => Key): (source: Iterable<T>) => Iterable<T>
-/**
- * Yields an iterable ordered by the selected key.
- * If no selector is specified, the elements will be compared directly.
  * @param source The input collection.
  * @param selector An optional function to transform items of the input sequence into comparable keys.
  */
 export function sort<T, Key>(source: Iterable<T>, selector?: (item: T) => Key): Iterable<T>
+/**
+ * Yields an iterable ordered by the selected key.
+ * If no selector is specified, the elements will be compared directly.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ */
+export function sort<T, Key>(selector?: (item: T) => Key): (source: Iterable<T>) => Iterable<T>
 export function sort<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function' || typeof a === 'undefined'
   const optionalSelector: (item: T) => Key = partial ? a : b
@@ -528,15 +528,6 @@ export function sort<T, Key>(a: any, b?: any): any {
 }
 
 /**
- * Yields an iterable ordered by the selected key, descending.
- * If no selector is specified, the elements will be compared directly.
- * @param selector An optional function to transform items of the input sequence into comparable keys.
- * @param source The input collection.
- */
-export function sortDescending<T, Key>(
-  selector?: (item: T) => Key
-): (source: Iterable<T>) => Iterable<T>
-/**
  * Yields an iterable ordered by the selected key descending.
  * If no selector is specified, the elements will be compared directly.
  * @param source The input collection.
@@ -546,6 +537,15 @@ export function sortDescending<T, Key>(
   source: Iterable<T>,
   selector?: (item: T) => Key
 ): Iterable<T>
+/**
+ * Yields an iterable ordered by the selected key, descending.
+ * If no selector is specified, the elements will be compared directly.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ */
+export function sortDescending<T, Key>(
+  selector?: (item: T) => Key
+): (source: Iterable<T>) => Iterable<T>
 export function sortDescending<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function' || typeof a === 'undefined'
   const optionalSelector: (item: T) => Key = partial ? a : b
@@ -587,14 +587,6 @@ export function sortBy<T, Key>(a: any, b?: any): any {
 
 /**
  * Applies a key-generating function to each element of the collection and yields an iterable ordered by keys, descending.
- * @param selector A function to transform items of the input sequence into comparable keys.
- * @param source The input collection.
- */
-export function sortByDescending<T, Key>(
-  selector: (item: T) => Key
-): (source: Iterable<T>) => Iterable<T>
-/**
- * Applies a key-generating function to each element of the collection and yields an iterable ordered by keys, descending.
  * @param source The input collection.
  * @param selector A function to transform items of the input sequence into comparable keys.
  */
@@ -602,6 +594,14 @@ export function sortByDescending<T, Key>(
   source: Iterable<T>,
   selector: (item: T) => Key
 ): Iterable<T>
+/**
+ * Applies a key-generating function to each element of the collection and yields an iterable ordered by keys, descending.
+ * @param selector A function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ */
+export function sortByDescending<T, Key>(
+  selector: (item: T) => Key
+): (source: Iterable<T>) => Iterable<T>
 export function sortByDescending<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => Key = partial ? a : b
@@ -640,16 +640,16 @@ export function sum(source: Iterable<number>): number {
 
 /**
  * Returns the sum of the values returned by the selector for each element in the collection.
- * @param selector A function to transform each element into a summable value.
- * @param source The input collection.
- */
-export function sumBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
-/**
- * Returns the sum of the values returned by the selector for each element in the collection.
  * @param source The input collection.
  * @param selector A function to transform each element into a summable value.
  */
 export function sumBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+/**
+ * Returns the sum of the values returned by the selector for each element in the collection.
+ * @param selector A function to transform each element into a summable value.
+ * @param source The input collection.
+ */
+export function sumBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
 export function sumBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
@@ -683,18 +683,18 @@ export function max(source: Iterable<number>): number {
 
 /**
  * Returns the maximum of the values returned by the selector for each element in the collection.
- * @param selector A function to transform each element into a comparable value.
- * @param source The input collection.
- * @throws If the collection is empty.
- */
-export function maxBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
-/**
- * Returns the maximum of the values returned by the selector for each element in the collection.
  * @param source The input collection.
  * @param selector A function to transform each element into a comparable value.
  * @throws If the collection is empty.
  */
 export function maxBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+/**
+ * Returns the maximum of the values returned by the selector for each element in the collection.
+ * @param selector A function to transform each element into a comparable value.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ */
+export function maxBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
 export function maxBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
@@ -734,18 +734,18 @@ export function min(source: Iterable<number>): number {
 
 /**
  * Returns the minimum of the values returned by the selector for each element in the collection.
- * @param selector A function to transform each element into a comparable value.
- * @param source The input collection.
- * @throws If the collection is empty.
- */
-export function minBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
-/**
- * Returns the minimum of the values returned by the selector for each element in the collection.
  * @param source The input collection.
  * @param selector A function to transform each element into a comparable value.
  * @throws If the collection is empty.
  */
 export function minBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+/**
+ * Returns the minimum of the values returned by the selector for each element in the collection.
+ * @param selector A function to transform each element into a comparable value.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ */
+export function minBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
 export function minBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
@@ -785,18 +785,18 @@ export function mean(source: Iterable<number>): number {
 
 /**
  * Returns the mean (average) of the values returned by the selector for each element in the collection.
- * @param selector A function to transform each element into a summable value.
- * @param source The input collection.
- * @throws If the collection is empty.
- */
-export function meanBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
-/**
- * Returns the mean (average) of the values returned by the selector for each element in the collection.
  * @param source The input collection.
  * @param selector A function to transform each element into a summable value.
  * @throws If the collection is empty.
  */
 export function meanBy<T>(source: Iterable<T>, selector: (item: T) => number): number
+/**
+ * Returns the mean (average) of the values returned by the selector for each element in the collection.
+ * @param selector A function to transform each element into a summable value.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ */
+export function meanBy<T>(selector: (item: T) => number): (source: Iterable<T>) => number
 export function meanBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
