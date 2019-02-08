@@ -287,7 +287,7 @@ describe('exists', () => {
   it('matches non-existance', () => {
     expect(
       pipe(
-        (function*() {
+        (function*(): IterableIterator<number> {
           yield 1
           yield 2
         })()
