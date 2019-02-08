@@ -350,6 +350,40 @@ export function exists<T>(a: any, b?: any): any {
 }
 
 /**
+ * Tests if every element of the array satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test against each item of the input collection.
+ * @example
+ * Arrays.every([1, 2], x => x === 1) // false
+ * // or using pipe
+ * pipe([1, 2], Arrays.every(x => x >= 1)) // true
+ */
+export function every<T>(
+  source: ReadonlyArray<T>,
+  predicate: (item: T, index: number) => boolean
+): boolean
+/**
+ * Tests if every element of the array satisfies the given predicate.
+ * @param predicate A function to test against each item of the input collection.
+ * @param source The input collection.
+ * @example
+ * Arrays.every([1, 2], x => x === 1) // false
+ * // or using pipe
+ * pipe([1, 2], Arrays.every(x => x >= 1)) // true
+ */
+export function every<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: ReadonlyArray<T>) => boolean
+export function every<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T, index: number) => boolean = partial ? a : b
+  function exec(source: ReadonlyArray<T>): boolean {
+    return source.every(predicate)
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
  * Returns the first element for which the given function returns true or throws if not found.
  * If you don't want exceptions, use `find` instead.
  * @param source The input collection.

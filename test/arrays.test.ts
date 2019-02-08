@@ -213,6 +213,34 @@ describe('exists', () => {
   })
 })
 
+describe('every', () => {
+  it('matches existance', () => {
+    expect(
+      pipe(
+        [1, 2],
+        Arrays.every(x => x >= 1)
+      )
+    ).toEqual(true)
+  })
+  it('matches non-existance', () => {
+    expect(
+      pipe(
+        [1, 2],
+        Arrays.every(x => x === 1)
+      )
+    ).toEqual(false)
+  })
+  test('invoke', () => {
+    expect(Arrays.every([1, 2], x => x === 1)).toEqual(false)
+  })
+  test('with index', () => {
+    expect(Arrays.every([1, 2], (x, index) => index >= 0)).toEqual(true)
+  })
+  test('invoke from readonly array', () => {
+    expect(Arrays.every([2, 4] as ReadonlyArray<number>, x => x % 2 === 0)).toEqual(true)
+  })
+})
+
 describe('get', () => {
   test('piped match', () => {
     expect(
