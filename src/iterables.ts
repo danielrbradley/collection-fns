@@ -249,6 +249,39 @@ export function exists<T>(a: any, b?: any): any {
 }
 
 /**
+ * Tests if every element of the collection satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test against each item of the input collection.
+ */
+export function every<T>(
+  source: Iterable<T>,
+  predicate: (item: T, index: number) => boolean
+): boolean
+/**
+ * Tests if every element of the collection satisfies the given predicate.
+ * @param predicate A function to test against each item of the input collection.
+ * @param source The input collection.
+ */
+export function every<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: Iterable<T>) => boolean
+export function every<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T, index: number) => boolean = partial ? a : b
+  function exec(source: Iterable<T>): boolean {
+    let index = 0
+    for (const item of source) {
+      if (!predicate(item, index)) {
+        return false
+      }
+      index++
+    }
+    return true
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
  * Returns the first element for which the given function returns true.
  * @param source The input collection.
  * @param predicate A function to test whether an item in the collection should be returned.

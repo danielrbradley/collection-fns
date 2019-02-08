@@ -317,6 +317,50 @@ describe('exists', () => {
   })
 })
 
+describe('every', () => {
+  it('matches existance', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 1
+          yield 2
+        })()
+      ).then(Iterables.every(x => x >= 1)).result
+    ).toEqual(true)
+  })
+  it('matches non-existance', () => {
+    expect(
+      pipe(
+        (function*(): IterableIterator<number> {
+          yield 1
+          yield 2
+        })()
+      ).then(Iterables.every(x => x === 2)).result
+    ).toEqual(false)
+  })
+  it('matches without partial application', () => {
+    expect(
+      Iterables.every(
+        (function*() {
+          yield 2
+          yield 4
+        })(),
+        x => x % 2 === 0
+      )
+    ).toEqual(true)
+  })
+  it('passes index', () => {
+    expect(
+      pipe(
+        (function*() {
+          yield 1
+          yield 2
+        })()
+      ).then(Iterables.every((x, index) => index >= 0)).result
+    ).toEqual(true)
+  })
+})
+
 describe('get', () => {
   it('finds match', () => {
     expect(
