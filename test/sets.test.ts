@@ -108,6 +108,18 @@ describe('exists', () => {
   })
 })
 
+describe('every', () => {
+  it('matches existance', () => {
+    expect(pipe(new Set([1, 2])).then(Sets.every(x => x >= 1)).result).toEqual(true)
+  })
+  it('matches non-existance', () => {
+    expect(pipe(new Set([1, 2])).then(Sets.every(x => x === 1)).result).toEqual(false)
+  })
+  test('invoke', () => {
+    expect(Sets.every(new Set([2, 4]), x => x % 2 === 0)).toEqual(true)
+  })
+})
+
 describe('contains', () => {
   test('piped match', () => {
     expect(pipe(new Set(['amy', 'bob'])).then(Sets.contains('bob')).result).toEqual(true)

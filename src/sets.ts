@@ -182,6 +182,27 @@ export function exists<T>(a: any, b?: any): any {
 }
 
 /**
+ * Tests if any element of the set satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test each item of the input collection.
+ */
+export function every<T>(source: ReadonlySet<T>, predicate: (item: T) => boolean): boolean
+/**
+ * Tests if any element of the set satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
+export function every<T>(predicate: (item: T) => boolean): (source: ReadonlySet<T>) => boolean
+export function every<T>(a: any, b?: any): any {
+  const partial = typeof a === 'function'
+  const predicate: (item: T) => boolean = partial ? a : b
+  function exec(source: ReadonlySet<T>): boolean {
+    return Iterables.every(source, predicate)
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
  * Evaluates to true if the given item is in the source set.
  * @param source The input collection.
  * @param item The item to look for.
