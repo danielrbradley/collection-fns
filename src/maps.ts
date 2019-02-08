@@ -242,6 +242,37 @@ export function exists<Key, T>(a: any, b?: any): any {
 }
 
 /**
+ * Tests if every element of the map satisfies the given predicate.
+ * @param source The input collection.
+ * @param predicate A function to test each item of the input collection.
+ */
+export function every<Key, T>(
+  source: ReadonlyMap<Key, T>,
+  predicate: (key: Key, value: T) => boolean
+): boolean
+/**
+ * Tests if every element of the map satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
+export function every<Key, T>(
+  predicate: (key: Key, value: T) => boolean
+): (source: ReadonlyMap<Key, T>) => boolean
+export function every<Key, T>(a: any, b?: any): any {
+  const partial = b === undefined
+  const predicate: (key: Key, value: T) => boolean = partial ? a : b
+  function exec(source: ReadonlyMap<Key, T>) {
+    for (const item of source) {
+      if (!predicate(item[0], item[1])) {
+        return false
+      }
+    }
+    return true
+  }
+  return partial ? exec : exec(a)
+}
+
+/**
  * Evaluates to true if the given key is in the source map.
  * @param source The input collection.
  * @param key The key to look for.

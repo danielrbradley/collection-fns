@@ -61,9 +61,8 @@ describe('filter', () => {
 describe('choose', () => {
   test('immediate', () => {
     expect(
-      Maps.choose(
-        new Map([['a', 1], ['b', 2], ['c', 3]]),
-        (key, value) => (value % 2 === 1 ? key + value : undefined)
+      Maps.choose(new Map([['a', 1], ['b', 2], ['c', 3]]), (key, value) =>
+        value % 2 === 1 ? key + value : undefined
       )
     ).toEqual(new Map([['a', 'a1'], ['c', 'c3']]))
   })
@@ -135,6 +134,20 @@ describe('exists', () => {
   })
   test('not found', () => {
     expect(Maps.exists(new Map([['a', 1], ['b', 2]]), (key, value) => value === 3)).toEqual(false)
+  })
+})
+
+describe('every', () => {
+  test('immediate', () => {
+    expect(Maps.every(new Map([['a', 1], ['b', 2]]), (key, value) => value >= 1)).toEqual(true)
+  })
+  test('piped', () => {
+    expect(
+      pipe(new Map([['a', 1], ['b', 2]])).then(Maps.every(key => key.length === 1)).result
+    ).toEqual(true)
+  })
+  test('not found', () => {
+    expect(Maps.every(new Map([['a', 1], ['b', 2]]), (key, value) => value === 1)).toEqual(false)
   })
 })
 
