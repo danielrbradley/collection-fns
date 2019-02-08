@@ -22,15 +22,6 @@ export function ofIterable<T>(source: Iterable<T>): T[] {
 
 /**
  * Creates a new array whose elements are the results of applying the specified mapping to each of the elements of the source collection.
- * @param mapping A function to transform items from the input collection.
- * @example
- * Arrays.map([1, 2], x => x * 2) // [2, 4]
- * // or using pipe
- * pipe([1, 2], Arrays.map(x => x * 2)) // [2, 4]
- */
-export function map<T, U>(mapping: (item: T, index: number) => U): (source: ReadonlyArray<T>) => U[]
-/**
- * Creates a new array whose elements are the results of applying the specified mapping to each of the elements of the source collection.
  * @param source The input collection.
  * @param mapping A function to transform items from the input collection.
  * @example
@@ -39,6 +30,15 @@ export function map<T, U>(mapping: (item: T, index: number) => U): (source: Read
  * pipe([1, 2], Arrays.map(x => x * 2)) // [2, 4]
  */
 export function map<T, U>(source: ReadonlyArray<T>, mapping: (item: T, index: number) => U): U[]
+/**
+ * Creates a new array whose elements are the results of applying the specified mapping to each of the elements of the source collection.
+ * @param mapping A function to transform items from the input collection.
+ * @example
+ * Arrays.map([1, 2], x => x * 2) // [2, 4]
+ * // or using pipe
+ * pipe([1, 2], Arrays.map(x => x * 2)) // [2, 4]
+ */
+export function map<T, U>(mapping: (item: T, index: number) => U): (source: ReadonlyArray<T>) => U[]
 export function map<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const mapping: (item: T, index: number) => U = partial ? a : b
@@ -48,17 +48,6 @@ export function map<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-/**
- * Returns a new array containing only the elements of the collection for which the given predicate returns true.
- * @param predicate A function to test whether each item in the input collection should be included in the output.
- * @example
- * Arrays.filter([1, 2, 3, 4], x => x % 2 === 0) // [2, 4]
- * // or using pipe
- * pipe([1, 2, 3, 4], Arrays.filter(x => x % 2 === 0)) // [2, 4]
- */
-export function filter<T>(
-  predicate: (item: T, index: number) => boolean
-): (source: ReadonlyArray<T>) => T[]
 /**
  * Returns a new array containing only the elements of the collection for which the given predicate returns true.
  * @param source The input collection.
@@ -72,6 +61,17 @@ export function filter<T>(
   source: ReadonlyArray<T>,
   predicate: (item: T, index: number) => boolean
 ): T[]
+/**
+ * Returns a new array containing only the elements of the collection for which the given predicate returns true.
+ * @param predicate A function to test whether each item in the input collection should be included in the output.
+ * @example
+ * Arrays.filter([1, 2, 3, 4], x => x % 2 === 0) // [2, 4]
+ * // or using pipe
+ * pipe([1, 2, 3, 4], Arrays.filter(x => x % 2 === 0)) // [2, 4]
+ */
+export function filter<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: ReadonlyArray<T>) => T[]
 export function filter<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -81,24 +81,6 @@ export function filter<T, U>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-/**
- * Applies the given function to each element of the array and returns a new array comprised of the results for each element where the function returns a value.
- * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
- * @example
- * Arrays.choose(
- *  [1, 2, 3],
- *  x => (x % 2 === 1 ? x * 2 : undefined)
- * ) // [2, 6]
- *
- * // or using pipe
- * pipe(
- *  [1, 2, 3],
- *  Arrays.choose(x => (x % 2 === 1 ? x * 2 : undefined))
- * ) // [2, 6]
- */
-export function choose<T, U>(
-  chooser: (item: T, index: number) => U | undefined
-): (source: ReadonlyArray<T>) => U[]
 /**
  * Applies the given function to each element of the array and returns a new array comprised of the results for each element where the function returns a value.
  * @param source The input collection.
@@ -118,6 +100,24 @@ export function choose<T, U>(
   source: ReadonlyArray<T>,
   chooser: (item: T, index: number) => U | undefined
 ): U[]
+/**
+ * Applies the given function to each element of the array and returns a new array comprised of the results for each element where the function returns a value.
+ * @param chooser A function to transform items from the input collection to a new value to be included, or undefined to be excluded.
+ * @example
+ * Arrays.choose(
+ *  [1, 2, 3],
+ *  x => (x % 2 === 1 ? x * 2 : undefined)
+ * ) // [2, 6]
+ *
+ * // or using pipe
+ * pipe(
+ *  [1, 2, 3],
+ *  Arrays.choose(x => (x % 2 === 1 ? x * 2 : undefined))
+ * ) // [2, 6]
+ */
+export function choose<T, U>(
+  chooser: (item: T, index: number) => U | undefined
+): (source: ReadonlyArray<T>) => U[]
 export function choose<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const chooser: (item: T, index: number) => U | undefined = partial ? a : b
@@ -138,17 +138,6 @@ export function choose<T, U>(a: any, b?: any): any {
 
 /**
  * Applies the given function to each element of the source array and concatenates all the results.
- * @param mapping A function to transform elements of the input collection into collections that are concatenated.
- * @example
- * Arrays.collect([1, 2], x => [x, x]) // [1, 1, 2, 2]
- * // or using pipe
- * pipe([1, 2], Arrays.collect(x => [x, x])) // [1, 1, 2, 2]
- */
-export function collect<T, U>(
-  mapping: (item: T, index: number) => Iterable<U>
-): (source: ReadonlyArray<T>) => U[]
-/**
- * Applies the given function to each element of the source array and concatenates all the results.
  * @param source The input collection.
  * @param mapping A function to transform elements of the input collection into collections that are concatenated.
  * @example
@@ -160,6 +149,17 @@ export function collect<T, U>(
   source: ReadonlyArray<T>,
   mapping: (item: T, index: number) => Iterable<U>
 ): U[]
+/**
+ * Applies the given function to each element of the source array and concatenates all the results.
+ * @param mapping A function to transform elements of the input collection into collections that are concatenated.
+ * @example
+ * Arrays.collect([1, 2], x => [x, x]) // [1, 1, 2, 2]
+ * // or using pipe
+ * pipe([1, 2], Arrays.collect(x => [x, x])) // [1, 1, 2, 2]
+ */
+export function collect<T, U>(
+  mapping: (item: T, index: number) => Iterable<U>
+): (source: ReadonlyArray<T>) => U[]
 export function collect<T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const mapping: (item: T, index: number) => Iterable<U> = partial ? a : b
@@ -180,16 +180,6 @@ export function collect<T, U>(a: any, b?: any): any {
 
 /**
  * Wraps the two given arrays as a single concatenated array.
- * @param second The second array.
- * @param first The first array.
- * @example
- * Arrays.append([1], [2]) // [1, 2]
- * // or using pipe
- * pipe([1], Arrays.append([2])) // [1, 2]
- */
-export function append<T>(second: T[]): (first: T[]) => T[]
-/**
- * Wraps the two given arrays as a single concatenated array.
  * @param first The first array.
  * @param second The second array.
  * @example
@@ -198,6 +188,16 @@ export function append<T>(second: T[]): (first: T[]) => T[]
  * pipe([1], Arrays.append([2])) // [1, 2]
  */
 export function append<T>(first: ReadonlyArray<T>, second: ReadonlyArray<T>): T[]
+/**
+ * Wraps the two given arrays as a single concatenated array.
+ * @param second The second array.
+ * @param first The first array.
+ * @example
+ * Arrays.append([1], [2]) // [1, 2]
+ * // or using pipe
+ * pipe([1], Arrays.append([2])) // [1, 2]
+ */
+export function append<T>(second: T[]): (first: T[]) => T[]
 export function append<T>(a: any, b?: any): any {
   const partial = b === undefined
   const second: T[] = partial ? a : b
@@ -244,34 +244,6 @@ export function distinct<T>(source: ReadonlyArray<T>): T[] {
  * Returns an array that contains no duplicate entries according to the equality comparisons on
  * the keys returned by the given key-generating function. If an element occurs multiple times in
  * the sequence then the later occurrences are discarded.
- * @param selector A function that transforms the array items into comparable keys.
- * @param source The input collection.
- * @example
- * pipe([
- *   { name: 'amy', id: 1 },
- *   { name: 'bob', id: 2 },
- *   { name: 'bob', id: 3 },
- *   { name: 'cat', id: 3 }
- *  ],
- *  Arrays.distinctBy(x => x.name)
- * ) // [{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }]
- * // or using pipe
- * Arrays.distinctBy([
- *   { name: 'amy', id: 1 },
- *   { name: 'bob', id: 2 },
- *   { name: 'bob', id: 3 },
- *   { name: 'cat', id: 3 }
- *  ],
- *  x => x.name
- * ) // [{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }]
- */
-export function distinctBy<T, Key>(
-  selector: (item: T, index: number) => Key
-): (source: ReadonlyArray<T>) => T[]
-/**
- * Returns an array that contains no duplicate entries according to the equality comparisons on
- * the keys returned by the given key-generating function. If an element occurs multiple times in
- * the sequence then the later occurrences are discarded.
  * @param source The input collection.
  * @param selector A function that transforms the array items into comparable keys.
  * @example
@@ -297,6 +269,34 @@ export function distinctBy<T, Key>(
   source: ReadonlyArray<T>,
   selector: (item: T, index: number) => Key
 ): T[]
+/**
+ * Returns an array that contains no duplicate entries according to the equality comparisons on
+ * the keys returned by the given key-generating function. If an element occurs multiple times in
+ * the sequence then the later occurrences are discarded.
+ * @param selector A function that transforms the array items into comparable keys.
+ * @param source The input collection.
+ * @example
+ * pipe([
+ *   { name: 'amy', id: 1 },
+ *   { name: 'bob', id: 2 },
+ *   { name: 'bob', id: 3 },
+ *   { name: 'cat', id: 3 }
+ *  ],
+ *  Arrays.distinctBy(x => x.name)
+ * ) // [{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }]
+ * // or using pipe
+ * Arrays.distinctBy([
+ *   { name: 'amy', id: 1 },
+ *   { name: 'bob', id: 2 },
+ *   { name: 'bob', id: 3 },
+ *   { name: 'cat', id: 3 }
+ *  ],
+ *  x => x.name
+ * ) // [{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }]
+ */
+export function distinctBy<T, Key>(
+  selector: (item: T, index: number) => Key
+): (source: ReadonlyArray<T>) => T[]
 export function distinctBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T, index: number) => Key = partial ? a : b
@@ -317,18 +317,6 @@ export function distinctBy<T, Key>(a: any, b?: any): any {
 
 /**
  * Tests if any element of the array satisfies the given predicate.
- * @param predicate A function to test each item of the input collection.
- * @param source The input collection.
- * @example
- * Arrays.exists([1, 2], x => x === 1) // true
- * // or using pipe
- * pipe([1, 2], Arrays.exists(x => x === 1)) // true
- */
-export function exists<T>(
-  predicate: (item: T, index: number) => boolean
-): (source: ReadonlyArray<T>) => boolean
-/**
- * Tests if any element of the array satisfies the given predicate.
  * @param source The input collection.
  * @param predicate A function to test each item of the input collection.
  * @example
@@ -340,6 +328,18 @@ export function exists<T>(
   source: ReadonlyArray<T>,
   predicate: (item: T, index: number) => boolean
 ): boolean
+/**
+ * Tests if any element of the array satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ * @example
+ * Arrays.exists([1, 2], x => x === 1) // true
+ * // or using pipe
+ * pipe([1, 2], Arrays.exists(x => x === 1)) // true
+ */
+export function exists<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: ReadonlyArray<T>) => boolean
 export function exists<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -349,6 +349,18 @@ export function exists<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Returns the first element for which the given function returns true or throws if not found.
+ * If you don't want exceptions, use `find` instead.
+ * @param source The input collection.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @throws If no item is found matching the criteria of the predicate.
+ * @example
+ * Arrays.get([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], x => x.name === 'bob') // { name: 'bob', id: 2 }
+ * // or using pipe
+ * pipe([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], Arrays.get(x => x.name === 'bob')) // { name: 'bob', id: 2 }
+ */
+export function get<T>(source: ReadonlyArray<T>, predicate: (item: T, index: number) => boolean): T
 /**
  * Returns the first element for which the given function returns true.
  * If you don't want exceptions, use `find` instead.
@@ -363,18 +375,6 @@ export function exists<T>(a: any, b?: any): any {
 export function get<T>(
   predicate: (item: T, index: number) => boolean
 ): (source: ReadonlyArray<T>) => T
-/**
- * Returns the first element for which the given function returns true or throws if not found.
- * If you don't want exceptions, use `find` instead.
- * @param source The input collection.
- * @param predicate A function to test whether an item in the collection should be returned.
- * @throws If no item is found matching the criteria of the predicate.
- * @example
- * Arrays.get([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], x => x.name === 'bob') // { name: 'bob', id: 2 }
- * // or using pipe
- * pipe([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], Arrays.get(x => x.name === 'bob')) // { name: 'bob', id: 2 }
- */
-export function get<T>(source: ReadonlyArray<T>, predicate: (item: T, index: number) => boolean): T
 export function get<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -393,18 +393,6 @@ export function get<T>(a: any, b?: any): any {
 
 /**
  * Returns the first element for which the given function returns true, otherwise undefined.
- * @param predicate A function to test whether an item in the collection should be returned.
- * @param source The input collection.
- * @example
- * Arrays.find([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], x => x.name === 'bob') // { name: 'bob', id: 2 }
- * // or using pipe
- * pipe([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], Arrays.find(x => x.name === 'bob')) // { name: 'bob', id: 2 }
- */
-export function find<T>(
-  predicate: (item: T, index: number) => boolean
-): (source: ReadonlyArray<T>) => T | undefined
-/**
- * Returns the first element for which the given function returns true, otherwise undefined.
  * @param source The input collection.
  * @param predicate A function to test whether an item in the collection should be returned.
  * @example
@@ -416,6 +404,18 @@ export function find<T>(
   source: ReadonlyArray<T>,
   predicate: (item: T, index: number) => boolean
 ): T | undefined
+/**
+ * Returns the first element for which the given function returns true, otherwise undefined.
+ * @param predicate A function to test whether an item in the collection should be returned.
+ * @param source The input collection.
+ * @example
+ * Arrays.find([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], x => x.name === 'bob') // { name: 'bob', id: 2 }
+ * // or using pipe
+ * pipe([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], Arrays.find(x => x.name === 'bob')) // { name: 'bob', id: 2 }
+ */
+export function find<T>(
+  predicate: (item: T, index: number) => boolean
+): (source: ReadonlyArray<T>) => T | undefined
 export function find<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (item: T, index: number) => boolean = partial ? a : b
@@ -432,25 +432,6 @@ export function find<T>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-/**
- * Applies a key-generating function to each element of an array and yields an array of unique
- * keys and an array of all elements that have each key.
- * @param selector A function that transforms an element of the collection into a comparable key.
- * @param source The input collection.
- * @example
- * Arrays.groupBy(
- *  [{ name: 'amy', age: 1 }, { name: 'bob', age: 2 }, { name: 'cat', age: 2 }],
- *  x => x.age
- * ) // [[1, [{ name: 'amy', age: 1 }]], [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]]
- * // or using pipe
- * pipe(
- *  [{ name: 'amy', age: 1 }, { name: 'bob', age: 2 }, { name: 'cat', age: 2 }],
- *  Arrays.groupBy(x => x.age)
- * ) // [[1, [{ name: 'amy', age: 1 }]], [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]]
- */
-export function groupBy<T, Key>(
-  selector: (item: T, index: number) => Key
-): (source: ReadonlyArray<T>) => [Key, T[]][]
 /**
  * Applies a key-generating function to each element of an array and yields an array of unique
  * keys and an array of all elements that have each key.
@@ -471,6 +452,25 @@ export function groupBy<T, Key>(
   source: ReadonlyArray<T>,
   selector: (item: T, index: number) => Key
 ): [Key, T[]][]
+/**
+ * Applies a key-generating function to each element of an array and yields an array of unique
+ * keys and an array of all elements that have each key.
+ * @param selector A function that transforms an element of the collection into a comparable key.
+ * @param source The input collection.
+ * @example
+ * Arrays.groupBy(
+ *  [{ name: 'amy', age: 1 }, { name: 'bob', age: 2 }, { name: 'cat', age: 2 }],
+ *  x => x.age
+ * ) // [[1, [{ name: 'amy', age: 1 }]], [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]]
+ * // or using pipe
+ * pipe(
+ *  [{ name: 'amy', age: 1 }, { name: 'bob', age: 2 }, { name: 'cat', age: 2 }],
+ *  Arrays.groupBy(x => x.age)
+ * ) // [[1, [{ name: 'amy', age: 1 }]], [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]]
+ */
+export function groupBy<T, Key>(
+  selector: (item: T, index: number) => Key
+): (source: ReadonlyArray<T>) => [Key, T[]][]
 export function groupBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T, index: number) => Key = partial ? a : b
@@ -645,27 +645,6 @@ export function count<T>(source: ReadonlyArray<T>): number {
 /**
  * Returns a new array ordered by the selected key.
  * If no selector is specified, the elements will be compared directly.
- * @param selector An optional function to transform items of the input sequence into comparable keys.
- * @param source The input collection.
- * @example
- * Arrays.sort([21, 2, 18]) // [2, 18, 21]
- *
- * // with selector
- * Arrays.sort(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
- *
- * // with piping
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.sort(x => x.age)
- * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
- */
-export function sort<T, Key>(selector?: (item: T) => Key): (source: ReadonlyArray<T>) => T[]
-/**
- * Returns a new array ordered by the selected key.
- * If no selector is specified, the elements will be compared directly.
  * @param source The input collection.
  * @param selector An optional function to transform items of the input sequence into comparable keys.
  * @example
@@ -684,6 +663,27 @@ export function sort<T, Key>(selector?: (item: T) => Key): (source: ReadonlyArra
  * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
  */
 export function sort<T, Key>(source: ReadonlyArray<T>, selector?: (item: T) => Key): T[]
+/**
+ * Returns a new array ordered by the selected key.
+ * If no selector is specified, the elements will be compared directly.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ * @example
+ * Arrays.sort([21, 2, 18]) // [2, 18, 21]
+ *
+ * // with selector
+ * Arrays.sort(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
+ *
+ * // with piping
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.sort(x => x.age)
+ * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
+ */
+export function sort<T, Key>(selector?: (item: T) => Key): (source: ReadonlyArray<T>) => T[]
 export function sort<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function' || typeof a === 'undefined'
   const optionalSelector: (item: T) => Key = partial ? a : b
@@ -698,6 +698,27 @@ export function sort<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Yields an iterable ordered by the selected key descending.
+ * If no selector is specified, the elements will be compared directly.
+ * @param source The input collection.
+ * @param selector An optional function to transform items of the input sequence into comparable keys.
+ * @example
+ * Arrays.sortDescending([21, 2, 18]) // [21, 18, 2]
+ *
+ * // with selector
+ * Arrays.sortDescending(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
+ *
+ * // with piping
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.sortDescending(x => x.age)
+ * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
+ */
+export function sortDescending<T, Key>(source: ReadonlyArray<T>, selector?: (item: T) => Key): T[]
 /**
  * Yields an iterable ordered by the selected key, descending.
  * If no selector is specified, the elements will be compared directly.
@@ -721,27 +742,6 @@ export function sort<T, Key>(a: any, b?: any): any {
 export function sortDescending<T, Key>(
   selector?: (item: T) => Key
 ): (source: ReadonlyArray<T>) => T[]
-/**
- * Yields an iterable ordered by the selected key descending.
- * If no selector is specified, the elements will be compared directly.
- * @param source The input collection.
- * @param selector An optional function to transform items of the input sequence into comparable keys.
- * @example
- * Arrays.sortDescending([21, 2, 18]) // [21, 18, 2]
- *
- * // with selector
- * Arrays.sortDescending(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
- *
- * // with piping
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.sortDescending(x => x.age)
- * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
- */
-export function sortDescending<T, Key>(source: ReadonlyArray<T>, selector?: (item: T) => Key): T[]
 export function sortDescending<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function' || typeof a === 'undefined'
   const optionalSelector: (item: T) => Key = partial ? a : b
@@ -756,23 +756,6 @@ export function sortDescending<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
-/**
- * Applies a key-generating function to each element of the array and returns a new array ordered by the keys.
- * @param selector A function to transform items of the input sequence into comparable keys.
- * @param source The input collection.
- * @example
- * Arrays.sortBy(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
- *
- * // with piping
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.sortBy(x => x.age)
- * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
- */
-export function sortBy<T, Key>(selector: (item: T) => Key): (source: ReadonlyArray<T>) => T[]
 /**
  * Applies a key-generating function to each element of the array and returns a new array ordered by the keys.
  * @param source The input collection.
@@ -790,6 +773,23 @@ export function sortBy<T, Key>(selector: (item: T) => Key): (source: ReadonlyArr
  * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
  */
 export function sortBy<T, Key>(source: ReadonlyArray<T>, selector: (item: T) => Key): T[]
+/**
+ * Applies a key-generating function to each element of the array and returns a new array ordered by the keys.
+ * @param selector A function to transform items of the input sequence into comparable keys.
+ * @param source The input collection.
+ * @example
+ * Arrays.sortBy(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
+ *
+ * // with piping
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.sortBy(x => x.age)
+ * ) // [{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }]
+ */
+export function sortBy<T, Key>(selector: (item: T) => Key): (source: ReadonlyArray<T>) => T[]
 export function sortBy<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => Key = partial ? a : b
@@ -803,6 +803,24 @@ export function sortBy<T, Key>(a: any, b?: any): any {
   return partial ? exec : exec(a)
 }
 
+/**
+ * Applies a key-generating function to each element of the array and returns a new array ordered by the keys, descending.
+ * @param source The input collection.
+ * @param selector A function to transform items of the input sequence into comparable keys.
+ * @example
+ * // with selector
+ * Arrays.sortByDescending(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
+ *
+ * // with piping
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.sortByDescending(x => x.age)
+ * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
+ */
+export function sortByDescending<T, Key>(source: ReadonlyArray<T>, selector: (item: T) => Key): T[]
 /**
  * Applies a key-generating function to each element of the array and returns a new array ordered by the keys, descending.
  * @param selector A function to transform items of the input sequence into comparable keys.
@@ -823,24 +841,6 @@ export function sortBy<T, Key>(a: any, b?: any): any {
 export function sortByDescending<T, Key>(
   selector: (item: T) => Key
 ): (source: ReadonlyArray<T>) => T[]
-/**
- * Applies a key-generating function to each element of the array and returns a new array ordered by the keys, descending.
- * @param source The input collection.
- * @param selector A function to transform items of the input sequence into comparable keys.
- * @example
- * // with selector
- * Arrays.sortByDescending(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
- *
- * // with piping
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.sortByDescending(x => x.age)
- * ) // [{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }]
- */
-export function sortByDescending<T, Key>(source: ReadonlyArray<T>, selector: (item: T) => Key): T[]
 export function sortByDescending<T, Key>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => Key = partial ? a : b
@@ -884,23 +884,6 @@ export function sum(source: ReadonlyArray<number>): number {
 
 /**
  * Returns the sum of the values returned by the selector for each element in the array.
- * @param selector A function to transform each element into a summable value.
- * @param source The input collection.
- * @example
- * Arrays.sumBy(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // 41
- *
- * // or using pipe
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.sumBy(x => x.age)
- * ) // 41
- */
-export function sumBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
-/**
- * Returns the sum of the values returned by the selector for each element in the array.
  * @param source The input collection.
  * @param selector A function to transform each element into a summable value.
  * @example
@@ -916,6 +899,23 @@ export function sumBy<T>(selector: (item: T) => number): (source: ReadonlyArray<
  * ) // 41
  */
 export function sumBy<T>(source: ReadonlyArray<T>, selector: (item: T) => number): number
+/**
+ * Returns the sum of the values returned by the selector for each element in the array.
+ * @param selector A function to transform each element into a summable value.
+ * @param source The input collection.
+ * @example
+ * Arrays.sumBy(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // 41
+ *
+ * // or using pipe
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.sumBy(x => x.age)
+ * ) // 41
+ */
+export function sumBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
 export function sumBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
@@ -953,24 +953,6 @@ export function max(source: ReadonlyArray<number>): number {
 
 /**
  * Returns the maximum of the values returned by the selector for each element in the array.
- * @param selector A function to transform each element into a comparable value.
- * @param source The input collection.
- * @throws If the collection is empty.
- * @example
- * Arrays.maxBy(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // 21
- *
- * // or using pipe
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.maxBy(x => x.age)
- * ) // 21
- */
-export function maxBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
-/**
- * Returns the maximum of the values returned by the selector for each element in the array.
  * @param source The input collection.
  * @param selector A function to transform each element into a comparable value.
  * @throws If the collection is empty.
@@ -987,6 +969,24 @@ export function maxBy<T>(selector: (item: T) => number): (source: ReadonlyArray<
  * ) // 21
  */
 export function maxBy<T>(source: ReadonlyArray<T>, selector: (item: T) => number): number
+/**
+ * Returns the maximum of the values returned by the selector for each element in the array.
+ * @param selector A function to transform each element into a comparable value.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ * @example
+ * Arrays.maxBy(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // 21
+ *
+ * // or using pipe
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.maxBy(x => x.age)
+ * ) // 21
+ */
+export function maxBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
 export function maxBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
@@ -1030,24 +1030,6 @@ export function min(source: ReadonlyArray<number>): number {
 
 /**
  * Returns the minimum of the values returned by the selector for each element in the array.
- * @param selector A function to transform each element into a comparable value.
- * @param source The input collection.
- * @throws If the collection is empty.
- * @example
- * Arrays.minBy(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // 2
- *
- * // or using pipe
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
- *  Arrays.minBy(x => x.age)
- * ) // 2
- */
-export function minBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
-/**
- * Returns the minimum of the values returned by the selector for each element in the array.
  * @param source The input collection.
  * @param selector A function to transform each element into a comparable value.
  * @throws If the collection is empty.
@@ -1064,6 +1046,24 @@ export function minBy<T>(selector: (item: T) => number): (source: ReadonlyArray<
  * ) // 2
  */
 export function minBy<T>(source: ReadonlyArray<T>, selector: (item: T) => number): number
+/**
+ * Returns the minimum of the values returned by the selector for each element in the array.
+ * @param selector A function to transform each element into a comparable value.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ * @example
+ * Arrays.minBy(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // 2
+ *
+ * // or using pipe
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+ *  Arrays.minBy(x => x.age)
+ * ) // 2
+ */
+export function minBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
 export function minBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
@@ -1107,24 +1107,6 @@ export function mean(source: ReadonlyArray<number>): number {
 
 /**
  * Returns the mean (average) of the values returned by the selector for each element in the array.
- * @param selector A function to transform each element into a summable value.
- * @param source The input collection.
- * @throws If the collection is empty.
- * @example
- * Arrays.meanBy(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 3 }, { name: 'cat', age: 18 }],
- *  x => x.age
- * ) // 14
- *
- * // or using pipe
- * pipe(
- *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 3 }, { name: 'cat', age: 18 }],
- *  Arrays.meanBy(x => x.age)
- * ) // 14
- */
-export function meanBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
-/**
- * Returns the mean (average) of the values returned by the selector for each element in the array.
  * @param source The input collection.
  * @param selector A function to transform each element into a summable value.
  * @throws If the collection is empty.
@@ -1141,6 +1123,24 @@ export function meanBy<T>(selector: (item: T) => number): (source: ReadonlyArray
  * ) // 14
  */
 export function meanBy<T>(source: ReadonlyArray<T>, selector: (item: T) => number): number
+/**
+ * Returns the mean (average) of the values returned by the selector for each element in the array.
+ * @param selector A function to transform each element into a summable value.
+ * @param source The input collection.
+ * @throws If the collection is empty.
+ * @example
+ * Arrays.meanBy(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 3 }, { name: 'cat', age: 18 }],
+ *  x => x.age
+ * ) // 14
+ *
+ * // or using pipe
+ * pipe(
+ *  [{ name: 'amy', age: 21 }, { name: 'bob', age: 3 }, { name: 'cat', age: 18 }],
+ *  Arrays.meanBy(x => x.age)
+ * ) // 14
+ */
+export function meanBy<T>(selector: (item: T) => number): (source: ReadonlyArray<T>) => number
 export function meanBy<T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const selector: (item: T) => number = partial ? a : b
