@@ -23,6 +23,9 @@ describe('map', () => {
   test('with index', () => {
     expect(Arrays.map([1, 2], (x, index) => x * index)).toEqual([0, 2])
   })
+  test('invoke from readonly array', () => {
+    expect(Arrays.map([1, 2] as ReadonlyArray<number>, x => x * 2)).toEqual([2, 4])
+  })
 })
 
 describe('filter', () => {
@@ -37,6 +40,9 @@ describe('filter', () => {
   })
   test('with index', () => {
     expect(Arrays.filter([1, 2, 3, 4], (x, index) => index % 2 === 0)).toEqual([1, 3])
+  })
+  test('invoke from readonly array', () => {
+    expect(Arrays.filter([1, 2, 3, 4] as ReadonlyArray<number>, x => x % 2 === 0)).toEqual([2, 4])
   })
 })
 
@@ -53,6 +59,11 @@ describe('choose', () => {
     expect(
       Arrays.choose([1, 2, 3], (x, index) => (index % 2 === 0 ? x * index : undefined))
     ).toEqual([0, 6])
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.choose([1, 2, 3] as ReadonlyArray<number>, x => (x % 2 === 1 ? x * 2 : undefined))
+    ).toEqual([2, 6])
   })
 })
 
@@ -80,6 +91,13 @@ describe('collect', () => {
       })
     ).toEqual([1, 1, 2, 3])
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.collect([1, 2] as ReadonlyArray<number>, function(x) {
+        return [x, x]
+      })
+    ).toEqual([1, 1, 2, 2])
+  })
 })
 
 describe('append', () => {
@@ -89,15 +107,39 @@ describe('append', () => {
   test('invoke', () => {
     expect(Arrays.append([1], [2])).toEqual([1, 2])
   })
+  test('invoke from readonly array', () => {
+    expect(Arrays.append([1] as ReadonlyArray<number>, [2] as ReadonlyArray<number>)).toEqual([
+      1,
+      2
+    ])
+  })
 })
 
-test('concat', () => {
-  expect(Arrays.concat([[1, 2], [3, 4], [5]])).toEqual([1, 2, 3, 4, 5])
+describe('concat', () => {
+  test('invoke', () => {
+    expect(Arrays.concat([[1, 2], [3, 4], [5]])).toEqual([1, 2, 3, 4, 5])
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.concat([
+        [1, 2] as ReadonlyArray<number>,
+        [3, 4] as ReadonlyArray<number>,
+        [5] as ReadonlyArray<number>
+      ])
+    ).toEqual([1, 2, 3, 4, 5])
+  })
 })
 
 describe('distinct', () => {
   it('ignores duplicates', () => {
     expect(Arrays.distinct(['amy', 'bob', 'bob', 'cat'])).toEqual(['amy', 'bob', 'cat'])
+  })
+  it('from readonly array', () => {
+    expect(Arrays.distinct(['amy', 'bob', 'bob', 'cat'] as ReadonlyArray<string>)).toEqual([
+      'amy',
+      'bob',
+      'cat'
+    ])
   })
 })
 
@@ -138,6 +180,19 @@ describe('distinctBy', () => {
       )
     ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 3 }])
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.distinctBy(
+        [
+          { name: 'amy', id: 1 },
+          { name: 'bob', id: 2 },
+          { name: 'bob', id: 3 },
+          { name: 'cat', id: 3 }
+        ] as ReadonlyArray<{ name: string; id: number }>,
+        x => x.name
+      )
+    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
+  })
 })
 
 describe('exists', () => {
@@ -152,6 +207,9 @@ describe('exists', () => {
   })
   test('with index', () => {
     expect(Arrays.exists([1, 2], (x, index) => index === 1)).toEqual(true)
+  })
+  test('invoke from readonly array', () => {
+    expect(Arrays.exists([1, 2] as ReadonlyArray<number>, x => x === 1)).toEqual(true)
   })
 })
 
@@ -180,6 +238,17 @@ describe('get', () => {
       Arrays.get([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], (x, index) => index === 1)
     ).toEqual({ name: 'bob', id: 2 })
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.get(
+        [{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }] as ReadonlyArray<{
+          name: string
+          id: number
+        }>,
+        x => x.name === 'bob'
+      )
+    ).toEqual({ name: 'bob', id: 2 })
+  })
 })
 
 describe('find', () => {
@@ -205,6 +274,17 @@ describe('find', () => {
   test('by index', () => {
     expect(
       Arrays.find([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }], (x, index) => index === 1)
+    ).toEqual({ name: 'bob', id: 2 })
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.find(
+        [{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }] as ReadonlyArray<{
+          name: string
+          id: number
+        }>,
+        x => x.name === 'bob'
+      )
     ).toEqual({ name: 'bob', id: 2 })
   })
 })
@@ -240,6 +320,21 @@ describe('groupBy', () => {
     ).toEqual([
       [0, [{ name: 'amy', age: 1 }, { name: 'cat', age: 2 }]],
       [1, [{ name: 'bob', age: 2 }]]
+    ])
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.groupBy(
+        [
+          { name: 'amy', age: 1 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 2 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual([
+      [1, [{ name: 'amy', age: 1 }]],
+      [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
     ])
   })
 })
@@ -303,8 +398,8 @@ describe('init', () => {
   test('count prop', () => {
     expect(Arrays.init({ count: 5 })).toEqual([0, 1, 2, 3, 4])
   })
-  test('start-count', () => {
-    expect(Arrays.init({ start: 3, count: 5 })).toEqual([3, 4, 5, 6, 7])
+  test('start-count-increment', () => {
+    expect(Arrays.init({ start: 3, count: 5, increment: 2 })).toEqual([3, 5, 7, 9, 11])
   })
   test('count-increment', () => {
     expect(Arrays.init({ count: 5, increment: 3 })).toEqual([0, 3, 6, 9, 12])
@@ -318,6 +413,9 @@ describe('length', () => {
   test('non-zero length', () => {
     expect(Arrays.length([1, 2, 3, 4, 5])).toEqual(5)
   })
+  test('readonly array', () => {
+    expect(Arrays.length([1, 2, 3, 4, 5] as ReadonlyArray<number>)).toEqual(5)
+  })
 })
 
 describe('count', () => {
@@ -326,6 +424,9 @@ describe('count', () => {
   })
   test('non-zero length', () => {
     expect(Arrays.count([1, 2, 3, 4, 5])).toEqual(5)
+  })
+  test('readonly array', () => {
+    expect(Arrays.count([1, 2, 3, 4, 5] as ReadonlyArray<number>)).toEqual(5)
   })
 })
 
@@ -350,6 +451,18 @@ describe('sort', () => {
   })
   test('invoke without selector', () => {
     expect(Arrays.sort(['amy', 'cat', 'bob'])).toEqual(['amy', 'bob', 'cat'])
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.sort(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
   })
 })
 
@@ -381,6 +494,18 @@ describe('sortDescending', () => {
   test('invoke without selector', () => {
     expect(Arrays.sortDescending(['amy', 'cat', 'bob'])).toEqual(['cat', 'bob', 'amy'])
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.sortDescending(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
 })
 
 describe('sortBy', () => {
@@ -395,6 +520,18 @@ describe('sortBy', () => {
     expect(
       Arrays.sortBy(
         [{ name: 'amy', age: 21 }, { name: 'bob', age: 2 }, { name: 'cat', age: 18 }],
+        x => x.age
+      )
+    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.sortBy(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
         x => x.age
       )
     ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
@@ -417,6 +554,18 @@ describe('sortByDescending', () => {
       )
     ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.sortByDescending(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+  })
 })
 
 describe('reverse', () => {
@@ -426,11 +575,17 @@ describe('reverse', () => {
   test('reversal', () => {
     expect(Arrays.reverse([8, 3, 5])).toEqual([5, 3, 8])
   })
+  test('reversal from readonly array', () => {
+    expect(Arrays.reverse([8, 3, 5] as ReadonlyArray<number>)).toEqual([5, 3, 8])
+  })
 })
 
 describe('sum', () => {
   it('sums without partial application', () => {
     expect(Arrays.sum([21, 2, 18])).toEqual(41)
+  })
+  it('sums from readonly array', () => {
+    expect(Arrays.sum([21, 2, 18] as ReadonlyArray<number>)).toEqual(41)
   })
 })
 
@@ -450,6 +605,18 @@ describe('sumBy', () => {
       )
     ).toEqual(41)
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.sumBy(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual(41)
+  })
 })
 
 describe('max', () => {
@@ -458,6 +625,9 @@ describe('max', () => {
   })
   it('fails on empty collection', () => {
     expect(() => Arrays.max([])).toThrow(`Can't find max of an empty collection`)
+  })
+  test('from readonly array', () => {
+    expect(Arrays.max([2, 21, 18] as ReadonlyArray<number>)).toEqual(21)
   })
 })
 
@@ -482,6 +652,18 @@ describe('maxBy', () => {
       )
     ).toEqual(21)
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.maxBy(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual(21)
+  })
 })
 
 describe('min', () => {
@@ -490,6 +672,9 @@ describe('min', () => {
   })
   it('fails on empty collection', () => {
     expect(() => Arrays.min([])).toThrow(`Can't find min of an empty collection`)
+  })
+  test('from readonly array', () => {
+    expect(Arrays.min([21, 2, 18] as ReadonlyArray<number>)).toEqual(2)
   })
 })
 
@@ -514,6 +699,18 @@ describe('minBy', () => {
       )
     ).toEqual(2)
   })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.minBy(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
+        x => x.age
+      )
+    ).toEqual(2)
+  })
 })
 
 describe('mean', () => {
@@ -522,6 +719,9 @@ describe('mean', () => {
   })
   it('fails on empty collection', () => {
     expect(() => Arrays.mean([])).toThrow(`Can't find mean of an empty collection`)
+  })
+  test('from readonly array', () => {
+    expect(Arrays.mean([21, 2, 18, 39] as ReadonlyArray<number>)).toEqual(20)
   })
 })
 
@@ -550,6 +750,19 @@ describe('meanBy', () => {
           { name: 'cat', age: 18 },
           { name: 'dot', age: 39 }
         ],
+        x => x.age
+      )
+    ).toEqual(20)
+  })
+  test('invoke from readonly array', () => {
+    expect(
+      Arrays.meanBy(
+        [
+          { name: 'amy', age: 21 },
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 18 },
+          { name: 'dot', age: 39 }
+        ] as ReadonlyArray<{ name: string; age: number }>,
         x => x.age
       )
     ).toEqual(20)
