@@ -36,13 +36,6 @@ export function asIterable<Key, T>(source: ReadonlyMap<Key, T>): Iterable<[Key, 
 
 /**
  * Creates a new map whose values are the results of applying the specified mapping to each of the values of the source map.
- * @param mapping A function to transform entries from the input collection into new values.
- */
-export function map<Key, T, U>(
-  mapping: (key: Key, value: T) => U
-): (source: ReadonlyMap<Key, T>) => Map<Key, U>
-/**
- * Creates a new map whose values are the results of applying the specified mapping to each of the values of the source map.
  * @param source The input collection.
  * @param mapping A function to transform entries from the input collection into new values.
  */
@@ -50,6 +43,13 @@ export function map<Key, T, U>(
   source: ReadonlyMap<Key, T>,
   mapping: (key: Key, value: T) => U
 ): Map<Key, U>
+/**
+ * Creates a new map whose values are the results of applying the specified mapping to each of the values of the source map.
+ * @param mapping A function to transform entries from the input collection into new values.
+ */
+export function map<Key, T, U>(
+  mapping: (key: Key, value: T) => U
+): (source: ReadonlyMap<Key, T>) => Map<Key, U>
 export function map<Key, T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const mapping: (key: Key, value: T) => U = partial ? a : b
@@ -67,13 +67,6 @@ export function map<Key, T, U>(a: any, b?: any): any {
 
 /**
  * Returns a new map containing only the elements of the map for which the given predicate returns true.
- * @param predicate A function to test whether each item in the input map should be included in the output map.
- */
-export function filter<Key, T>(
-  predicate: (key: Key, value: T) => boolean
-): (source: ReadonlyMap<Key, T>) => Map<Key, T>
-/**
- * Returns a new map containing only the elements of the map for which the given predicate returns true.
  * @param source The input collection.
  * @param predicate A function to test whether each item in the input map should be included in the output map.
  */
@@ -81,6 +74,13 @@ export function filter<Key, T>(
   source: ReadonlyMap<Key, T>,
   predicate: (key: Key, value: T) => boolean
 ): Map<Key, T>
+/**
+ * Returns a new map containing only the elements of the map for which the given predicate returns true.
+ * @param predicate A function to test whether each item in the input map should be included in the output map.
+ */
+export function filter<Key, T>(
+  predicate: (key: Key, value: T) => boolean
+): (source: ReadonlyMap<Key, T>) => Map<Key, T>
 export function filter<Key, T>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const predicate: (key: Key, value: T) => boolean = partial ? a : b
@@ -94,13 +94,6 @@ export function filter<Key, T>(a: any, b?: any): any {
 
 /**
  * Applies the given function to each entry of the map and returns a new map comprised of the results for each element where the function returns a value.
- * @param chooser A function to transform entries from the input map to a new value to be included, or undefined to be excluded.
- */
-export function choose<Key, T, U>(
-  chooser: (key: Key, value: T) => U | undefined
-): (source: ReadonlyMap<Key, T>) => Map<Key, U>
-/**
- * Applies the given function to each entry of the map and returns a new map comprised of the results for each element where the function returns a value.
  * @param source The input collection.
  * @param chooser A function to transform entries from the input map to a new value to be included, or undefined to be excluded.
  */
@@ -108,6 +101,13 @@ export function choose<Key, T, U>(
   source: ReadonlyMap<Key, T>,
   chooser: (key: Key, value: T) => U | undefined
 ): Map<Key, U>
+/**
+ * Applies the given function to each entry of the map and returns a new map comprised of the results for each element where the function returns a value.
+ * @param chooser A function to transform entries from the input map to a new value to be included, or undefined to be excluded.
+ */
+export function choose<Key, T, U>(
+  chooser: (key: Key, value: T) => U | undefined
+): (source: ReadonlyMap<Key, T>) => Map<Key, U>
 export function choose<Key, T, U>(a: any, b?: any): any {
   const partial = typeof a === 'function'
   const chooser: (key: Key, value: T) => U | undefined = partial ? a : b
@@ -127,18 +127,18 @@ export function choose<Key, T, U>(a: any, b?: any): any {
 
 /**
  * Wraps the two given maps as a single concatenated map.
+ * @param first The first map.
+ * @param second The second map.
+ */
+export function append<Key, T>(first: ReadonlyMap<Key, T>, second: ReadonlyMap<Key, T>): Map<Key, T>
+/**
+ * Wraps the two given maps as a single concatenated map.
  * @param second The second map.
  * @param first The first map.
  */
 export function append<Key, T>(
   second: ReadonlyMap<Key, T>
 ): (first: ReadonlyMap<Key, T>) => Map<Key, T>
-/**
- * Wraps the two given maps as a single concatenated map.
- * @param first The first map.
- * @param second The second map.
- */
-export function append<Key, T>(first: ReadonlyMap<Key, T>, second: ReadonlyMap<Key, T>): Map<Key, T>
 export function append<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const second: Map<Key, T> = partial ? a : b
@@ -165,18 +165,18 @@ export function concat<Key, T>(sources: Iterable<ReadonlyMap<Key, T>>): Map<Key,
 
 /**
  * Returns the value for the given key.
- * @param key The key to lookup in the map.
- * @param source The input collection.
- * @throws If the key does not exist in the source collection.
- */
-export function get<Key, T>(key: Key): (source: ReadonlyMap<Key, T>) => T
-/**
- * Returns the value for the given key.
  * @param source The input collection.
  * @param key The key to lookup in the map.
  * @throws If the key does not exist in the source collection.
  */
 export function get<Key, T>(source: ReadonlyMap<Key, T>, key: Key): T
+/**
+ * Returns the value for the given key.
+ * @param key The key to lookup in the map.
+ * @param source The input collection.
+ * @throws If the key does not exist in the source collection.
+ */
+export function get<Key, T>(key: Key): (source: ReadonlyMap<Key, T>) => T
 export function get<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
@@ -191,16 +191,16 @@ export function get<Key, T>(a: any, b?: any): any {
 
 /**
  * Returns the value for the given key, or undefined if not found.
- * @param key The key to lookup in the map.
- * @param source The input collection.
- */
-export function find<Key, T>(key: Key): (source: ReadonlyMap<Key, T>) => T | undefined
-/**
- * Returns the value for the given key, or undefined if not found.
  * @param source The input collection.
  * @param key The key to lookup in the map.
  */
 export function find<Key, T>(source: ReadonlyMap<Key, T>, key: Key): T | undefined
+/**
+ * Returns the value for the given key, or undefined if not found.
+ * @param key The key to lookup in the map.
+ * @param source The input collection.
+ */
+export function find<Key, T>(key: Key): (source: ReadonlyMap<Key, T>) => T | undefined
 export function find<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
@@ -212,14 +212,6 @@ export function find<Key, T>(a: any, b?: any): any {
 
 /**
  * Tests if any element of the map satisfies the given predicate.
- * @param predicate A function to test each item of the input collection.
- * @param source The input collection.
- */
-export function exists<Key, T>(
-  predicate: (key: Key, value: T) => boolean
-): (source: ReadonlyMap<Key, T>) => boolean
-/**
- * Tests if any element of the map satisfies the given predicate.
  * @param source The input collection.
  * @param predicate A function to test each item of the input collection.
  */
@@ -227,6 +219,14 @@ export function exists<Key, T>(
   source: ReadonlyMap<Key, T>,
   predicate: (key: Key, value: T) => boolean
 ): boolean
+/**
+ * Tests if any element of the map satisfies the given predicate.
+ * @param predicate A function to test each item of the input collection.
+ * @param source The input collection.
+ */
+export function exists<Key, T>(
+  predicate: (key: Key, value: T) => boolean
+): (source: ReadonlyMap<Key, T>) => boolean
 export function exists<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const predicate: (key: Key, value: T) => boolean = partial ? a : b
@@ -243,16 +243,16 @@ export function exists<Key, T>(a: any, b?: any): any {
 
 /**
  * Evaluates to true if the given key is in the source map.
- * @param key The key to look for.
- * @param source The input collection.
- */
-export function containsKey<Key, T>(key: Key): (source: ReadonlyMap<Key, T>) => boolean
-/**
- * Evaluates to true if the given key is in the source map.
  * @param source The input collection.
  * @param key The key to look for.
  */
 export function containsKey<Key, T>(source: ReadonlyMap<Key, T>, key: Key): boolean
+/**
+ * Evaluates to true if the given key is in the source map.
+ * @param key The key to look for.
+ * @param source The input collection.
+ */
+export function containsKey<Key, T>(key: Key): (source: ReadonlyMap<Key, T>) => boolean
 export function containsKey<Key, T>(a: any, b?: any): any {
   const partial = b === undefined
   const key: Key = partial ? a : b
