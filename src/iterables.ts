@@ -408,7 +408,7 @@ export function* init(options: number | InitRange | InitCount): Iterable<number>
       return {
         start: 0,
         count: options,
-        increment: 1
+        increment: 1,
       }
     }
     if ('from' in options) {
@@ -425,14 +425,14 @@ export function* init(options: number | InitRange | InitCount): Iterable<number>
       return {
         start: options.from,
         count: Math.floor((options.to - options.from) / increment + 1),
-        increment: increment
+        increment: increment,
       }
     }
     const start = options.start === undefined ? 0 : options.start
     return {
       start,
       count: options.count,
-      increment: options.increment === undefined ? 1 : options.increment
+      increment: options.increment === undefined ? 1 : options.increment,
     }
   }
   const { start, count, increment } = normaliseOptions()

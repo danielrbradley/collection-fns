@@ -86,7 +86,7 @@ export function filter<Key, T>(a: any, b?: any): any {
   const predicate: (key: Key, value: T) => boolean = partial ? a : b
   function exec(source: ReadonlyMap<Key, T>) {
     return new Map<Key, T>(
-      Iterables.filter(source.entries(), entry => predicate(entry[0], entry[1]))
+      Iterables.filter(source.entries(), (entry) => predicate(entry[0], entry[1]))
     )
   }
   return partial ? exec : exec(a)

@@ -1,7 +1,7 @@
 import { pipe, Sets, Iterables } from '../src/collection-fns'
 
 test('ofIterable', () => {
-  const iterator = function*() {
+  const iterator = function* () {
     yield 1
     yield 2
     yield 2
@@ -23,38 +23,38 @@ test('toArray', () => {
 
 describe('map', () => {
   test('empty', () => {
-    expect(Sets.map(x => '')(new Set())).toEqual(new Set())
+    expect(Sets.map((x) => '')(new Set())).toEqual(new Set())
   })
   test('piped', () => {
-    expect(pipe(new Set([1, 2, 3])).then(Sets.map(x => x % 2)).result).toEqual(new Set([0, 1]))
+    expect(pipe(new Set([1, 2, 3])).then(Sets.map((x) => x % 2)).result).toEqual(new Set([0, 1]))
   })
   test('invoke', () => {
-    expect(Sets.map(new Set([1, 2, 3]), x => x % 2)).toEqual(new Set([0, 1]))
+    expect(Sets.map(new Set([1, 2, 3]), (x) => x % 2)).toEqual(new Set([0, 1]))
   })
 })
 
 describe('filter', () => {
   test('empty', () => {
-    expect(Sets.filter(new Set(), x => true)).toEqual(new Set([]))
+    expect(Sets.filter(new Set(), (x) => true)).toEqual(new Set([]))
   })
   test('piped', () => {
-    expect(pipe(new Set([1, 2, 3, 4])).then(Sets.filter(x => x % 2 === 0)).result).toEqual(
+    expect(pipe(new Set([1, 2, 3, 4])).then(Sets.filter((x) => x % 2 === 0)).result).toEqual(
       new Set([2, 4])
     )
   })
   test('invoke', () => {
-    expect(Sets.filter(new Set([1, 2, 3, 4]), x => x % 2 === 0)).toEqual(new Set([2, 4]))
+    expect(Sets.filter(new Set([1, 2, 3, 4]), (x) => x % 2 === 0)).toEqual(new Set([2, 4]))
   })
 })
 
 describe('choose', () => {
   test('piped', () => {
     expect(
-      pipe(new Set([1, 2, 3])).then(Sets.choose(x => (x % 2 === 1 ? x * 2 : undefined))).result
+      pipe(new Set([1, 2, 3])).then(Sets.choose((x) => (x % 2 === 1 ? x * 2 : undefined))).result
     ).toEqual(new Set([2, 6]))
   })
   test('invoke', () => {
-    expect(Sets.choose(new Set([1, 2, 3]), x => (x % 2 === 1 ? x * 2 : undefined))).toEqual(
+    expect(Sets.choose(new Set([1, 2, 3]), (x) => (x % 2 === 1 ? x * 2 : undefined))).toEqual(
       new Set([2, 6])
     )
   })
@@ -64,7 +64,7 @@ describe('collect', () => {
   test('piped', () => {
     expect(
       pipe(new Set([1, 2])).then(
-        Sets.collect(function(x) {
+        Sets.collect(function (x) {
           return [x, x + 1]
         })
       ).result
@@ -72,7 +72,7 @@ describe('collect', () => {
   })
   test('invoke', () => {
     expect(
-      Sets.collect(new Set([1, 2]), function(x) {
+      Sets.collect(new Set([1, 2]), function (x) {
         return [x, x + 1]
       })
     ).toEqual(new Set([1, 2, 3]))
@@ -98,25 +98,25 @@ test('concat', () => {
 
 describe('exists', () => {
   it('matches existance', () => {
-    expect(pipe(new Set([1, 2])).then(Sets.exists(x => x % 2 === 1)).result).toEqual(true)
+    expect(pipe(new Set([1, 2])).then(Sets.exists((x) => x % 2 === 1)).result).toEqual(true)
   })
   it('matches non-existance', () => {
-    expect(pipe(new Set([1, 2])).then(Sets.exists(x => x % 3 === 0)).result).toEqual(false)
+    expect(pipe(new Set([1, 2])).then(Sets.exists((x) => x % 3 === 0)).result).toEqual(false)
   })
   test('invoke', () => {
-    expect(Sets.exists(new Set([1, 2]), x => x % 2 === 1)).toEqual(true)
+    expect(Sets.exists(new Set([1, 2]), (x) => x % 2 === 1)).toEqual(true)
   })
 })
 
 describe('every', () => {
   it('matches existance', () => {
-    expect(pipe(new Set([1, 2])).then(Sets.every(x => x >= 1)).result).toEqual(true)
+    expect(pipe(new Set([1, 2])).then(Sets.every((x) => x >= 1)).result).toEqual(true)
   })
   it('matches non-existance', () => {
-    expect(pipe(new Set([1, 2])).then(Sets.every(x => x === 1)).result).toEqual(false)
+    expect(pipe(new Set([1, 2])).then(Sets.every((x) => x === 1)).result).toEqual(false)
   })
   test('invoke', () => {
-    expect(Sets.every(new Set([2, 4]), x => x % 2 === 0)).toEqual(true)
+    expect(Sets.every(new Set([2, 4]), (x) => x % 2 === 0)).toEqual(true)
   })
 })
 
@@ -134,33 +134,33 @@ describe('contains', () => {
 
 describe('get', () => {
   test('piped match', () => {
-    expect(pipe(new Set(['amy', 'bob'])).then(Sets.get(x => x.startsWith('b'))).result).toEqual(
+    expect(pipe(new Set(['amy', 'bob'])).then(Sets.get((x) => x.startsWith('b'))).result).toEqual(
       'bob'
     )
   })
   it('throws when not found', () => {
     expect(
-      () => pipe(new Set(['amy', 'bob'])).then(Sets.get(x => x.startsWith('c'))).result
+      () => pipe(new Set(['amy', 'bob'])).then(Sets.get((x) => x.startsWith('c'))).result
     ).toThrow('Element not found matching criteria')
   })
   test('invoke', () => {
-    expect(Sets.get(new Set(['amy', 'bob']), x => x.startsWith('a'))).toEqual('amy')
+    expect(Sets.get(new Set(['amy', 'bob']), (x) => x.startsWith('a'))).toEqual('amy')
   })
 })
 
 describe('find', () => {
   test('piped match', () => {
-    expect(pipe(new Set(['amy', 'bob'])).then(Sets.find(x => x.startsWith('b'))).result).toEqual(
+    expect(pipe(new Set(['amy', 'bob'])).then(Sets.find((x) => x.startsWith('b'))).result).toEqual(
       'bob'
     )
   })
   it('returns undefined when not found', () => {
     expect(
-      pipe(new Set(['amy', 'bob'])).then(Sets.find(x => x.startsWith('c'))).result
+      pipe(new Set(['amy', 'bob'])).then(Sets.find((x) => x.startsWith('c'))).result
     ).toBeUndefined()
   })
   test('invoke', () => {
-    expect(Sets.find(new Set(['amy', 'bob']), x => x.startsWith('a'))).toEqual('amy')
+    expect(Sets.find(new Set(['amy', 'bob']), (x) => x.startsWith('a'))).toEqual('amy')
   })
 })
 

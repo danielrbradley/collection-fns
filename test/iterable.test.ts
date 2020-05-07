@@ -2,7 +2,7 @@ import { pipe, Iterables } from '../src/collection-fns'
 
 describe('toArray', () => {
   it('constructs an array', () => {
-    const iterator = function*() {
+    const iterator = function* () {
       yield 1
       yield 2
     }
@@ -12,17 +12,17 @@ describe('toArray', () => {
 
 describe('map', () => {
   it('maps empty collection', () => {
-    expect(Array.from(Iterables.map(x => x)([]))).toEqual([])
+    expect(Array.from(Iterables.map((x) => x)([]))).toEqual([])
   })
   it('maps items with partial application', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })()
       )
-        .then(Iterables.map(x => x * 2))
+        .then(Iterables.map((x) => x * 2))
         .then(Iterables.toArray).result
     ).toEqual([2, 4])
   })
@@ -30,11 +30,11 @@ describe('map', () => {
     expect(
       pipe(
         Iterables.map(
-          (function*() {
+          (function* () {
             yield 1
             yield 2
           })(),
-          x => x * 2
+          (x) => x * 2
         )
       ).then(Iterables.toArray).result
     ).toEqual([2, 4])
@@ -42,7 +42,7 @@ describe('map', () => {
   it('can map with index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })()
@@ -57,28 +57,28 @@ describe('filter', () => {
   it('can filter empty collection', () => {
     expect(
       pipe([])
-        .then(Iterables.filter(x => true))
+        .then(Iterables.filter((x) => true))
         .then(Iterables.toArray).result
     ).toEqual([])
   })
   it('can filter out everything', () => {
     expect(
       pipe([1, 2])
-        .then(Iterables.filter(x => false))
+        .then(Iterables.filter((x) => false))
         .then(Iterables.toArray).result
     ).toEqual([])
   })
   it('can filters based on criteria', () => {
     expect(
       pipe([1, 2])
-        .then(Iterables.filter(x => x % 2 === 0))
+        .then(Iterables.filter((x) => x % 2 === 0))
         .then(Iterables.toArray).result
     ).toEqual([2])
   })
   it('can filters without partial application', () => {
-    expect(pipe(Iterables.filter([1, 2], x => x % 2 === 0)).then(Iterables.toArray).result).toEqual(
-      [2]
-    )
+    expect(
+      pipe(Iterables.filter([1, 2], (x) => x % 2 === 0)).then(Iterables.toArray).result
+    ).toEqual([2])
   })
   it('can filters based on index', () => {
     expect(
@@ -95,13 +95,13 @@ describe('choose', () => {
   it('chooses defined values', () => {
     expect(
       pipe([1, 2, 3])
-        .then(Iterables.choose(x => (x % 2 === 1 ? x * 2 : undefined)))
+        .then(Iterables.choose((x) => (x % 2 === 1 ? x * 2 : undefined)))
         .then(Iterables.toArray).result
     ).toEqual([2, 6])
   })
   it('can choose without partial application', () => {
     expect(
-      pipe(Iterables.choose([1, 2, 3], x => (x % 2 === 1 ? x * 2 : undefined))).then(
+      pipe(Iterables.choose([1, 2, 3], (x) => (x % 2 === 1 ? x * 2 : undefined))).then(
         Iterables.toArray
       ).result
     ).toEqual([2, 6])
@@ -122,7 +122,7 @@ describe('collect', () => {
     expect(
       pipe([1, 2])
         .then(
-          Iterables.collect(function*(x) {
+          Iterables.collect(function* (x) {
             yield x
             yield x
           })
@@ -133,7 +133,7 @@ describe('collect', () => {
   it('can collect iterables without partial application', () => {
     expect(
       pipe(
-        Iterables.collect([1, 2], function*(x) {
+        Iterables.collect([1, 2], function* (x) {
           yield x
           yield x
         })
@@ -144,7 +144,7 @@ describe('collect', () => {
     expect(
       pipe([1, 2])
         .then(
-          Iterables.collect(function*(x, index) {
+          Iterables.collect(function* (x, index) {
             yield x
             yield x + index
           })
@@ -158,13 +158,13 @@ describe('append', () => {
   it('appends two iterators', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
         })()
       )
         .then(
           Iterables.append(
-            (function*() {
+            (function* () {
               yield 2
             })()
           )
@@ -176,10 +176,10 @@ describe('append', () => {
     expect(
       Iterables.toArray(
         Iterables.append(
-          (function*() {
+          (function* () {
             yield 1
           })(),
-          (function*() {
+          (function* () {
             yield 2
           })()
         )
@@ -192,12 +192,12 @@ describe('concat', () => {
   it('appends nested iterators', () => {
     expect(
       pipe(
-        (function*() {
-          yield (function*() {
+        (function* () {
+          yield (function* () {
             yield 1
             yield 2
           })()
-          yield (function*() {
+          yield (function* () {
             yield 3
             yield 4
           })()
@@ -214,7 +214,7 @@ describe('distinct', () => {
   it('ignores duplicates', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 'amy'
           yield 'bob'
           yield 'bob'
@@ -231,36 +231,44 @@ describe('distinctBy', () => {
   it('ignores duplicates', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
           yield { name: 'bob', id: 3 }
           yield { name: 'cat', id: 3 }
         })()
       )
-        .then(Iterables.distinctBy(x => x.name))
+        .then(Iterables.distinctBy((x) => x.name))
         .then(Iterables.toArray).result
-    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
+    ).toEqual([
+      { name: 'amy', id: 1 },
+      { name: 'bob', id: 2 },
+      { name: 'cat', id: 3 },
+    ])
   })
   it('ignores duplicates without partial application', () => {
     expect(
       Iterables.toArray(
         Iterables.distinctBy(
-          (function*() {
+          (function* () {
             yield { name: 'amy', id: 1 }
             yield { name: 'bob', id: 2 }
             yield { name: 'bob', id: 3 }
             yield { name: 'cat', id: 3 }
           })(),
-          x => x.name
+          (x) => x.name
         )
       )
-    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 2 }, { name: 'cat', id: 3 }])
+    ).toEqual([
+      { name: 'amy', id: 1 },
+      { name: 'bob', id: 2 },
+      { name: 'cat', id: 3 },
+    ])
   })
   it('passes index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
           yield { name: 'bob', id: 3 }
@@ -269,7 +277,10 @@ describe('distinctBy', () => {
       )
         .then(Iterables.distinctBy((x, index) => Math.floor(index / 2)))
         .then(Iterables.toArray).result
-    ).toEqual([{ name: 'amy', id: 1 }, { name: 'bob', id: 3 }])
+    ).toEqual([
+      { name: 'amy', id: 1 },
+      { name: 'bob', id: 3 },
+    ])
   })
 })
 
@@ -277,38 +288,38 @@ describe('exists', () => {
   it('matches existance', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })()
-      ).then(Iterables.exists(x => x === 1)).result
+      ).then(Iterables.exists((x) => x === 1)).result
     ).toEqual(true)
   })
   it('matches non-existance', () => {
     expect(
       pipe(
-        (function*(): IterableIterator<number> {
+        (function* (): IterableIterator<number> {
           yield 1
           yield 2
         })()
-      ).then(Iterables.exists(x => x === 3)).result
+      ).then(Iterables.exists((x) => x === 3)).result
     ).toEqual(false)
   })
   it('matches without partial application', () => {
     expect(
       Iterables.exists(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })(),
-        x => x === 1
+        (x) => x === 1
       )
     ).toEqual(true)
   })
   it('passes index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })()
@@ -321,38 +332,38 @@ describe('every', () => {
   it('matches existance', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })()
-      ).then(Iterables.every(x => x >= 1)).result
+      ).then(Iterables.every((x) => x >= 1)).result
     ).toEqual(true)
   })
   it('matches non-existance', () => {
     expect(
       pipe(
-        (function*(): IterableIterator<number> {
+        (function* (): IterableIterator<number> {
           yield 1
           yield 2
         })()
-      ).then(Iterables.every(x => x === 2)).result
+      ).then(Iterables.every((x) => x === 2)).result
     ).toEqual(false)
   })
   it('matches without partial application', () => {
     expect(
       Iterables.every(
-        (function*() {
+        (function* () {
           yield 2
           yield 4
         })(),
-        x => x % 2 === 0
+        (x) => x % 2 === 0
       )
     ).toEqual(true)
   })
   it('passes index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
         })()
@@ -365,39 +376,39 @@ describe('get', () => {
   it('finds match', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })()
-      ).then(Iterables.get(x => x.name === 'bob')).result
+      ).then(Iterables.get((x) => x.name === 'bob')).result
     ).toEqual({ name: 'bob', id: 2 })
   })
   it('throws when not found', () => {
     expect(
       () =>
         pipe(
-          (function*() {
+          (function* () {
             yield { name: 'amy', id: 1 }
             yield { name: 'bob', id: 2 }
           })()
-        ).then(Iterables.get(x => x.name === 'cat')).result
+        ).then(Iterables.get((x) => x.name === 'cat')).result
     ).toThrow('Element not found matching criteria')
   })
   it('finds without partial application', () => {
     expect(
       Iterables.get(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })(),
-        x => x.name === 'bob'
+        (x) => x.name === 'bob'
       )
     ).toEqual({ name: 'bob', id: 2 })
   })
   it('finds by index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })()
@@ -410,38 +421,38 @@ describe('find', () => {
   it('finds match', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })()
-      ).then(Iterables.find(x => x.name === 'bob')).result
+      ).then(Iterables.find((x) => x.name === 'bob')).result
     ).toEqual({ name: 'bob', id: 2 })
   })
   it('returns undefined when not found', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })()
-      ).then(Iterables.find(x => x.name === 'cat')).result
+      ).then(Iterables.find((x) => x.name === 'cat')).result
     ).toBeUndefined()
   })
   it('finds without partial application', () => {
     expect(
       Iterables.find(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })(),
-        x => x.name === 'bob'
+        (x) => x.name === 'bob'
       )
     ).toEqual({ name: 'bob', id: 2 })
   })
   it('finds by index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', id: 1 }
           yield { name: 'bob', id: 2 }
         })()
@@ -454,40 +465,52 @@ describe('groupBy', () => {
   it('groups by key', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 1 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 2 }
         })()
       )
-        .then(Iterables.groupBy(x => x.age))
+        .then(Iterables.groupBy((x) => x.age))
         .then(Iterables.toArray).result
     ).toEqual([
       [1, [{ name: 'amy', age: 1 }]],
-      [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
+      [
+        2,
+        [
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 2 },
+        ],
+      ],
     ])
   })
   it('groups without partial application', () => {
     expect(
       Iterables.toArray(
         Iterables.groupBy(
-          (function*() {
+          (function* () {
             yield { name: 'amy', age: 1 }
             yield { name: 'bob', age: 2 }
             yield { name: 'cat', age: 2 }
           })(),
-          x => x.age
+          (x) => x.age
         )
       )
     ).toEqual([
       [1, [{ name: 'amy', age: 1 }]],
-      [2, [{ name: 'bob', age: 2 }, { name: 'cat', age: 2 }]]
+      [
+        2,
+        [
+          { name: 'bob', age: 2 },
+          { name: 'cat', age: 2 },
+        ],
+      ],
     ])
   })
   it('groups by index', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 1 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 2 }
@@ -496,8 +519,14 @@ describe('groupBy', () => {
         .then(Iterables.groupBy((x, index) => index % 2))
         .then(Iterables.toArray).result
     ).toEqual([
-      [0, [{ name: 'amy', age: 1 }, { name: 'cat', age: 2 }]],
-      [1, [{ name: 'bob', age: 2 }]]
+      [
+        0,
+        [
+          { name: 'amy', age: 1 },
+          { name: 'cat', age: 2 },
+        ],
+      ],
+      [1, [{ name: 'bob', age: 2 }]],
     ])
   })
 })
@@ -513,7 +542,7 @@ describe('init', () => {
     expect(pipe(Iterables.init({ from: 1, to: 3 })).then(Iterables.toArray).result).toEqual([
       1,
       2,
-      3
+      3,
     ])
   })
   test('from-to-same', () => {
@@ -533,14 +562,14 @@ describe('init', () => {
     expect(pipe(Iterables.init({ from: 1, to: -1 })).then(Iterables.toArray).result).toEqual([
       1,
       0,
-      -1
+      -1,
     ])
   })
   test('from negative to positive', () => {
     expect(pipe(Iterables.init({ from: -1, to: 1 })).then(Iterables.toArray).result).toEqual([
       -1,
       0,
-      1
+      1,
     ])
   })
   test('from positive to negative with fractional increment', () => {
@@ -587,16 +616,12 @@ describe('init', () => {
 describe('initInfinite', () => {
   test('defaults', () => {
     expect(
-      pipe(Iterables.initInfinite())
-        .then(Iterables.take(5))
-        .then(Iterables.toArray).result
+      pipe(Iterables.initInfinite()).then(Iterables.take(5)).then(Iterables.toArray).result
     ).toEqual([0, 1, 2, 3, 4])
   })
   test('no properties', () => {
     expect(
-      pipe(Iterables.initInfinite({}))
-        .then(Iterables.take(5))
-        .then(Iterables.toArray).result
+      pipe(Iterables.initInfinite({})).then(Iterables.take(5)).then(Iterables.toArray).result
     ).toEqual([0, 1, 2, 3, 4])
   })
   test('just start', () => {
@@ -633,7 +658,7 @@ describe('take', () => {
   test('piped', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 1
           yield 2
           yield 3
@@ -648,7 +673,7 @@ describe('take', () => {
     expect(
       Iterables.toArray(
         Iterables.skip(
-          (function*() {
+          (function* () {
             yield 1
             yield 2
             yield 3
@@ -665,7 +690,7 @@ describe('take', () => {
   test('piped', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           while (true) {
             yield 0
           }
@@ -679,7 +704,7 @@ describe('take', () => {
     expect(
       Iterables.toArray(
         Iterables.take(
-          (function*() {
+          (function* () {
             while (true) {
               yield 0
             }
@@ -713,7 +738,7 @@ describe('sort', () => {
   test('piped numbers', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 21
           yield 2
           yield 18
@@ -727,7 +752,7 @@ describe('sort', () => {
     expect(
       Iterables.toArray(
         Iterables.sort(
-          (function*() {
+          (function* () {
             yield 'cat'
             yield 'amy'
             yield 'bob'
@@ -739,29 +764,37 @@ describe('sort', () => {
   test('with key selector, piped', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })(),
-        Iterables.sort(x => x.age),
+        Iterables.sort((x) => x.age),
         Iterables.toArray
       )
-    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+    ).toEqual([
+      { name: 'bob', age: 2 },
+      { name: 'cat', age: 18 },
+      { name: 'amy', age: 21 },
+    ])
   })
   test('with key selector, direct invoke', () => {
     expect(
       Iterables.toArray(
         Iterables.sort(
-          (function*() {
+          (function* () {
             yield { name: 'amy', age: 21 }
             yield { name: 'bob', age: 2 }
             yield { name: 'cat', age: 18 }
           })(),
-          x => x.age
+          (x) => x.age
         )
       )
-    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+    ).toEqual([
+      { name: 'bob', age: 2 },
+      { name: 'cat', age: 18 },
+      { name: 'amy', age: 21 },
+    ])
   })
 })
 
@@ -769,7 +802,7 @@ describe('sortDescending', () => {
   test('piped numbers', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield 21
           yield 2
           yield 18
@@ -783,7 +816,7 @@ describe('sortDescending', () => {
     expect(
       Iterables.toArray(
         Iterables.sortDescending(
-          (function*() {
+          (function* () {
             yield 'cat'
             yield 'amy'
             yield 'bob'
@@ -795,29 +828,37 @@ describe('sortDescending', () => {
   test('with key selector, piped', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })(),
-        Iterables.sortDescending(x => x.age),
+        Iterables.sortDescending((x) => x.age),
         Iterables.toArray
       )
-    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+    ).toEqual([
+      { name: 'amy', age: 21 },
+      { name: 'cat', age: 18 },
+      { name: 'bob', age: 2 },
+    ])
   })
   test('with key selector, direct invoke', () => {
     expect(
       Iterables.toArray(
         Iterables.sortDescending(
-          (function*() {
+          (function* () {
             yield { name: 'amy', age: 21 }
             yield { name: 'bob', age: 2 }
             yield { name: 'cat', age: 18 }
           })(),
-          x => x.age
+          (x) => x.age
         )
       )
-    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+    ).toEqual([
+      { name: 'amy', age: 21 },
+      { name: 'cat', age: 18 },
+      { name: 'bob', age: 2 },
+    ])
   })
 })
 
@@ -825,29 +866,37 @@ describe('sortBy', () => {
   it('sorts by selected key', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })()
       )
-        .then(Iterables.sortBy(x => x.age))
+        .then(Iterables.sortBy((x) => x.age))
         .then(Iterables.toArray).result
-    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+    ).toEqual([
+      { name: 'bob', age: 2 },
+      { name: 'cat', age: 18 },
+      { name: 'amy', age: 21 },
+    ])
   })
   it('sorts without partial application', () => {
     expect(
       Iterables.toArray(
         Iterables.sortBy(
-          (function*() {
+          (function* () {
             yield { name: 'amy', age: 21 }
             yield { name: 'bob', age: 2 }
             yield { name: 'cat', age: 18 }
           })(),
-          x => x.age
+          (x) => x.age
         )
       )
-    ).toEqual([{ name: 'bob', age: 2 }, { name: 'cat', age: 18 }, { name: 'amy', age: 21 }])
+    ).toEqual([
+      { name: 'bob', age: 2 },
+      { name: 'cat', age: 18 },
+      { name: 'amy', age: 21 },
+    ])
   })
 })
 
@@ -855,29 +904,37 @@ describe('sortByDescending', () => {
   test('piped', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })()
       )
-        .then(Iterables.sortByDescending(x => x.age))
+        .then(Iterables.sortByDescending((x) => x.age))
         .then(Iterables.toArray).result
-    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+    ).toEqual([
+      { name: 'amy', age: 21 },
+      { name: 'cat', age: 18 },
+      { name: 'bob', age: 2 },
+    ])
   })
   test('invoke', () => {
     expect(
       Iterables.toArray(
         Iterables.sortByDescending(
-          (function*() {
+          (function* () {
             yield { name: 'amy', age: 21 }
             yield { name: 'bob', age: 2 }
             yield { name: 'cat', age: 18 }
           })(),
-          x => x.age
+          (x) => x.age
         )
       )
-    ).toEqual([{ name: 'amy', age: 21 }, { name: 'cat', age: 18 }, { name: 'bob', age: 2 }])
+    ).toEqual([
+      { name: 'amy', age: 21 },
+      { name: 'cat', age: 18 },
+      { name: 'bob', age: 2 },
+    ])
   })
 })
 
@@ -894,7 +951,7 @@ describe('sum', () => {
   it('sums without partial application', () => {
     expect(
       Iterables.sum(
-        (function*() {
+        (function* () {
           yield 21
           yield 2
           yield 18
@@ -908,23 +965,23 @@ describe('sumBy', () => {
   it('sums ages', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })()
-      ).then(Iterables.sumBy(x => x.age)).result
+      ).then(Iterables.sumBy((x) => x.age)).result
     ).toEqual(41)
   })
   it('sums without partial application', () => {
     expect(
       Iterables.sumBy(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })(),
-        x => x.age
+        (x) => x.age
       )
     ).toEqual(41)
   })
@@ -934,7 +991,7 @@ describe('max', () => {
   it('finds max', () => {
     expect(
       Iterables.max(
-        (function*() {
+        (function* () {
           yield 2
           yield 21
           yield 18
@@ -951,28 +1008,28 @@ describe('maxBy', () => {
   it('finds max age', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })()
-      ).then(Iterables.maxBy(x => x.age)).result
+      ).then(Iterables.maxBy((x) => x.age)).result
     ).toEqual(21)
   })
   it('fails on empty collection', () => {
-    expect(() => pipe([]).then(Iterables.maxBy(x => x)).result).toThrow(
+    expect(() => pipe([]).then(Iterables.maxBy((x) => x)).result).toThrow(
       `Can't find max of an empty collection`
     )
   })
   it('works without partial application', () => {
     expect(
       Iterables.maxBy(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })(),
-        x => x.age
+        (x) => x.age
       )
     ).toEqual(21)
   })
@@ -982,7 +1039,7 @@ describe('min', () => {
   it('finds min', () => {
     expect(
       Iterables.min(
-        (function*() {
+        (function* () {
           yield 21
           yield 2
           yield 18
@@ -999,28 +1056,28 @@ describe('minBy', () => {
   it('finds min age', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })()
-      ).then(Iterables.minBy(x => x.age)).result
+      ).then(Iterables.minBy((x) => x.age)).result
     ).toEqual(2)
   })
   it('fails on empty collection', () => {
-    expect(() => pipe([]).then(Iterables.minBy(x => x)).result).toThrow(
+    expect(() => pipe([]).then(Iterables.minBy((x) => x)).result).toThrow(
       `Can't find min of an empty collection`
     )
   })
   it('works without partial application', () => {
     expect(
       Iterables.minBy(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
         })(),
-        x => x.age
+        (x) => x.age
       )
     ).toEqual(2)
   })
@@ -1030,7 +1087,7 @@ describe('mean', () => {
   it('finds mean', () => {
     expect(
       Iterables.mean(
-        (function*() {
+        (function* () {
           yield 21
           yield 2
           yield 18
@@ -1048,30 +1105,30 @@ describe('meanBy', () => {
   it('finds mean age', () => {
     expect(
       pipe(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
           yield { name: 'dot', age: 39 }
         })()
-      ).then(Iterables.meanBy(x => x.age)).result
+      ).then(Iterables.meanBy((x) => x.age)).result
     ).toEqual(20)
   })
   it('fails on empty collection', () => {
-    expect(() => pipe([]).then(Iterables.meanBy(x => x)).result).toThrow(
+    expect(() => pipe([]).then(Iterables.meanBy((x) => x)).result).toThrow(
       `Can't find mean of an empty collection`
     )
   })
   it('works without partial application', () => {
     expect(
       Iterables.meanBy(
-        (function*() {
+        (function* () {
           yield { name: 'amy', age: 21 }
           yield { name: 'bob', age: 2 }
           yield { name: 'cat', age: 18 }
           yield { name: 'dot', age: 39 }
         })(),
-        x => x.age
+        (x) => x.age
       )
     ).toEqual(20)
   })
