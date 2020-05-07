@@ -518,6 +518,21 @@ describe('init', () => {
   })
 })
 
+describe('pairwise', () => {
+  test('empty', () => {
+    expect(Arrays.pairwise([])).toEqual([])
+  })
+  test('single item', () => {
+    expect(Arrays.pairwise([1])).toEqual([])
+  })
+  test('multiple items', () => {
+    expect(Arrays.pairwise([1, 2, 3])).toEqual([
+      [1, 2],
+      [2, 3],
+    ])
+  })
+})
+
 describe('length', () => {
   test('zero length', () => {
     expect(Arrays.length([])).toEqual(0)

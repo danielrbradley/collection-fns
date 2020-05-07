@@ -901,6 +901,19 @@ export function reverse<T>(source: ReadonlyArray<T>): T[] {
 }
 
 /**
+ * Returns an array of each element in the input collection and its predecessor,
+ * with the exception of the first element which is only returned as the predecessor of the second element.
+ * @param source The input collection
+ */
+export function pairwise<T>(source: ReadonlyArray<T>): [T, T][] {
+  const pairs: [T, T][] = []
+  for (let index = 1; index < source.length; index++) {
+    pairs.push([source[index - 1], source[index]])
+  }
+  return pairs
+}
+
+/**
  * Returns the sum of the values in the collection.
  * @param source The input collection.
  * @example
