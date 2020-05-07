@@ -660,6 +660,24 @@ export function* reverse<T>(source: Iterable<T>): Iterable<T> {
 }
 
 /**
+ * Returns an interable of each element in the input sequence and its predecessor,
+ * with the exception of the first element which is only returned as the predecessor of the second element.
+ * @param source The input collection
+ */
+export function* pairwise<T>(source: Iterable<T>): Iterable<[T, T]> {
+  let prev: T | undefined = undefined
+  let started = false
+  for (const item of source) {
+    if (!started) {
+      started = true
+    } else {
+      yield [prev!, item]
+    }
+    prev = item
+  }
+}
+
+/**
  * Returns the sum of the values in the collection.
  * @param source The input collection.
  */

@@ -716,6 +716,43 @@ describe('take', () => {
   })
 })
 
+describe('pairwise', () => {
+  test('empty', () => {
+    expect(
+      pipe(Iterables.init({ count: 0 }))
+        .then(Iterables.pairwise)
+        .then(Iterables.toArray).result
+    ).toEqual([])
+  })
+  test('single item', () => {
+    expect(
+      pipe(
+        (function* () {
+          yield 1
+        })()
+      )
+        .then(Iterables.pairwise)
+        .then(Iterables.toArray).result
+    ).toEqual([])
+  })
+  test('multiple items', () => {
+    expect(
+      pipe(
+        (function* () {
+          yield 1
+          yield 2
+          yield 3
+        })()
+      )
+        .then(Iterables.pairwise)
+        .then(Iterables.toArray).result
+    ).toEqual([
+      [1, 2],
+      [2, 3],
+    ])
+  })
+})
+
 describe('length', () => {
   it('can return zero length', () => {
     expect(pipe(Iterables.init({ count: 0 })).then(Iterables.length).result).toEqual(0)
