@@ -2,7 +2,13 @@
   "name": "collection-fns",
   "version": "0.0.1",
   "description": "Functions for working with built-in collection types",
-  "keywords": ["collections", "array", "map", "set", "iterable"],
+  "keywords": [
+    "collections",
+    "array",
+    "map",
+    "set",
+    "iterable"
+  ],
   "main": "dist/collection-fns.umd.js",
   "module": "dist/collection-fns.es5.js",
   "typings": "dist/types/collection-fns.d.ts",
